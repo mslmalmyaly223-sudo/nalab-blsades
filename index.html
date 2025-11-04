@@ -7,6 +7,9 @@
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;700;900&display=swap" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#0000ff">
 
   <style>
     :root{
@@ -4221,6 +4224,12 @@ document.addEventListener('DOMContentLoaded', function() {
   }, 100);
 });
 
+    // تسجيل Service Worker
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js')
+            .then(() => console.log('Service Worker registered'))
+            .catch(err => console.log('Error:', err));
+    }
 </script>
 </body>
 </html>
