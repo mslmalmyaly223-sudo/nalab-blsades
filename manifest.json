@@ -4,7 +4,7 @@
   "display": "standalone",
   "name": "سوق الطلاب",
   "orientation": "natural",
-  "scope": "/",
+  "scope": "/mslm1/",
   "short_name": "سوق الطلاب",
   "start_url": "/mslm1/",
   "theme_color": "#0000ff",
