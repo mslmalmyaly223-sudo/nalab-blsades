@@ -1,0 +1,10 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.muslim.Studentmarket",
+    "sha256_cert_fingerprints": [
+      "84:05:76:CC:00:7D:59:45:54:A6:CA:57:FE:75:6D:A4:E5:C6:63:BC:3F:9F:FB:C3:8C:1C:DA:D0:DD:B9:2F:4E"
+    ]
+  }
+}]
