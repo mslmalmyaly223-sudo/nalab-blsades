@@ -1,7 +1,7 @@
 {
   "name": "سوق الطلاب",
-  "short_name": "سوق الطلاب",
-  "start_url": "/mslm1/index.html",
+  "short_name": "سوق الطلاب", 
+  "start_url": "/mslm1/",
   "scope": "/mslm1/",
   "display": "standalone",
   "theme_color": "#000000",
@@ -14,7 +14,7 @@
     },
     {
       "src": "icon-512.png",
-      "sizes": "512x512", 
+      "sizes": "512x512",
       "type": "image/png"
     }
   ]
