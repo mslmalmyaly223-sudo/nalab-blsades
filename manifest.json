@@ -3,7 +3,7 @@
   "dir": "ltr",
   "display": "standalone",
   "name": "سوق الطلاب",
-  "orientation": "natural",
+  "orientation": "portrait",
   "scope": "/mslm1/",
   "short_name": "سوق الطلاب",
   "start_url": "/mslm1/",
