@@ -4,7 +4,7 @@
   "start_url": "/mslm1/",
   "display": "standalone",
   "display_override": ["window-controls-overlay"],
-  "theme_color": "#000000",
+  "theme_color": "#000000", 
   "background_color": "#ffffff",
   "icons": [
     {
@@ -13,7 +13,7 @@
       "type": "image/png"
     },
     {
-      "src": "icon-512.png",
+      "src": "icon-512.png", 
       "sizes": "512x512",
       "type": "image/png"
     }
