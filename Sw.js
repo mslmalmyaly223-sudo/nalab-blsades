@@ -1,7 +1,8 @@
-self.addEventListener('install', function(event) {
-  event.waitUntil(self.skipWaiting());
+// sw.js
+self.addEventListener('install', event => {
+  self.skipWaiting();
 });
 
-self.addEventListener('activate', function(event) {
+self.addEventListener('activate', event => {
   event.waitUntil(self.clients.claim());
 });
