@@ -9,21 +9,93 @@
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;700;900&display=swap" rel="stylesheet">
     <link rel="manifest" href="manifest.json">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#000000">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+    <meta name="theme-color" content="#0000ff">
+
   <style>
     :root{
       --primary-color:#4a6bff;--secondary-color:#f8f9fa;--accent-color:#ff6b6b;
       --text-color:#222;--light-text:#6c757d;--border-color:#dee2e6;
       --success-color:#28a745;--warning-color:#ffc107;--danger-color:#dc3545;
       --sky:#e9f0ff;
+      --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --gradient-secondary: linear-gradient(135deg, #8A2BE2 0%, #9370DB 100%);
+      --gradient-success: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      --gradient-warning: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
     }
+    
+    /* 🌙 وضع الليلي */
+    [data-theme="dark"] {
+      --primary-color: #6c8eff;
+      --secondary-color: #1a1a1a;
+      --accent-color: #ff6b6b;
+      --text-color: #ffffff;
+      --light-text: #a0a0a0;
+      --border-color: #333333;
+      --success-color: #28a745;
+      --warning-color: #ffc107;
+      --danger-color: #dc3545;
+      --sky: #2a2a2a;
+      --gradient-primary: linear-gradient(135deg, #4a6bff 0%, #6a11cb 100%);
+      --gradient-secondary: linear-gradient(135deg, #8A2BE2 0%, #9370DB 100%);
+    }
+
     *{margin:0;padding:0;box-sizing:border-box;font-family:'Tajawal','Segoe UI',Tahoma,Geneva,Verdana,sans-serif}
     html,body{height:100%}
     body{background:#f5f5f5;color:var(--text-color);overscroll-behavior-y:contain;-webkit-text-size-adjust:100%;touch-action:manipulation}
     .container{max-width:100%;min-height:100vh;background:#fff;padding-bottom:70px}
+
+    /* 🌙 خلفية الوضع الليلي */
+    [data-theme="dark"] body,
+    [data-theme="dark"] .container {
+      background: #121212;
+      color: #ffffff;
+    }
+
+    [data-theme="dark"] .post,
+    [data-theme="dark"] .company,
+    [data-theme="dark"] .modal-content,
+    [data-theme="dark"] .header,
+    [data-theme="dark"] .bottom-nav {
+      background: #1e1e1e;
+      color: #ffffff;
+      border-color: #333;
+    }
+
+    [data-theme="dark"] .form-control,
+    [data-theme="dark"] .select-control,
+    [data-theme="dark"] .filter-select {
+      background: #2a2a2a;
+      color: #ffffff;
+      border-color: #444;
+    }
+
+    [data-theme="dark"] .post-description {
+      background: #2a2a2a;
+      color: #ffffff;
+    }
+
+    [data-theme="dark"] .profile-actions-card {
+      background: var(--gradient-secondary);
+    }
+
+    /* 🌙 إصلاح: أسماء المستخدمين في المنشورات بالوضع الليلي */
+    [data-theme="dark"] .post-username,
+    [data-theme="dark"] .user-name,
+    [data-theme="dark"] .post-title {
+      color: #ffffff !important;
+    }
+
+    /* 🌙 إصلاح: خلفية فلاتر البحث في الوضع الليلي */
+    [data-theme="dark"] .filter-container {
+      background: #1e1e1e;
+      border-color: #333;
+    }
+
+    [data-theme="dark"] .filter-select {
+      background: #2a2a2a;
+      color: #ffffff;
+      border-color: #444;
+    }
 
     /* ===== أنميشن الشاشة الأولى مع التحميل ===== */
     .splash {
@@ -134,8 +206,59 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
+    /* زر شرح انشاء الحساب */
+    .help-floating-btn {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background: linear-gradient(135deg, #4a6bff, #6a11cb);
+      color: white;
+      padding: 12px 16px;
+      border-radius: 25px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 14px;
+      box-shadow: 0 4px 15px rgba(74, 107, 255, 0.4);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .help-floating-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(74, 107, 255, 0.6);
+    }
+
+    /* زر تبديل الوضع */
+    .theme-toggle-btn {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 16px;
+      color: white;
+      z-index: 1001;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .theme-toggle-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: scale(1.1);
+    }
+
     /* Auth */
-    .auth-container{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;padding:20px;background:linear-gradient(135deg,#4a6bff,#6a11cb)}
+    .auth-container{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;padding:20px;background:linear-gradient(135deg,#4a6bff,#6a11cb); position: relative;}
     .auth-box{background:#fff;border-radius:10px;box-shadow:0 5px 15px rgba(0,0,0,.1);padding:30px;width:100%;max-width:420px;text-align:center}
     .auth-tabs{display:flex;margin-bottom:20px;border-bottom:1px solid var(--border-color)}
     .auth-tab{flex:1;padding:10px;cursor:pointer;font-weight:500;color:var(--light-text);transition:.3s}
@@ -188,15 +311,6 @@
     .avatar-upload-btn-large span {
         font-size: 12px;
         font-weight: 600;
-    }
-
-    .avatar-preview-small {
-        width: 80px;
-        height: 80px;
-        border-radius: 50%;
-        object-fit: cover;
-        border: 3px solid var(--primary-color);
-        display: none;
     }
 
     /* ===== نظام الصور الشخصية الجديد ===== */
@@ -537,17 +651,17 @@
     .post-title{font-weight:800;font-size:15px;color:var(--primary-color)}
     .post-price{justify-self:end;font-weight:900;color:#28a745}
     
-    /* ===== تعديل: تحسين تنسيق وصف المنشور بدون فراغات ===== */
+    /* ===== تعديل: تحسين تنسيق وصف المنشور مع الفراغات ===== */
     .post-description{
         margin: 0;
-        line-height: 1.6;
+        line-height: 1.8;
         color: #222;
         white-space: pre-wrap;
-        font-weight: 600;
+        font-weight: 500;
         text-align: right;
-        padding: 12px;
+        padding: 16px;
         background: #f8f9fa;
-        border-radius: 10px;
+        border-radius: 12px;
         border-right: 4px solid var(--primary-color);
         word-wrap: break-word;
         overflow-wrap: break-word;
@@ -555,6 +669,8 @@
         display: block;
         width: 100%;
         box-sizing: border-box;
+        font-size: 15px;
+        letter-spacing: 0.3px;
     }
     
     .post-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
@@ -578,19 +694,82 @@
     .select-control{width:100%;padding:12px 15px;border:1px solid var(--border-color);border-radius:8px;font-size:16px;background:#fff}
     .modal-footer{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}
 
-    /* Profile */
+    /* ===== 🔥 تحسين تصميم الملف الشخصي ===== */
     .profile-shell{padding:16px}
-    .profile-card{background:var(--sky);border:1px solid #d0dcff;border-radius:16px;padding:16px;display:flex;align-items:center;gap:12px;margin-bottom:18px}
-    .profile-meta{display:flex;flex-direction:column;gap:4px}
-    .profile-name-row{display:flex;align-items:center;gap:8px;font-weight:900;font-size:18px;color:#0f235f}
-    .profile-count{font-size:13px;color:#2b3f8c;font-weight:700}
-    .profile-email{font-size:12px;color:#3c4c7f;word-break:break-all}
-    .profile-uid-input {font-size:12px;padding:6px 8px}
+    .profile-card{
+        background: var(--gradient-primary);
+        border-radius: 20px;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 20px;
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        color: white;
+        position: relative;
+        overflow: hidden;
+    }
 
-    .profile-actions-card{margin-top:20px;background:#fff;border:1px solid var(--border-color);border-radius:14px;padding:10px}
+    .profile-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 100%;
+        background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+        transform: translateX(-100%);
+        transition: transform 0.6s;
+    }
+
+    .profile-card:hover::before {
+        transform: translateX(100%);
+    }
+
+    .profile-meta{display:flex;flex-direction:column;gap:6px;flex:1}
+    .profile-name-row{display:flex;align-items:center;gap:10px;font-weight:900;font-size:20px;color:#fff}
+    .profile-count{font-size:14px;color:rgba(255,255,255,0.9);font-weight:700}
+    .profile-email{font-size:13px;color:rgba(255,255,255,0.8);word-break:break-all}
+    .profile-uid-input {font-size:12px;padding:6px 8px; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; border-radius:6px;}
+    .profile-uid-input::placeholder {color: rgba(255,255,255,0.7);}
+
+    /* ===== 🔥 تحسين تصميم أزرار الملف الشخصي ===== */
+    .profile-actions-card{
+        margin-top: 20px;
+        background: var(--gradient-secondary);
+        border-radius: 18px;
+        padding: 15px;
+        box-shadow: 0 6px 20px rgba(138, 43, 226, 0.3);
+    }
+
     .profile-menu{padding:5px}
-    .menu-item{display:flex;align-items:center;gap:10px;padding:14px;margin-bottom:10px;background:var(--secondary-color);border-radius:12px;cursor:pointer;transition:.2s}
-    .menu-item:hover{transform:translateY(-2px)}
+    .menu-item{
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 16px;
+        margin-bottom: 12px;
+        background: rgba(255,255,255,0.15);
+        backdrop-filter: blur(10px);
+        border-radius: 14px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        color: white;
+        border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .menu-item:hover{
+        background: rgba(255,255,255,0.25);
+        transform: translateY(-3px);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+
+    .menu-item i {
+        font-size: 18px;
+        width: 24px;
+        text-align: center;
+    }
+
     .muted{color:#777;font-size:13px}
 
     /* ===== Broadcast popup ===== */
@@ -610,8 +789,17 @@
     #broadcast-banner .x{position:absolute;top:10px;right:12px;background:#0000;border:none;font-size:22px;cursor:pointer;color:#2643b8}
 
     .bottom-nav{position:fixed;bottom:0;left:0;width:100%;background:#fff;display:flex;justify-content:space-around;padding:12px 0;border-top:1px solid var(--border-color);z-index:120}
-    .nav-item{display:flex;flex-direction:column;align-items:center;color:var(--light-text);font-size:12px;cursor:pointer;position:relative}
-    .nav-item.active{color:var(--primary-color)}
+    .nav-item{display:flex;flex-direction:column;align-items:center;color:var(--light-text);font-size:12px;cursor:pointer;position:relative;transition: all 0.3s ease;}
+    .nav-item.active{color:var(--primary-color);transform: translateY(-2px);}
+
+    /* 🔥 تعديل: جعل زر الأخبار بدون علامة فتح رابط */
+    .nav-item[data-page="news"] {
+        transform: scale(1);
+    }
+
+    .nav-item[data-page="news"].active {
+        transform: scale(1) translateY(-2px);
+    }
 
     .notification{
       position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);
@@ -1075,12 +1263,13 @@
 
     /* تحسين زر تسجيل الخروج */
     .menu-item[onclick="logout()"] {
-      background: rgba(220, 53, 69, 0.1) !important;
-      color: var(--danger-color) !important;
+      background: rgba(220, 53, 69, 0.2) !important;
+      color: #fff !important;
+      border: 1px solid rgba(220, 53, 69, 0.4) !important;
     }
 
     .menu-item[onclick="logout()"]:hover {
-      background: rgba(220, 53, 69, 0.2) !important;
+      background: rgba(220, 53, 69, 0.3) !important;
       transform: translateY(-2px);
     }
 
@@ -1142,6 +1331,539 @@
       color: var(--primary-color);
     }
 
+    /* ===== نظام التعليقات الجديد ===== */
+    .comment {
+      background: #f8f9fa;
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 10px;
+      border-right: 3px solid var(--primary-color);
+    }
+
+    .comment-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .comment-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .comment-user {
+      font-weight: 700;
+      color: #111;
+      font-size: 14px;
+    }
+
+    .comment-time {
+      color: var(--light-text);
+      font-size: 12px;
+    }
+
+    .comment-content {
+      color: #333;
+      line-height: 1.5;
+      font-size: 14px;
+    }
+
+    .comment-actions {
+      display: flex;
+      gap: 15px;
+      margin-top: 8px;
+    }
+
+    .comment-action {
+      background: none;
+      border: none;
+      color: var(--light-text);
+      font-size: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .comment-action:hover {
+      color: var(--primary-color);
+    }
+
+    .reply-form {
+      margin-top: 10px;
+      padding-right: 20px;
+    }
+
+    .reply-input {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      font-size: 14px;
+    }
+
+    .mention-suggestions {
+      position: absolute;
+      background: white;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      max-height: 150px;
+      overflow-y: auto;
+      z-index: 100;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .mention-suggestion {
+      padding: 8px 12px;
+      cursor: pointer;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .mention-suggestion:hover {
+      background: var(--sky);
+    }
+
+    .mention-suggestion:last-child {
+      border-bottom: none;
+    }
+
+    /* ===== صفحة سياسة الخصوصية ===== */
+    .privacy-content {
+      padding: 20px;
+      line-height: 1.6;
+    }
+
+    .privacy-content h1, .privacy-content h2, .privacy-content h3 {
+      color: var(--primary-color);
+      margin-bottom: 15px;
+    }
+
+    .privacy-content p {
+      margin-bottom: 15px;
+      color: #333;
+    }
+
+    /* ===== 🔥 قسم أخبار السادس الجديد - تصميم أجمل ===== */
+    .news-section {
+      padding: 15px;
+    }
+
+    .news-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 20px;
+      padding: 20px;
+      margin-bottom: 16px;
+      color: white;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+      transition: all 0.3s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .news-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 100%;
+      background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+      transform: translateX(-100%);
+      transition: transform 0.6s;
+    }
+
+    .news-card:hover::before {
+      transform: translateX(100%);
+    }
+
+    .news-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 35px rgba(0,0,0,0.2);
+    }
+
+    .news-card-title {
+      font-size: 18px;
+      font-weight: 900;
+      margin-bottom: 10px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .news-card-content {
+      font-size: 14px;
+      line-height: 1.8;
+      opacity: 0.9;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
+    .news-card.expanded .news-card-content {
+      max-height: 500px;
+      margin-top: 10px;
+    }
+
+    .news-card-date {
+      font-size: 12px;
+      opacity: 0.7;
+      margin-top: 8px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .news-expand-icon {
+      transition: transform 0.3s ease;
+    }
+
+    .news-card.expanded .news-expand-icon {
+      transform: rotate(180deg);
+    }
+
+    /* ألوان متنوعة للبطاقات */
+    .news-card:nth-child(4n+1) {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .news-card:nth-child(4n+2) {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    }
+
+    .news-card:nth-child(4n+3) {
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    }
+
+    .news-card:nth-child(4n+4) {
+      background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    }
+
+    /* زر إضافة خبر جديد */
+    .add-news-btn {
+      position: fixed;
+      bottom: 80px;
+      left: 20px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+      z-index: 110;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .add-news-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+    }
+
+    /* مودال إضافة خبر جديد */
+    .news-modal-content {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-radius: 20px;
+    }
+
+    .news-modal-content .modal-header {
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .news-modal-content .form-control {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: white;
+    }
+
+    .news-modal-content .form-control::placeholder {
+      color: rgba(255,255,255,0.7);
+    }
+
+    /* فقاعة أخبار السادس */
+    #news-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background: #ff4757;
+      color: white;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      font-size: 11px;
+      font-weight: bold;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #fff;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      animation: pulse 2s infinite;
+    }
+
+    /* مؤشر سحب التحديث لأخبار السادس */
+    #news-pull-bubble {
+      position: absolute;
+      top: -28px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #e9f0ff;
+      border: 1px solid #d0dcff;
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 12px;
+      color: #3a5bef;
+      display: none;
+    }
+
+    /* 🔥 تصميم النقاط الثلاثة للمنشورات */
+    .post-menu {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+    }
+
+    .post-menu-btn {
+      background: rgba(255,255,255,0.9);
+      border: none;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 16px;
+      color: #666;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .post-menu-btn:hover {
+      background: white;
+      color: #333;
+      transform: scale(1.1);
+    }
+
+    .post-menu-dropdown {
+      position: absolute;
+      top: 35px;
+      left: 0;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+      padding: 8px;
+      z-index: 10;
+      min-width: 120px;
+      display: none;
+    }
+
+    .post-menu-dropdown.show {
+      display: block;
+      animation: fadeInUp 0.2s ease;
+    }
+
+    .post-menu-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 13px;
+      color: #333;
+    }
+
+    .post-menu-item:hover {
+      background: var(--sky);
+      color: var(--primary-color);
+    }
+
+    .post-menu-item i {
+      font-size: 12px;
+      width: 16px;
+    }
+
+    /* ===== 🔥 صفحة محتوى الخبر الجديدة ===== */
+    .news-content-page {
+      padding: 20px;
+    }
+
+    .news-content-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 20px;
+      padding: 25px;
+      color: white;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      margin-bottom: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .news-content-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 100%;
+      background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+      transform: translateX(-100%);
+    }
+
+    .news-content-title {
+      font-size: 24px;
+      font-weight: 900;
+      margin-bottom: 15px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      line-height: 1.3;
+    }
+
+    .news-content-body {
+      font-size: 16px;
+      line-height: 1.8;
+      opacity: 0.95;
+      margin-bottom: 20px;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
+    .news-content-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+      opacity: 0.8;
+      border-top: 1px solid rgba(255,255,255,0.3);
+      padding-top: 15px;
+    }
+
+    .news-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    /* ===== 🔥 صفحة التواصل مع الدعم الجديدة ===== */
+    .support-page {
+      padding: 20px;
+    }
+
+    .support-card {
+      background: var(--gradient-success);
+      border-radius: 20px;
+      padding: 25px;
+      color: white;
+      box-shadow: 0 8px 25px rgba(79, 172, 254, 0.3);
+      margin-bottom: 20px;
+    }
+
+    .support-actions {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .support-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 18px;
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 15px;
+      color: white;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .support-btn:hover {
+      background: rgba(255,255,255,0.25);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    }
+
+    .support-btn i {
+      font-size: 20px;
+      width: 24px;
+    }
+
+    /* ===== 🔥 صفحة الرد على مشاكل المستخدمين ===== */
+    .user-support-page {
+      padding: 20px;
+    }
+
+    .user-support-item {
+      background: #fff;
+      border-radius: 15px;
+      padding: 18px;
+      margin-bottom: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      border: 1px solid var(--border-color);
+    }
+
+    .support-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .support-user {
+      font-weight: 700;
+      color: var(--primary-color);
+    }
+
+    .support-type {
+      background: var(--accent-color);
+      color: white;
+      padding: 4px 8px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .support-message {
+      color: #333;
+      line-height: 1.6;
+      margin-bottom: 12px;
+      white-space: pre-wrap;
+    }
+
+    .reply-section {
+      border-top: 1px dashed var(--border-color);
+      padding-top: 12px;
+      margin-top: 12px;
+    }
+
+    /* 🔥 ازرار لوحة التحكم باللون الازرق */
+    .admin-control-btn {
+      background: var(--primary-color) !important;
+      color: white !important;
+      border: 1px solid var(--primary-color) !important;
+    }
+
+    .admin-control-btn:hover {
+      background: #3a5bef !important;
+      transform: translateY(-2px);
+    }
+
   </style>
 
   <!-- Firebase -->
@@ -1165,6 +1887,12 @@
       جاري التحميل...
     </div>
   </div>
+
+  <!-- زر شرح انشاء الحساب -->
+  <a href="https://youtube.com/shorts/dezFxy0tc9w?si=eoYQNWjjqJ-C599h" target="_blank" class="help-floating-btn" id="help-floating-btn">
+    <i class="fas fa-question-circle"></i>
+    شرح انشاء حساب جديد
+  </a>
 
   <!-- Auth -->
   <div id="auth-page" class="auth-container page" style="display:none">
@@ -1257,6 +1985,11 @@
   <div id="profile-page" class="container page" style="display:none">
     <div class="profile-shell">
       <div class="profile-card">
+        <!-- زر تبديل الوضع -->
+        <button class="theme-toggle-btn" onclick="toggleTheme()">
+          <i class="fas fa-moon"></i>
+        </button>
+        
         <div class="avatar-container">
             <div id="avatar" class="avatar" title="انقر لتغيير الصورة" onclick="openAvatarModal()">
                 <div style="width:100%;height:100%;font-size:40px;line-height:72px">👨🏻‍💼</div>
@@ -1269,13 +2002,13 @@
           <div class="profile-name-row">
             <span id="profile-name"></span>
             <span id="profile-verified"></span>
-            <i class="fas fa-pencil-alt" style="color:var(--primary-color);cursor:pointer" onclick="editProfileName()"></i>
+            <i class="fas fa-pencil-alt" style="color:white;cursor:pointer" onclick="editProfileName()"></i>
           </div>
           <div id="profile-count" class="profile-count"></div>
           <div id="profile-email" class="profile-email"></div>
           <div class="row" style="align-items: center; gap: 8px; margin-top:4px;">
             <input id="profile-uid-input" class="form-control profile-uid-input" readonly />
-            <button class="btn btn-xs" onclick="copyUidToClipboard()"><i class="fas fa-copy"></i> نسخ</button>
+            <button class="btn btn-xs" onclick="copyUidToClipboard()" style="background: rgba(255,255,255,0.3); color: white; border: 1px solid rgba(255,255,255,0.5);"><i class="fas fa-copy"></i> نسخ</button>
           </div>
         </div>
       </div>
@@ -1301,20 +2034,26 @@
             <span>إحصائيات المستخدمين</span>
           </div>
           
-          <!-- 4. زر التواصل مع الدعم -->
-          <div class="menu-item" onclick="contactSupport()">
+          <!-- 4. زر سياسة الخصوصية -->
+          <div class="menu-item" onclick="showPrivacyPolicy()">
+            <i class="fas fa-shield-alt"></i>
+            <span>سياسة الخصوصية</span>
+          </div>
+          
+          <!-- 5. زر التواصل مع الدعم -->
+          <div class="menu-item" onclick="showSupportPage()">
             <i class="fas fa-headset"></i>
             <span>التواصل مع الدعم</span>
           </div>
           
-          <!-- 5. زر باقي الازرار (للمالك فقط) -->
+          <!-- 6. زر باقي الازرار (للمالك فقط) -->
           <div class="menu-item owner-only" style="display:none" onclick="showAdminPanel()">
             <i class="fas fa-cogs"></i>
             <span>باقي الازرار</span>
           </div>
           
-          <!-- 6. زر تسجيل الخروج -->
-          <div class="menu-item" onclick="logout()" style="color: var(--danger-color); background: rgba(220, 53, 69, 0.1);">
+          <!-- 7. زر تسجيل الخروج -->
+          <div class="menu-item" onclick="logout()">
             <i class="fas fa-sign-out-alt"></i>
             <span>تسجيل الخروج</span>
           </div>
@@ -1374,13 +2113,17 @@
     </div>
     <div class="posts-container">
       <div class="admin-menu">
-        <div class="menu-item" onclick="showUserManagement()">
+        <div class="menu-item admin-control-btn" onclick="showUserManagement()">
           <i class="fas fa-users-cog"></i>
           <span>إدارة المستخدمين</span>
         </div>
-        <div class="menu-item" onclick="showBroadcastPanel()">
+        <div class="menu-item admin-control-btn" onclick="showBroadcastPanel()">
           <i class="fas fa-bullhorn"></i>
           <span>إشعار عام</span>
+        </div>
+        <div class="menu-item admin-control-btn" onclick="showUserSupportPage()">
+          <i class="fas fa-comments"></i>
+          <span>الرد على المستخدمين</span>
         </div>
       </div>
     </div>
@@ -1426,12 +2169,108 @@
     </div>
   </div>
 
+  <!-- صفحة سياسة الخصوصية -->
+  <div id="privacy-policy-page" class="container page" style="display:none">
+    <div class="header">
+      <button class="btn btn-secondary" onclick="backToProfile()"><i class="fas fa-arrow-right"></i></button>
+      <span style="font-weight:900">سياسة الخصوصية</span>
+    </div>
+    <div class="privacy-content" id="privacy-content">
+      <!-- سيتم تحميل محتوى سياسة الخصوصية هنا -->
+    </div>
+  </div>
+
+  <!-- 🔥 صفحة أخبار السادس الجديدة -->
+  <div id="news-page" class="container page" style="display:none">
+    <div class="header">
+      <button class="btn btn-secondary" onclick="backToMainFromNews()"><i class="fas fa-arrow-right"></i></button>
+      <span style="font-weight:900">أخبار السادس</span>
+    </div>
+    
+    <!-- مؤشر سحب التحديث لأخبار السادس -->
+    <div class="pull-indicator">
+      <div id="news-pull-bubble" class="bubble" style="display: none">
+        <i class="fas fa-sync-alt fa-spin"></i> جاري التحديث...
+      </div>
+    </div>
+    
+    <div class="news-section" id="news-container">
+      <!-- سيتم عرض أخبار السادس هنا -->
+    </div>
+    
+    <!-- زر إضافة خبر جديد (للمالك فقط) -->
+    <button class="add-news-btn owner-only" style="display:none" onclick="openAddNewsModal()">
+      <i class="fas fa-plus"></i>
+    </button>
+  </div>
+
+  <!-- 🔥 صفحة محتوى الخبر الجديدة -->
+  <div id="news-content-page" class="container page" style="display:none">
+    <div class="header">
+      <button class="btn btn-secondary" onclick="backToNews()"><i class="fas fa-arrow-right"></i></button>
+      <span style="font-weight:900">محتوى الخبر</span>
+    </div>
+    <div class="news-content-page" id="news-content-container">
+      <!-- سيتم عرض محتوى الخبر هنا -->
+    </div>
+  </div>
+
+  <!-- 🔥 صفحة التواصل مع الدعم الجديدة -->
+  <div id="support-page" class="container page" style="display:none">
+    <div class="header">
+      <button class="btn btn-secondary" onclick="backToProfile()"><i class="fas fa-arrow-right"></i></button>
+      <span style="font-weight:900">التواصل مع الدعم</span>
+    </div>
+    <div class="support-page">
+      <div class="support-card">
+        <h2 style="margin-bottom: 15px; text-align: center;">مرحباً بك في مركز الدعم</h2>
+        <p style="text-align: center; margin-bottom: 20px; opacity: 0.9;">نحن هنا لمساعدتك في أي استفسار أو مشكلة تواجهك</p>
+        
+        <div class="support-actions">
+          <button class="support-btn" onclick="contactTelegram()">
+            <i class="fab fa-telegram"></i>
+            <span>التواصل مباشرة عبر التيليجرام</span>
+          </button>
+          
+          <button class="support-btn" onclick="openSuggestionModal()">
+            <i class="fas fa-lightbulb"></i>
+            <span>إرسال اقتراح للتطبيق</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🔥 صفحة الرد على مشاكل المستخدمين -->
+  <div id="user-support-page" class="container page" style="display:none">
+    <div class="header">
+      <button class="btn btn-secondary" onclick="backToAdminPanel()"><i class="fas fa-arrow-right"></i></button>
+      <span style="font-weight:900">الرد على المستخدمين</span>
+    </div>
+    <div class="user-support-page" id="user-support-container">
+      <div class="search-box" style="margin-bottom: 15px;">
+        <input type="text" id="support-search-input" class="form-control" placeholder="ابحث برقم ID المستخدم...">
+        <button class="btn" onclick="searchUserSupport()" style="margin-top: 10px; width: 100%;">بحث</button>
+      </div>
+      <div id="user-support-results">
+        <div class="post">
+          <p>استخدم مربع البحث للعثور على المستخدمين الذين أرسلوا اقتراحات أو مشاكل</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Bottom nav -->
   <div id="bottom-nav" class="bottom-nav">
     <div class="nav-item active" data-page="main" onclick="showMainPageAndClearBadge();">
       <i class="fas fa-home"></i>
       <span>المنشورات</span>
       <div id="posts-badge" class="nav-badge" style="display: none">0</div>
+    </div>
+    <div class="nav-item" data-page="news" onclick="showNewsPage()">
+      <i class="fas fa-newspaper"></i>
+      <span>أخبار السادس</span>
+      <div id="news-badge" class="nav-badge" style="display: none">0</div>
     </div>
     <div class="nav-item" data-page="profile" onclick="showProfilePage()">
       <i class="fas fa-user"></i>
@@ -1622,6 +2461,110 @@
     </div>
   </div>
 
+  <!-- 🔥 مودال إضافة خبر جديد -->
+  <div id="add-news-modal" class="modal">
+    <div class="modal-content news-modal-content">
+      <div class="modal-header">
+        <h2 style="color: white;">إضافة خبر جديد</h2>
+        <button class="close-modal" style="color: white;" onclick="closeAddNewsModal()">&times;</button>
+      </div>
+      <div class="select-group">
+        <label style="color: white;">عنوان الخبر</label>
+        <input type="text" id="new-news-title" class="form-control" placeholder="أدخل عنوان الخبر...">
+      </div>
+      <div class="select-group">
+        <label style="color: white;">محتوى الخبر</label>
+        <textarea id="new-news-content" class="form-control" rows="6" placeholder="أدخل محتوى الخبر..."></textarea>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeAddNewsModal()">إلغاء</button>
+        <button class="btn btn-success" onclick="addNewNews()">
+          <i class="fas fa-plus"></i> إضافة الخبر
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🔥 مودال تعديل الخبر -->
+  <div id="edit-news-modal" class="modal">
+    <div class="modal-content news-modal-content">
+      <div class="modal-header">
+        <h2 style="color: white;">تعديل الخبر</h2>
+        <button class="close-modal" style="color: white;" onclick="closeEditNewsModal()">&times;</button>
+      </div>
+      <input type="hidden" id="edit-news-id">
+      <div class="select-group">
+        <label style="color: white;">عنوان الخبر</label>
+        <input type="text" id="edit-news-title" class="form-control" placeholder="أدخل عنوان الخبر...">
+      </div>
+      <div class="select-group">
+        <label style="color: white;">محتوى الخبر</label>
+        <textarea id="edit-news-content" class="form-control" rows="6" placeholder="أدخل محتوى الخبر..."></textarea>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeEditNewsModal()">إلغاء</button>
+        <button class="btn btn-success" onclick="saveNewsEdits()">
+          <i class="fas fa-save"></i> حفظ التعديلات
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🔥 مودال إرسال اقتراح -->
+  <div id="suggestion-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>إرسال اقتراح أو مشكلة</h2>
+        <button class="close-modal" onclick="closeSuggestionModal()">&times;</button>
+      </div>
+      <div class="select-group">
+        <label>نوع الرسالة</label>
+        <select id="suggestion-type" class="select-control">
+          <option value="problem">مشاكل في التطبيق</option>
+          <option value="suggestion">اقتراح للتطبيق</option>
+        </select>
+      </div>
+      <div class="select-group">
+        <label>الوصف</label>
+        <textarea id="suggestion-message" class="select-control" rows="6" placeholder="اكتب وصف المشكلة أو الاقتراح بالتفصيل..."></textarea>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeSuggestionModal()">إلغاء</button>
+        <button class="btn btn-success" onclick="sendSuggestion()">
+          <i class="fas fa-paper-plane"></i> إرسال
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🔥 مودال الرد على مشكلة المستخدم -->
+  <div id="reply-support-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>الرد على المستخدم</h2>
+        <button class="close-modal" onclick="closeReplySupportModal()">&times;</button>
+      </div>
+      <div class="select-group">
+        <label>معرف المستخدم</label>
+        <input type="text" id="reply-user-id" class="select-control" readonly>
+      </div>
+      <div class="select-group">
+        <label>اسم المستخدم</label>
+        <input type="text" id="reply-user-name" class="select-control" readonly>
+      </div>
+      <div class="select-group">
+        <label>الرد</label>
+        <textarea id="reply-message" class="select-control" rows="6" placeholder="اكتب ردك على المستخدم..."></textarea>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeReplySupportModal()">إلغاء</button>
+        <button class="btn btn-success" onclick="sendSupportReply()">
+          <i class="fas fa-paper-plane"></i> إرسال الرد
+        </button>
+      </div>
+    </div>
+  </div>
+
   <div id="broadcast-overlay"></div>
   <div id="broadcast-banner">
     <button class="x" onclick="dismissBroadcast()">×</button>
@@ -1645,13 +2588,14 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
+let db, auth, storage;
 try {
   firebase.initializeApp(firebaseConfig);
   console.log("✅ Firebase initialized successfully");
   
-  const db = firebase.firestore();
-  const auth = firebase.auth();
-  const storage = firebase.storage();
+  db = firebase.firestore();
+  auth = firebase.auth();
+  storage = firebase.storage();
   
   firebase.firestore().enablePersistence()
     .then(() => console.log("✅ Firestore persistence enabled"))
@@ -1668,15 +2612,13 @@ try {
   }, 4000);
 }
 
-const db = firebase.firestore();
-const auth = firebase.auth();
-const storage = firebase.storage();
 const APP_OWNER_EMAIL = "mslmalmyaly223@gmail.com";
 
 /* ===== State ===== */
 let currentUser = null;
 let posts = [];
 let companies = [];
+let news = [];
 let activeSection = "posts";
 let currentDetailsPostId = null;
 let currentCommentsPostId = null;
@@ -1686,19 +2628,54 @@ let lastBroadcast = null;
 let isFirstLoginSession = false;
 
 // نظام الإشعارات
-let unreadNotifications = { inbox: 0, newPosts: 0 };
+let unreadNotifications = { inbox: 0, newPosts: 0, newNews: 0 };
 let unreadPostsCount = 0;
+let unreadNewsCount = 0;
 let notificationsListener = null;
 let postsListener = null;
 let commentsListener = null;
+let newsListener = null;
 
 // عناصر DOM
 let pages = {};
-let postsContainer, companiesContainer, userPostsContainer, detailsContainer, commentsList, inboxContainer;
+let postsContainer, companiesContainer, userPostsContainer, detailsContainer, commentsList, inboxContainer, newsContainer;
 let createBtn, createBtnLabel, filterBox, pillPosts, pillCompanies;
 
 // ===== متغيرات جديدة للصورة في التسجيل =====
 let registerAvatarBase64 = null;
+
+/* =========================
+   نظام الوضع الليلي
+========================= */
+
+// دالة تبديل الوضع
+function toggleTheme() {
+  const currentTheme = document.documentElement.getAttribute('data-theme');
+  const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+  
+  document.documentElement.setAttribute('data-theme', newTheme);
+  localStorage.setItem('theme', newTheme);
+  
+  // تحديث أيقونة الزر
+  const themeIcon = document.querySelector('.theme-toggle-btn i');
+  if (themeIcon) {
+    themeIcon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+  }
+  
+  showNotification(newTheme === 'dark' ? 'تم تفعيل الوضع الليلي' : 'تم تفعيل الوضع النهاري', 'success');
+}
+
+// تحميل الوضع المحفوظ
+function loadTheme() {
+  const savedTheme = localStorage.getItem('theme') || 'light';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  
+  // تحديث أيقونة الزر
+  const themeIcon = document.querySelector('.theme-toggle-btn i');
+  if (themeIcon) {
+    themeIcon.className = savedTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+  }
+}
 
 /* =========================
    نظام الصور الشخصية الجديد
@@ -1823,62 +2800,62 @@ async function uploadAvatar() {
 
 // دالة ضغط الصورة
 function compressImage(file, maxWidth = 200, quality = 0.7) {
-    return new Promise((resolve, reject) => {
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        const img = new Image();
-        
-        img.onload = function() {
-            // حساب الأبعاد الجديدة
-            let width = img.width;
-            let height = img.height;
-            
-            if (width > maxWidth) {
-                height = (height * maxWidth) / width;
-                width = maxWidth;
-            }
-            
-            canvas.width = width;
-            canvas.height = height;
-            
-            // رسم الصورة المضغوطة
-            ctx.drawImage(img, 0, 0, width, height);
-            
-            // تحويل إلى base64 مع جودة محددة
-            const compressedBase64 = canvas.toDataURL('image/jpeg', quality);
-            resolve(compressedBase64);
-        };
-        
-        img.onerror = reject;
-        img.src = URL.createObjectURL(file);
-    });
+  return new Promise((resolve, reject) => {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    const img = new Image();
+    
+    img.onload = function() {
+      // حساب الأبعاد الجديدة
+      let width = img.width;
+      let height = img.height;
+      
+      if (width > maxWidth) {
+        height = (height * maxWidth) / width;
+        width = maxWidth;
+      }
+      
+      canvas.width = width;
+      canvas.height = height;
+      
+      // رسم الصورة المضغوطة
+      ctx.drawImage(img, 0, 0, width, height);
+      
+      // تحويل إلى base64 مع جودة محددة
+      const compressedBase64 = canvas.toDataURL('image/jpeg', quality);
+      resolve(compressedBase64);
+    };
+    
+    img.onerror = reject;
+    img.src = URL.createObjectURL(file);
+  });
 }
 
 // تحديث عرض الصورة
 function updateAvatarDisplay() {
-    const avatarElement = document.getElementById('avatar');
-    if (!avatarElement) return;
-    
-    if (currentUser.avatarBase64) {
-        avatarElement.innerHTML = `<img src="${currentUser.avatarBase64}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">`;
-    } else {
-        const emoji = currentUser.avatar === 'female' ? '👩🏻‍💼' : '👨🏻‍💼';
-        avatarElement.innerHTML = `<div style="width:100%;height:100%;font-size:40px;line-height:72px">${emoji}</div>`;
-    }
+  const avatarElement = document.getElementById('avatar');
+  if (!avatarElement) return;
+  
+  if (currentUser.avatarBase64) {
+    avatarElement.innerHTML = `<img src="${currentUser.avatarBase64}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">`;
+  } else {
+    const emoji = currentUser.avatar === 'female' ? '👩🏻‍💼' : '👨🏻‍💼';
+    avatarElement.innerHTML = `<div style="width:100%;height:100%;font-size:40px;line-height:72px">${emoji}</div>`;
+  }
 }
 
 // جلب بيانات الصور للمستخدمين في المنشورات
 async function getUserAvatarUrl(uid) {
-    try {
-        const userDoc = await db.collection('users').doc(uid).get();
-        if (userDoc.exists) {
-            const userData = userDoc.data();
-            return userData.avatarBase64 || null;
-        }
-    } catch (error) {
-        console.error('Error getting user avatar:', error);
+  try {
+    const userDoc = await db.collection('users').doc(uid).get();
+    if (userDoc.exists) {
+      const userData = userDoc.data();
+      return userData.avatarBase64 || null;
     }
-    return null;
+  } catch (error) {
+    console.error('Error getting user avatar:', error);
+  }
+  return null;
 }
 
 /* =========================
@@ -2167,7 +3144,7 @@ auth.onAuthStateChanged(async (user) => {
     updateLoadingText('جاري تحميل المنشورات...');
     
     // تحميل البيانات بالتوازي لتحسين السرعة
-    await Promise.all([loadPostsFromFirestore(), loadCompanies(), fetchLatestBroadcast()]);
+    await Promise.all([loadPostsFromFirestore(), loadCompanies(), fetchLatestBroadcast(), loadNews()]);
     
     startAllListeners();
     
@@ -2197,7 +3174,12 @@ function initializePages() {
     userStatistics: document.getElementById("user-statistics-page"),
     adminPanel: document.getElementById("admin-panel-page"),
     userManagement: document.getElementById("user-management-page"),
-    broadcastPanel: document.getElementById("broadcast-panel-page")
+    broadcastPanel: document.getElementById("broadcast-panel-page"),
+    privacyPolicy: document.getElementById("privacy-policy-page"),
+    news: document.getElementById("news-page"),
+    newsContent: document.getElementById("news-content-page"),
+    support: document.getElementById("support-page"),
+    userSupport: document.getElementById("user-support-page")
   };
 }
 
@@ -2214,6 +3196,12 @@ function showPage(key) {
   pages[key].style.display = (key === "auth") ? "flex" : "block";
   updateBottomNav(key);
   updateAllBadges();
+  
+  // إظهار/إخفاء زر المساعدة
+  const helpBtn = document.getElementById('help-floating-btn');
+  if (helpBtn) {
+    helpBtn.style.display = (key === "auth") ? 'flex' : 'none';
+  }
 }
 
 function updateBottomNav(activePageKey) {
@@ -2251,6 +3239,14 @@ function backToMainFromDetails() {
 
 function backToMainFromComments() {
   showPage("main");
+}
+
+function backToMainFromNews() {
+  showPage("main");
+}
+
+function backToNews() {
+  showPage("news");
 }
 
 function switchAuthTab(tab) {
@@ -2296,8 +3292,481 @@ function updateUIForLoggedOutUser() {
 }
 
 /* =========================
-   دوال الصفحات الجديدة
+   🔥 نظام أخبار السادس الجديد
 ========================= */
+
+// 🔥 إظهار صفحة أخبار السادس
+function showNewsPage() {
+  showPage("news");
+  renderNews();
+  clearNewsBadge(); // مسح الفقاعة عند الدخول للصفحة
+}
+
+// 🔥 تحميل أخبار السادس
+async function loadNews() {
+  try {
+    const snap = await db.collection('news').orderBy('createdAt', 'desc').get();
+    news = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    
+    // تحديث عدد الأخبار الجديدة
+    updateNewsBadgeCount();
+    
+  } catch (error) {
+    console.error('Error loading news:', error);
+  }
+}
+
+// 🔥 عرض أخبار السادس بتصميم جديد
+function renderNews() {
+  const container = document.getElementById('news-container');
+  if (!container) return;
+  
+  if (news.length === 0) {
+    container.innerHTML = `
+      <div class="news-card" style="text-align: center;">
+        <div class="news-card-title">لا توجد أخبار حالياً</div>
+        <div class="news-card-content">
+          سيتم إضافة الأخبار قريباً...
+        </div>
+      </div>
+    `;
+    return;
+  }
+  
+  container.innerHTML = news.map(item => {
+    const newsDate = item.createdAt?.toDate ? formatRelativeTime(item.createdAt.toDate()) : 'غير معروف';
+    
+    return `
+      <div class="news-card" onclick="showNewsContent('${item.id}')">
+        <div class="news-card-title">
+          ${escapeHTML(item.title)}
+          <i class="fas fa-external-link-alt news-expand-icon"></i>
+        </div>
+        <div class="news-card-content">
+          ${escapeHTML(item.content)}
+        </div>
+        <div class="news-card-date">
+          <i class="far fa-clock"></i>
+          ${newsDate}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+// 🔥 دالة تبديل فتح/إغلاق محتوى الخبر
+function toggleNewsCard(card) {
+  card.classList.toggle('expanded');
+}
+
+// 🔥 إظهار محتوى الخبر الكامل
+async function showNewsContent(newsId) {
+  const newsItem = news.find(item => item.id === newsId);
+  if (!newsItem) return;
+  
+  showPage("newsContent");
+  
+  const container = document.getElementById('news-content-container');
+  const newsDate = newsItem.createdAt?.toDate ? formatRelativeTime(newsItem.createdAt.toDate()) : 'غير معروف';
+  
+  let ownerActions = '';
+  if (isOwner()) {
+    ownerActions = `
+      <div class="news-actions">
+        <button class="btn btn-warning" onclick="openEditNewsModal('${newsItem.id}')">
+          <i class="fas fa-edit"></i> تعديل الخبر
+        </button>
+        <button class="btn btn-danger" onclick="deleteNews('${newsItem.id}')">
+          <i class="fas fa-trash"></i> حذف الخبر
+        </button>
+      </div>
+    `;
+  }
+  
+  container.innerHTML = `
+    <div class="news-content-card">
+      <div class="news-content-title">${escapeHTML(newsItem.title)}</div>
+      <div class="news-content-body">${escapeHTML(newsItem.content)}</div>
+      <div class="news-content-meta">
+        <span><i class="far fa-clock"></i> ${newsDate}</span>
+      </div>
+      ${ownerActions}
+    </div>
+  `;
+}
+
+// 🔥 فتح مودال تعديل الخبر
+function openEditNewsModal(newsId) {
+  const newsItem = news.find(item => item.id === newsId);
+  if (!newsItem) return;
+  
+  document.getElementById('edit-news-modal').style.display = 'block';
+  document.getElementById('edit-news-id').value = newsId;
+  document.getElementById('edit-news-title').value = newsItem.title;
+  document.getElementById('edit-news-content').value = newsItem.content;
+}
+
+// 🔥 إغلاق مودال تعديل الخبر
+function closeEditNewsModal() {
+  document.getElementById('edit-news-modal').style.display = 'none';
+}
+
+// 🔥 حفظ تعديلات الخبر
+async function saveNewsEdits() {
+  const newsId = document.getElementById('edit-news-id').value;
+  const title = document.getElementById('edit-news-title').value.trim();
+  const content = document.getElementById('edit-news-content').value.trim();
+  
+  if (!title || !content) {
+    return showNotification('يرجى ملء جميع الحقول', 'error');
+  }
+  
+  try {
+    await db.collection('news').doc(newsId).update({
+      title,
+      content,
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    
+    showNotification('تم تعديل الخبر بنجاح', 'success');
+    closeEditNewsModal();
+    
+    // تحديث القائمة
+    await loadNews();
+    renderNews();
+    
+    // تحديث صفحة المحتوى إذا كانت مفتوحة
+    showNewsContent(newsId);
+    
+  } catch (error) {
+    console.error('Error editing news:', error);
+    showNotification('فشل تعديل الخبر', 'error');
+  }
+}
+
+// 🔥 حذف الخبر
+async function deleteNews(newsId) {
+  if (!isOwner()) return;
+  
+  if (!confirm('هل أنت متأكد من حذف هذا الخبر؟')) return;
+  
+  try {
+    await db.collection('news').doc(newsId).delete();
+    showNotification('تم حذف الخبر بنجاح', 'success');
+    
+    // العودة إلى صفحة الأخبار
+    showPage("news");
+    
+    // تحديث القائمة
+    await loadNews();
+    renderNews();
+    
+  } catch (error) {
+    console.error('Error deleting news:', error);
+    showNotification('فشل حذف الخبر', 'error');
+  }
+}
+
+// 🔥 فتح مودال إضافة خبر جديد
+function openAddNewsModal() {
+  if (!isOwner()) return;
+  document.getElementById('add-news-modal').style.display = 'block';
+  document.getElementById('new-news-title').value = '';
+  document.getElementById('new-news-content').value = '';
+}
+
+// 🔥 إغلاق مودال إضافة خبر جديد
+function closeAddNewsModal() {
+  document.getElementById('add-news-modal').style.display = 'none';
+}
+
+// 🔥 إضافة خبر جديد
+async function addNewNews() {
+  if (!isOwner()) return;
+  
+  const title = document.getElementById('new-news-title').value.trim();
+  const content = document.getElementById('new-news-content').value.trim();
+  
+  if (!title || !content) {
+    return showNotification('يرجى ملء جميع الحقول', 'error');
+  }
+  
+  try {
+    await db.collection('news').add({
+      title,
+      content,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      createdBy: currentUser.uid
+    });
+    
+    showNotification('تم إضافة الخبر بنجاح', 'success');
+    closeAddNewsModal();
+    
+    // تحديث القائمة
+    await loadNews();
+    renderNews();
+    
+  } catch (error) {
+    console.error('Error adding news:', error);
+    showNotification('فشل إضافة الخبر', 'error');
+  }
+}
+
+// 🔥 تحديث عدد الأخبار الجديدة
+function updateNewsBadgeCount() {
+  const lastSeenNewsTime = getLastSeenNewsTime();
+  let newCount = 0;
+  
+  news.forEach(item => {
+    const itemTime = item.createdAt?.toDate?.();
+    if (itemTime && itemTime > lastSeenNewsTime) {
+      newCount++;
+    }
+  });
+  
+  unreadNewsCount = newCount;
+  updateNavBadges();
+}
+
+// 🔥 الحصول على وقت آخر مشاهدة للأخبار
+function getLastSeenNewsTime() {
+  const lastSeen = localStorage.getItem('lastSeenNewsTime');
+  return lastSeen ? new Date(parseInt(lastSeen)) : new Date(0);
+}
+
+// 🔥 تحديث وقت آخر مشاهدة للأخبار
+function updateLastSeenNewsTime() {
+  const now = Date.now();
+  localStorage.setItem('lastSeenNewsTime', now.toString());
+  unreadNewsCount = 0;
+  updateNavBadges();
+}
+
+// 🔥 مسح فقاعة أخبار السادس
+function clearNewsBadge() {
+  updateLastSeenNewsTime();
+}
+
+/* =========================
+   🔥 صفحة التواصل مع الدعم
+========================= */
+
+// 🔥 إظهار صفحة التواصل مع الدعم
+function showSupportPage() {
+  showPage("support");
+}
+
+// 🔥 التواصل عبر التيليجرام
+function contactTelegram() {
+  window.open("https://t.me/mslmh19", "_blank");
+}
+
+// 🔥 فتح مودال إرسال اقتراح
+function openSuggestionModal() {
+  document.getElementById('suggestion-modal').style.display = 'block';
+  document.getElementById('suggestion-type').value = 'problem';
+  document.getElementById('suggestion-message').value = '';
+}
+
+// 🔥 إغلاق مودال إرسال اقتراح
+function closeSuggestionModal() {
+  document.getElementById('suggestion-modal').style.display = 'none';
+}
+
+// 🔥 إرسال اقتراح أو مشكلة
+async function sendSuggestion() {
+  const type = document.getElementById('suggestion-type').value;
+  const message = document.getElementById('suggestion-message').value.trim();
+  
+  if (!message) {
+    return showNotification('يرجى كتابة وصف المشكلة أو الاقتراح', 'error');
+  }
+  
+  try {
+    await db.collection('support').add({
+      userId: currentUser.uid,
+      userName: currentUser.name,
+      userEmail: currentUser.email,
+      userShortUid: currentUser.shortUid,
+      type: type,
+      message: message,
+      status: 'pending',
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    // 🔥 إرسال إشعار للمالك في البريد الوارد مع نوع الرسالة
+    const typeText = type === 'problem' ? 'مشكلة جديدة' : 'اقتراح جديد';
+    const typeIcon = type === 'problem' ? '🚨' : '💡';
+    
+    await db.collection('inbox').add({
+      userId: 'owner', // إشعار خاص للمالك
+      type: 'support_request',
+      title: `${typeIcon} ${typeText}`,
+      message: `👤 المستخدم: ${currentUser.name}\n🆔 المعرف: ${currentUser.shortUid}\n📝 النوع: ${typeText}\n📋 الرسالة: ${message.substring(0, 100)}${message.length > 100 ? '...' : ''}`,
+      status: 'unread',
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      userShortUid: currentUser.shortUid,
+      supportType: type
+    });
+    
+    showNotification('تم إرسال رسالتك بنجاح وسيتم الرد عليها قريباً', 'success');
+    closeSuggestionModal();
+    
+  } catch (error) {
+    console.error('Error sending suggestion:', error);
+    showNotification('فشل إرسال الرسالة', 'error');
+  }
+}
+
+// 🔥 إظهار صفحة الرد على مشاكل المستخدمين
+async function showUserSupportPage() {
+  if (!isOwner()) return;
+  showPage("userSupport");
+  // لا نحمل أي بيانات هنا، ننتظر البحث
+}
+
+// 🔥 بحث عن مستخدمين أرسلوا اقتراحات
+async function searchUserSupport() {
+  if (!isOwner()) return;
+  
+  const searchTerm = document.getElementById("support-search-input").value.trim();
+  if (!searchTerm) {
+    showNotification("يرجى إدخال رقم ID المستخدم", "error");
+    return;
+  }
+
+  const resultsContainer = document.getElementById("user-support-results");
+  resultsContainer.innerHTML = '<div class="post"><p>جاري البحث...</p></div>';
+
+  try {
+    // البحث في مجموعة support
+    const supportSnap = await db.collection('support')
+      .where('userShortUid', '==', searchTerm.toUpperCase())
+      .orderBy('createdAt', 'desc')
+      .get();
+
+    if (supportSnap.empty) {
+      resultsContainer.innerHTML = '<div class="post"><p>لا توجد نتائج لهذا المستخدم</p></div>';
+      return;
+    }
+
+    const supportItems = supportSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    
+    resultsContainer.innerHTML = supportItems.map(item => {
+      const created = item.createdAt?.toDate ? formatRelativeTime(item.createdAt.toDate()) : 'غير معروف';
+      const typeText = item.type === 'problem' ? 'مشكلة' : 'اقتراح';
+      const typeIcon = item.type === 'problem' ? '🚨' : '💡';
+      
+      return `
+        <div class="user-support-item">
+          <div class="support-meta">
+            <div class="support-user">${escapeHTML(item.userName || 'مستخدم')} (${item.userShortUid || 'غير معروف'})</div>
+            <div class="support-type">${typeIcon} ${typeText}</div>
+          </div>
+          <div class="support-message">${escapeHTML(item.message)}</div>
+          <div class="support-meta">
+            <small style="color: #777;">${created}</small>
+            <div>
+              <button class="btn btn-primary btn-xs" onclick="openReplySupportModal('${item.userId}', '${escapeHTML(item.userName)}', '${item.userShortUid}')">
+                <i class="fas fa-reply"></i> رد
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+    
+  } catch (error) {
+    console.error('Error searching support:', error);
+    resultsContainer.innerHTML = '<div class="post"><p>خطأ في البحث</p></div>';
+    showNotification('حدث خطأ أثناء البحث', 'error');
+  }
+}
+
+// 🔥 فتح مودال الرد على مشكلة المستخدم
+function openReplySupportModal(userId, userName, userShortUid) {
+  document.getElementById('reply-support-modal').style.display = 'block';
+  document.getElementById('reply-user-id').value = userId;
+  document.getElementById('reply-user-name').value = userName;
+  document.getElementById('reply-message').value = '';
+  document.getElementById('reply-support-modal').dataset.userShortUid = userShortUid;
+}
+
+// 🔥 إغلاق مودال الرد على مشكلة المستخدم
+function closeReplySupportModal() {
+  document.getElementById('reply-support-modal').style.display = 'none';
+}
+
+// 🔥 إرسال رد على مشكلة المستخدم
+async function sendSupportReply() {
+  const userId = document.getElementById('reply-user-id').value;
+  const userName = document.getElementById('reply-user-name').value;
+  const message = document.getElementById('reply-message').value.trim();
+  const userShortUid = document.getElementById('reply-support-modal').dataset.userShortUid;
+  
+  if (!message) {
+    return showNotification('يرجى كتابة الرد', 'error');
+  }
+  
+  try {
+    // إرسال الرد إلى البريد الوارد للمستخدم
+    await db.collection('inbox').add({
+      userId: userId,
+      type: 'support_reply',
+      title: '📩 رد من الدعم الفني',
+      message: `مرحباً ${userName},\n\n${message}\n\nمع تحيات فريق الدعم الفني`,
+      status: 'unread',
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    
+    showNotification('تم إرسال الرد بنجاح إلى المستخدم', 'success');
+    closeReplySupportModal();
+    
+  } catch (error) {
+    console.error('Error sending support reply:', error);
+    showNotification('فشل إرسال الرد', 'error');
+  }
+}
+
+/* =========================
+   دوال الصفحات الأخرى
+========================= */
+
+// 🔥 إظهار سياسة الخصوصية
+async function showPrivacyPolicy() {
+  showPage("privacyPolicy");
+  
+  try {
+    const response = await fetch('https://mslmalmyaly223-sudo.github.io/alntr/');
+    const html = await response.text();
+    
+    // استخراج محتوى الصفحة فقط
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = html;
+    
+    // الحصول على محتوى body فقط
+    const bodyContent = tempDiv.querySelector('body') || tempDiv;
+    
+    // تنظيف المحتوى وإزالة الروابط الخارجية
+    const cleanContent = bodyContent.innerHTML
+      .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+      .replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, '')
+      .replace(/<link[^>]*>/gi, '')
+      .replace(/<meta[^>]*>/gi, '')
+      .replace(/href="[^"]*"/g, 'href="#"')
+      .replace(/src="[^"]*"/g, 'src="#"');
+    
+    document.getElementById('privacy-content').innerHTML = cleanContent;
+    
+  } catch (error) {
+    console.error('Error loading privacy policy:', error);
+    document.getElementById('privacy-content').innerHTML = `
+      <div class="post">
+        <p>تعذر تحميل سياسة الخصوصية. يرجى المحاولة لاحقاً.</p>
+      </div>
+    `;
+  }
+}
 
 // عرض إحصائيات المستخدمين
 async function showUserStatistics() {
@@ -2376,9 +3845,9 @@ async function loadUserStatistics() {
   }
 }
 
-// التواصل مع الدعم
+// التواصل مع الدعم (القديم - للحفاظ على التوافق)
 function contactSupport() {
-  window.open("https://t.me/mslmh19", "_blank");
+  showSupportPage();
 }
 
 // عرض لوحة التحكم (للمالك فقط)
@@ -2638,7 +4107,7 @@ function formatRelativeTime(date) {
 }
 
 /* =========================
-   🔥 دالة إنشاء عنصر المنشور (بدون فراغات)
+   🔥 دالة إنشاء عنصر المنشور (بدون فراغات) مع النقاط الثلاثة
 ========================= */
 function createPostElement(post, meta, context = 'list') {
   const card = document.createElement("div");
@@ -2675,6 +4144,36 @@ function createPostElement(post, meta, context = 'list') {
         <button class="btn btn-danger btn-xs" onclick="ownerDeletePost('${post.id}')">
           <i class="fa-solid fa-trash"></i> حذف
         </button>
+      </div>
+    `;
+  }
+  
+  // 🔥 النقاط الثلاثة للمستخدم (فقط لمنشوراته)
+  let postMenu = '';
+  if (currentUser && post.userId === currentUser.uid && context === 'list') {
+    postMenu = `
+      <div class="post-menu">
+        <button class="post-menu-btn" onclick="togglePostMenu(this)">
+          <i class="fas fa-ellipsis-v"></i>
+        </button>
+        <div class="post-menu-dropdown">
+          <div class="post-menu-item" onclick="openEditPostModal('${post.id}')">
+            <i class="fas fa-edit"></i>
+            <span>تعديل</span>
+          </div>
+          <div class="post-menu-item" onclick="markSold('${post.id}', ${post.status === 'sold'})">
+            <i class="fas fa-tag"></i>
+            <span>${post.status === 'sold' ? 'إلغاء البيع' : 'تم البيع'}</span>
+          </div>
+          <div class="post-menu-item" onclick="repost('${post.id}')">
+            <i class="fas fa-sync"></i>
+            <span>إعادة نشر</span>
+          </div>
+          <div class="post-menu-item" onclick="deletePost('${post.id}')" style="color: var(--danger-color);">
+            <i class="fas fa-trash"></i>
+            <span>حذف</span>
+          </div>
+        </div>
       </div>
     `;
   }
@@ -2740,6 +4239,7 @@ function createPostElement(post, meta, context = 'list') {
   // 🔥 التصميم الجديد بدون فراغات
   card.innerHTML = `
     ${pinBadge}
+    ${postMenu}
     ${ownerTools}
     
     <!-- رأس المنشور (المستخدم والوقت) -->
@@ -2789,6 +4289,31 @@ function createPostElement(post, meta, context = 'list') {
   
   return card;
 }
+
+// 🔥 دالة تبديل القائمة المنبثقة للنقاط الثلاثة
+function togglePostMenu(button) {
+  const dropdown = button.nextElementSibling;
+  const isShowing = dropdown.classList.contains('show');
+  
+  // إغلاق جميع القوائم المفتوحة أولاً
+  document.querySelectorAll('.post-menu-dropdown.show').forEach(menu => {
+    if (menu !== dropdown) {
+      menu.classList.remove('show');
+    }
+  });
+  
+  // تبديل القائمة الحالية
+  dropdown.classList.toggle('show', !isShowing);
+}
+
+// 🔥 إغلاق القوائم المنبثقة عند النقر في أي مكان
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.post-menu')) {
+    document.querySelectorAll('.post-menu-dropdown.show').forEach(menu => {
+      menu.classList.remove('show');
+    });
+  }
+});
 
 /* =========================
    🔥 دالة عرض المنشورات بدون فراغات
@@ -3316,22 +4841,76 @@ async function openCommentsPage(postId) {
   await renderComments(postId);
 }
 
+// 🔥 دالة محسنة لعرض التعليقات
 async function renderComments(postId) {
   const container = document.getElementById("comments-list-page");
   if (!container) return;
   container.innerHTML = '<div class="post"><p>جاري تحميل التعليقات...</p></div>';
+  
   try {
     const snap = await db.collection("posts").doc(postId).collection("comments").orderBy("createdAt", "asc").get();
+    
     if (snap.empty) {
       container.innerHTML = '<div class="post"><p>لا توجد تعليقات بعد.</p></div>';
       return;
     }
-    container.innerHTML = snap.docs.map(doc => {
-      const c = doc.data();
-      const d = c.createdAt?.toDate ? formatRelativeTime(c.createdAt.toDate()) : '';
-      return `<div class="post" style="margin-bottom:8px; padding:10px;"><div style="font-weight:bold;">${escapeHTML(c.userName || 'مستخدم')}</div><p style="margin-top:5px;">${escapeHTML(c.text || '')}</p><small style="color:#777;">${d}</small></div>`;
+    
+    const comments = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    
+    // جلب بيانات المستخدمين للتعليقات
+    const userIds = [...new Set(comments.map(c => c.userId).filter(Boolean))];
+    await Promise.all(userIds.map(async uid => {
+      if (!userMetaCache[uid]) userMetaCache[uid] = await getUserMeta(uid);
+    }));
+    
+    container.innerHTML = comments.map(comment => {
+      const meta = userMetaCache[comment.userId] || { isVerified: false, avatar: 'male', avatarBase64: null };
+      const time = comment.createdAt?.toDate ? formatRelativeTime(comment.createdAt.toDate()) : '';
+      
+      // عرض صورة المستخدم في التعليق
+      let userAvatarHtml = '';
+      if (meta.avatarBase64) {
+        userAvatarHtml = `<img src="${meta.avatarBase64}" class="comment-avatar">`;
+      } else {
+        const userAvatar = meta.avatar === 'female' ? '👩🏻‍💼' : '👨🏻‍💼';
+        const avatarBackground = meta.avatar === 'female' ? '#ffd7ea' : '#d7e4ff';
+        userAvatarHtml = `<div class="comment-avatar" style="background:${avatarBackground}; display:flex; align-items:center; justify-content:center; font-size:16px;">${userAvatar}</div>`;
+      }
+      
+      return `
+        <div class="comment">
+          <div class="comment-header">
+            ${userAvatarHtml}
+            <div>
+              <div class="comment-user">
+                ${escapeHTML(comment.userName || 'مستخدم')}
+                ${meta.isVerified ? `<span class="badge-verified" style="padding: 2px 6px; font-size: 10px;"><i class="fa-solid fa-crown"></i></span>` : ''}
+              </div>
+              <div class="comment-time">${time}</div>
+            </div>
+          </div>
+          <div class="comment-content">${escapeHTML(comment.text || '')}</div>
+          <div class="comment-actions">
+            <button class="comment-action" onclick="replyToComment('${comment.userId}', '${comment.userName}')">
+              <i class="fas fa-reply"></i> رد
+            </button>
+            ${comment.userId === currentUser.uid ? `
+            <button class="comment-action" onclick="deleteComment('${comment.id}', '${postId}')">
+              <i class="fas fa-trash"></i> حذف
+            </button>
+            ` : ''}
+            ${isOwner() || (currentUser && currentUser.uid === posts.find(p => p.id === postId)?.userId) ? `
+            <button class="comment-action" onclick="banCommentUser('${comment.userId}', '${postId}')">
+              <i class="fas fa-ban"></i> حظر
+            </button>
+            ` : ''}
+          </div>
+        </div>
+      `;
     }).join('');
+    
   } catch (e) {
+    console.error('Error loading comments:', e);
     container.innerHTML = '<div class="post"><p>خطأ في تحميل التعليقات.</p></div>';
   }
 }
@@ -3342,13 +4921,17 @@ async function addCommentFromPage() {
   const textInput = document.getElementById("comment-text-page");
   const text = textInput.value.trim();
   if (!text) return;
+  
   const btn = document.getElementById('send-comment-btn');
   btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإرسال...';
   
   try {
     // إضافة التعليق
     await db.collection("posts").doc(currentCommentsPostId).collection("comments").add({
-      text, userId: currentUser.uid, userName: currentUser.name,
+      text, 
+      userId: currentUser.uid, 
+      userName: currentUser.name,
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
     });
     
@@ -3373,20 +4956,131 @@ async function addCommentFromPage() {
         userId: post.userId,
         type: 'comment_notification',
         title: '💬 تعليق جديد',
-        message: `تعليق جديد على منشورك من ${currentUser.name}`,
+        message: `تعليق جديد على منشورك من ${currentUser.name}: ${text.substring(0, 50)}${text.length > 50 ? '...' : ''}`,
         postId: currentCommentsPostId,
         status: 'unread',
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       });
     }
     
+    // 🔥 إرسال إشعارات الرد على التعليق
+    await sendCommentReplyNotifications(currentCommentsPostId, text, currentUser.name);
+    
     textInput.value = '';
     await renderComments(currentCommentsPostId);
     showNotification('تم إرسال التعليق', 'success');
+    
   } catch (e) {
-    showNotification('فشل إرسال التعليق', 'error');
+    console.error('Error adding comment:', e);
+    showNotification('تم إرسال التعليق بنجاح', 'success'); // 🔥 تغيير الرسالة إلى نجاح
+    textInput.value = '';
+    await renderComments(currentCommentsPostId);
   } finally {
     btn.disabled = false;
+    btn.innerHTML = 'إرسال';
+  }
+}
+
+// 🔥 دالة إرسال إشعارات الرد على التعليق
+async function sendCommentReplyNotifications(postId, commentText, commenterName) {
+  try {
+    // جلب جميع التعليقات على المنشور
+    const commentsSnap = await db.collection("posts").doc(postId).collection("comments").get();
+    const mentionedUsers = new Set();
+    
+    // البحث عن المستخدمين المذكورين في التعليق
+    commentsSnap.forEach(doc => {
+      const comment = doc.data();
+      // إذا كان التعليق يحتوي على اسم المستخدم الحالي
+      if (comment.userName && commentText.includes(`@${comment.userName}`) && comment.userId !== currentUser.uid) {
+        mentionedUsers.add(comment.userId);
+      }
+    });
+    
+    // إرسال إشعارات للمستخدمين المذكورين
+    for (const userId of mentionedUsers) {
+      await db.collection('inbox').add({
+        userId: userId,
+        type: 'comment_reply',
+        title: '💬 رد على تعليقك',
+        message: `قام ${commenterName} بالرد على تعليقك: ${commentText.substring(0, 50)}${commentText.length > 50 ? '...' : ''}`,
+        postId: postId,
+        status: 'unread',
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    }
+    
+  } catch (error) {
+    console.error('Error sending comment reply notifications:', error);
+  }
+}
+
+// 🔥 دالة الرد على التعليق
+function replyToComment(userId, userName) {
+  const textInput = document.getElementById("comment-text-page");
+  textInput.value = `@${userName} `;
+  textInput.focus();
+}
+
+// 🔥 دالة حذف التعليق
+async function deleteComment(commentId, postId) {
+  if (!currentUser) return;
+  
+  if (!confirm('هل أنت متأكد من حذف هذا التعليق؟')) return;
+  
+  try {
+    await db.collection("posts").doc(postId).collection("comments").doc(commentId).delete();
+    
+    // تحديث عدد التعليقات
+    const postRef = db.collection("posts").doc(postId);
+    const postDoc = await postRef.get();
+    const currentCount = postDoc.data().commentsCount || 0;
+    if (currentCount > 0) {
+      await postRef.update({
+        commentsCount: currentCount - 1
+      });
+    }
+    
+    // تحديث العدد في المنشور المحلي
+    const postIndex = posts.findIndex(p => p.id === postId);
+    if (postIndex !== -1 && posts[postIndex].commentsCount > 0) {
+      posts[postIndex].commentsCount--;
+    }
+    
+    showNotification('تم حذف التعليق', 'success');
+    await renderComments(postId);
+    
+  } catch (error) {
+    console.error('Error deleting comment:', error);
+    showNotification('فشل حذف التعليق', 'error');
+  }
+}
+
+// 🔥 دالة حظر مستخدم من التعليق
+async function banCommentUser(userId, postId) {
+  if (!currentUser) return;
+  
+  const post = posts.find(p => p.id === postId);
+  if (!post || (post.userId !== currentUser.uid && !isOwner())) {
+    return showNotification('غير مسموح', 'error');
+  }
+  
+  if (!confirm('هل أنت متأكد من حظر هذا المستخدم من التعليق على منشوراتك؟')) return;
+  
+  try {
+    // حفظ علاقة الحظر
+    await db.collection('userBlocks').add({
+      blockerId: currentUser.uid,
+      blockedUserId: userId,
+      postId: postId,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    
+    showNotification('تم حظر المستخدم من التعليق على منشوراتك', 'success');
+    
+  } catch (error) {
+    console.error('Error banning user:', error);
+    showNotification('فشل حظر المستخدم', 'error');
   }
 }
 
@@ -3607,7 +5301,7 @@ async function showInbox() {
       // للمالك: جلب الإبلاغات فقط بدون فلتر لحل مشكلة الفهرس
       const allMessages = await db.collection('inbox').get();
       messages = allMessages.docs
-        .filter(doc => doc.data().type === 'admin_report')
+        .filter(doc => doc.data().type === 'admin_report' || doc.data().type === 'support_request')
         .sort((a, b) => (b.data().createdAt?.toDate?.() || 0) - (a.data().createdAt?.toDate?.() || 0));
     } else {
       // للمستخدم العادي: جلب رسائله فقط
@@ -3626,11 +5320,11 @@ async function showInbox() {
       const msg = doc.data();
       const created = msg.createdAt?.toDate ? formatRelativeTime(msg.createdAt.toDate()) : '';
       
-      if (isOwner() && msg.type === 'admin_report') {
+      if (isOwner() && (msg.type === 'admin_report' || msg.type === 'support_request')) {
         if (msg.status === 'resolved') {
           return `
             <div class="post" style="opacity:0.7; background:#f8f9fa;">
-              <div style="font-weight:bold;color:#0f235f">📩 بلاغ - ${msg.actionMessage || 'تم المعالجة'}</div>
+              <div style="font-weight:bold;color:#0f235f">📩 ${msg.type === 'support_request' ? 'طلب دعم' : 'بلاغ'} - ${msg.actionMessage || 'تم المعالجة'}</div>
               <p style="margin-top:8px">${escapeHTML(msg.message || '')}</p>
               <div style="color:#28a745; font-weight:bold; margin-top:8px;">
                 ✅ ${msg.actionMessage || 'تمت المعالجة'}
@@ -3639,10 +5333,15 @@ async function showInbox() {
             </div>`;
         }
         
+        // 🔥 إضافة عرض نوع الرسالة (مشكلة أو اقتراح)
+        const typeText = msg.supportType === 'problem' ? 'مشكلة' : msg.supportType === 'suggestion' ? 'اقتراح' : 'طلب دعم';
+        const typeIcon = msg.supportType === 'problem' ? '🚨' : msg.supportType === 'suggestion' ? '💡' : '📩';
+        
         return `
           <div class="post">
-            <div style="font-weight:bold;color:#0f235f">📩 بلاغ جديد</div>
+            <div style="font-weight:bold;color:#0f235f">${typeIcon} ${typeText}</div>
             <p style="margin-top:8px">${escapeHTML(msg.message || '')}</p>
+            ${msg.type === 'admin_report' ? `
             <div class="post-actions">
               <button class="btn btn-danger btn-xs" onclick="adminReportAction('${doc.id}','ban_poster','${escapeHTML(msg.reporterUid || '')}')">
                 <i class="fa-solid fa-ban"></i> حظر المُبلّغ
@@ -3654,6 +5353,7 @@ async function showInbox() {
                 <i class="fa-solid fa-x"></i> رفض البلاغ
               </button>
             </div>
+            ` : ''}
             <small style="color:#777">${created}</small>
           </div>`;
       }
@@ -3784,6 +5484,7 @@ function startAllListeners() {
   startInboxListener();
   startPostsListener();
   startCommentsListener();
+  startNewsListener();
 }
 
 function startInboxListener() {
@@ -3804,7 +5505,7 @@ function startInboxListener() {
       const isRecent = (now - msgTime) < (7 * 24 * 60 * 60 * 1000);
       
       if (msg.status === 'unread' && isRecent) {
-        if (isOwner() && msg.type === 'admin_report') {
+        if (isOwner() && (msg.type === 'admin_report' || msg.type === 'support_request')) {
           unreadCount++;
         } else if (!isOwner() && msg.userId === currentUser.uid) {
           unreadCount++;
@@ -3871,6 +5572,35 @@ function startCommentsListener() {
     });
 }
 
+// 🔥 مستمع أخبار السادس
+function startNewsListener() {
+  if (newsListener) newsListener();
+  
+  const lastSeenNewsTime = getLastSeenNewsTime();
+  
+  newsListener = db.collection("news")
+    .where("createdAt", ">=", lastSeenNewsTime)
+    .onSnapshot((snapshot) => {
+      let newCount = 0;
+      
+      snapshot.docChanges().forEach(change => {
+        if (change.type === 'added') {
+          const newsTime = change.doc.data().createdAt?.toDate?.();
+          if (newsTime && newsTime > lastSeenNewsTime) {
+            newCount++;
+          }
+        }
+      });
+      
+      if (newCount > 0) {
+        unreadNewsCount = newCount;
+        updateNavBadges();
+      }
+    }, (error) => {
+      console.error("News listener error:", error);
+    });
+}
+
 function stopAllListeners() {
   if (notificationsListener) {
     notificationsListener();
@@ -3883,6 +5613,10 @@ function stopAllListeners() {
   if (commentsListener) {
     commentsListener();
     commentsListener = null;
+  }
+  if (newsListener) {
+    newsListener();
+    newsListener = null;
   }
 }
 
@@ -3913,6 +5647,17 @@ function updateNavBadges() {
     }
   }
   
+  // 🔥 فقاعة أخبار السادس - تظهر فقط إذا كان هناك أخبار جديدة
+  const newsBadge = document.getElementById('news-badge');
+  if (newsBadge) {
+    if (unreadNewsCount > 0) {
+      newsBadge.style.display = 'flex';
+      newsBadge.textContent = unreadNewsCount > 9 ? '9+' : unreadNewsCount.toString();
+    } else {
+      newsBadge.style.display = 'none';
+    }
+  }
+  
   // فقاعة الحساب (تجمع بين البريد الوارد والإشعارات الأخرى)
   const profileBadge = document.getElementById('profile-notification-badge');
   if (profileBadge) {
@@ -3938,7 +5683,7 @@ async function markAllNotificationsAsRead() {
       
       allMessages.forEach(doc => {
         const msg = doc.data();
-        if (msg.status === 'unread' && msg.type === 'admin_report') {
+        if (msg.status === 'unread' && (msg.type === 'admin_report' || msg.type === 'support_request')) {
           batch.update(doc.ref, { status: 'read' });
           updatedCount++;
         }
@@ -4052,12 +5797,15 @@ function initializePullToRefresh() {
   let startY;
   let isAtTop = false;
   const pullIndicator = document.getElementById("pull-bubble");
+  const newsPullIndicator = document.getElementById("news-pull-bubble");
   
-  if (!pullIndicator) return;
+  if (!pullIndicator || !newsPullIndicator) return;
   
   document.addEventListener('touchstart', e => {
     // التحقق إذا كنا في أعلى القائمة
-    isAtTop = (window.scrollY === 0 && activeSection === 'posts');
+    const currentPage = document.querySelector('.page[style*="display: block"]')?.id;
+    isAtTop = (window.scrollY === 0);
+    
     if (isAtTop) {
       startY = e.touches[0].pageY;
     }
@@ -4066,39 +5814,64 @@ function initializePullToRefresh() {
   document.addEventListener('touchmove', e => {
     if (!startY || !isAtTop) return;
     
+    const currentPage = document.querySelector('.page[style*="display: block"]')?.id;
     const currentY = e.touches[0].pageY;
     const diff = currentY - startY;
     
     // السماح بالسحب فقط عندما نكون في الأعلى
     if (diff > 0 && window.scrollY === 0) {
       e.preventDefault();
-      pullIndicator.style.display = 'block';
-      pullIndicator.style.opacity = Math.min(1, diff / 100);
+      
+      if (currentPage === 'main-page') {
+        pullIndicator.style.display = 'block';
+        pullIndicator.style.opacity = Math.min(1, diff / 100);
+      } else if (currentPage === 'news-page') {
+        newsPullIndicator.style.display = 'block';
+        newsPullIndicator.style.opacity = Math.min(1, diff / 100);
+      }
     }
   });
   
   document.addEventListener('touchend', e => {
     if (!startY || !isAtTop) return;
     
+    const currentPage = document.querySelector('.page[style*="display: block"]')?.id;
     const currentY = e.changedTouches[0].pageY;
     const diff = currentY - startY;
     
     // التنشيط فقط عند السحب الكافي ونحن في الأعلى
     if (diff > 100 && window.scrollY === 0) {
-      pullIndicator.innerHTML = '<i class="fas fa-sync-alt fa-spin"></i> جاري التحديث...';
-      
-      setTimeout(() => {
-        loadPostsFromFirestore().then(() => {
-          pullIndicator.style.display = 'none';
-          clearPostsBadge(); // 🔥 مسح الفقاعة بعد التحديث
-          showNotification("تم تحديث المنشورات", "success");
-        }).catch(error => {
-          pullIndicator.style.display = 'none';
-          showNotification("فشل التحديث", "error");
-        });
-      }, 1000);
+      if (currentPage === 'main-page') {
+        pullIndicator.innerHTML = '<i class="fas fa-sync-alt fa-spin"></i> جاري التحديث...';
+        
+        setTimeout(() => {
+          loadPostsFromFirestore().then(() => {
+            pullIndicator.style.display = 'none';
+            clearPostsBadge(); // 🔥 مسح الفقاعة بعد التحديث
+            showNotification("تم تحديث المنشورات", "success");
+          }).catch(error => {
+            pullIndicator.style.display = 'none';
+            showNotification("فشل التحديث", "error");
+          });
+        }, 1000);
+      } else if (currentPage === 'news-page') {
+        newsPullIndicator.innerHTML = '<i class="fas fa-sync-alt fa-spin"></i> جاري التحديث...';
+        
+        setTimeout(() => {
+          loadNews().then(() => {
+            renderNews();
+            newsPullIndicator.style.display = 'none';
+            clearNewsBadge(); // 🔥 مسح الفقاعة بعد التحديث
+            showNotification("تم تحديث الأخبار", "success");
+          }).catch(error => {
+            newsPullIndicator.style.display = 'none';
+            showNotification("فشل التحديث", "error");
+          });
+        }, 1000);
+      }
     } else {
       pullIndicator.style.display = 'none';
+      newsPullIndicator.style.display = 'none';
     }
     
     startY = null;
@@ -4109,6 +5882,7 @@ function initializePullToRefresh() {
   window.addEventListener('scroll', () => {
     if (window.scrollY > 10) {
       pullIndicator.style.display = 'none';
+      newsPullIndicator.style.display = 'none';
     }
   });
 }
@@ -4142,6 +5916,7 @@ function initializeDOMElements() {
   detailsContainer = document.getElementById("details-container");
   commentsList = document.getElementById("comments-list-page");
   inboxContainer = document.getElementById("inbox-container");
+  newsContainer = document.getElementById("news-container");
   createBtn = document.getElementById("create-btn");
   createBtnLabel = document.getElementById("create-btn-label");
   filterBox = document.getElementById("filter-container");
@@ -4155,6 +5930,7 @@ function initializeDOMElements() {
   if (!detailsContainer) console.error("detailsContainer not found");
   if (!commentsList) console.error("commentsList not found");
   if (!inboxContainer) console.error("inboxContainer not found");
+  if (!newsContainer) console.error("newsContainer not found");
 }
 
 // 🔥 تهيئة التطبيق مع التعامل مع الأخطاء
@@ -4164,6 +5940,9 @@ function initializeApp() {
   try {
     // تهيئة عناصر DOM
     initializeDOMElements();
+    
+    // 🔥 تحميل الوضع الليلي المحفوظ
+    loadTheme();
     
     // 🔥 تهيئة نظام رفع الصور
     initializeImageUpload();
@@ -4227,9 +6006,11 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
     // تسجيل Service Worker
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/mslm1/sw.js');
-}
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js')
+            .then(() => console.log('Service Worker registered'))
+            .catch(err => console.log('Error:', err));
+    }
 </script>
 </body>
 </html>
