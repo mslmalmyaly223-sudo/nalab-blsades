@@ -1446,317 +1446,355 @@
       color: #333;
     }
 
-    /* ===== 🔥 قسم أخبار السادس الجديد - تصميم أجمل ===== */
-    .news-section {
-      padding: 15px;
-    }
-
-    .news-card {
+    /* ===== 🔥 قسم المساعد الدراسي الجديد - تصميم مطابق للصورة ===== */
+    .ai-assistant-page {
+      padding: 0;
+      height: calc(100vh - 120px);
+      display: flex;
+      flex-direction: column;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      border-radius: 20px;
-      padding: 20px;
-      margin-bottom: 16px;
-      color: white;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-      transition: all 0.3s ease;
-      cursor: pointer;
       position: relative;
       overflow: hidden;
     }
 
-    .news-card::before {
+    .ai-assistant-page::before {
       content: '';
       position: absolute;
       top: 0;
       left: 0;
       right: 0;
-      height: 100%;
-      background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
-      transform: translateX(-100%);
-      transition: transform 0.6s;
+      bottom: 0;
+      background: 
+        radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.2) 0%, transparent 50%);
+      animation: float 6s ease-in-out infinite;
     }
 
-    .news-card:hover::before {
-      transform: translateX(100%);
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-10px) rotate(1deg); }
     }
 
-    .news-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 12px 35px rgba(0,0,0,0.2);
-    }
-
-    .news-card-title {
-      font-size: 18px;
-      font-weight: 900;
-      margin-bottom: 10px;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    .ai-welcome-screen {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
       display: flex;
-      justify-content: space-between;
+      flex-direction: column;
       align-items: center;
-    }
-
-    .news-card-content {
-      font-size: 14px;
-      line-height: 1.8;
-      opacity: 0.9;
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.3s ease;
-      white-space: pre-wrap;
-      word-wrap: break-word;
-    }
-
-    .news-card.expanded .news-card-content {
-      max-height: 500px;
-      margin-top: 10px;
-    }
-
-    .news-card-date {
-      font-size: 12px;
-      opacity: 0.7;
-      margin-top: 8px;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .news-expand-icon {
-      transition: transform 0.3s ease;
-    }
-
-    .news-card.expanded .news-expand-icon {
-      transform: rotate(180deg);
-    }
-
-    /* ألوان متنوعة للبطاقات */
-    .news-card:nth-child(4n+1) {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    }
-
-    .news-card:nth-child(4n+2) {
-      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-    }
-
-    .news-card:nth-child(4n+3) {
-      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-    }
-
-    .news-card:nth-child(4n+4) {
-      background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-    }
-
-    /* زر إضافة خبر جديد */
-    .add-news-btn {
-      position: fixed;
-      bottom: 80px;
-      left: 20px;
-      background: linear-gradient(135deg, #667eea, #764ba2);
+      justify-content: center;
+      text-align: center;
       color: white;
-      width: 60px;
-      height: 60px;
+      padding: 20px;
+      z-index: 2;
+      transition: opacity 0.5s ease;
+    }
+
+    .ai-welcome-screen.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .ai-avatar {
+      width: 120px;
+      height: 120px;
       border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      border: 3px solid rgba(255, 255, 255, 0.3);
       display: flex;
       align-items: center;
       justify-content: center;
+      margin-bottom: 20px;
+      animation: bounce 2s ease-in-out infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .ai-avatar i {
+      font-size: 50px;
+      color: white;
+    }
+
+    .ai-welcome-text {
       font-size: 24px;
-      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-      z-index: 110;
-      border: none;
+      font-weight: 900;
+      margin-bottom: 10px;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+
+    .ai-subtitle {
+      font-size: 16px;
+      opacity: 0.9;
+      margin-bottom: 30px;
+      max-width: 300px;
+      line-height: 1.5;
+    }
+
+    .ai-start-btn {
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      color: white;
+      padding: 15px 30px;
+      border-radius: 25px;
+      font-size: 16px;
+      font-weight: 700;
       cursor: pointer;
       transition: all 0.3s ease;
     }
 
-    .add-news-btn:hover {
-      transform: scale(1.1);
-      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+    .ai-start-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.2);
     }
 
-    /* مودال إضافة خبر جديد */
-    .news-modal-content {
+    .ai-chat-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 15px;
+      overflow: hidden;
+      position: relative;
+      z-index: 2;
+    }
+
+    .ai-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .ai-message {
+      max-width: 85%;
+      padding: 12px 16px;
+      border-radius: 18px;
+      line-height: 1.5;
+      word-wrap: break-word;
+      animation: messageSlide 0.3s ease-out;
+    }
+
+    @keyframes messageSlide {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .ai-message.user {
+      align-self: flex-end;
+      background: rgba(255, 255, 255, 0.9);
+      color: #333;
+      border-bottom-right-radius: 5px;
+    }
+
+    .ai-message.assistant {
+      align-self: flex-start;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      color: white;
+      border-bottom-left-radius: 5px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .ai-typing {
+      align-self: flex-start;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      color: white;
+      padding: 12px 16px;
+      border-radius: 18px;
+      border-bottom-left-radius: 5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .ai-typing-dots {
+      display: flex;
+      gap: 4px;
+    }
+
+    .ai-typing-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: white;
+      animation: typing 1.4s infinite ease-in-out;
+    }
+
+    .ai-typing-dot:nth-child(1) { animation-delay: -0.32s; }
+    .ai-typing-dot:nth-child(2) { animation-delay: -0.16s; }
+    .ai-typing-dot:nth-child(3) { animation-delay: 0s; }
+
+    @keyframes typing {
+      0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; }
+      40% { transform: scale(1); opacity: 1; }
+    }
+
+    .ai-input-container {
+      display: flex;
+      gap: 10px;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      position: relative;
+      z-index: 2;
+    }
+
+    .ai-input {
+      flex: 1;
+      padding: 12px 16px;
+      border: none;
+      border-radius: 25px;
+      background: rgba(255, 255, 255, 0.9);
+      color: #333;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .ai-input::placeholder {
+      color: #666;
+    }
+
+    .ai-send-btn {
+      background: rgba(255, 255, 255, 0.9);
+      border: none;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #667eea;
+      font-size: 18px;
+      transition: all 0.3s ease;
+    }
+
+    .ai-send-btn:hover {
+      background: white;
+      transform: scale(1.05);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+
+    .ai-send-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* ===== إدارة الذكاء الاصطناعي للمالك ===== */
+    .ai-management-card {
+      background: var(--gradient-primary);
+      border-radius: 20px;
+      padding: 20px;
+      margin: 15px;
+      color: white;
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+    }
+
+    .ai-management-title {
+      font-size: 18px;
+      font-weight: 900;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
+    .ai-management-actions {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .ai-management-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 15px;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .ai-management-btn:hover {
+      background: rgba(255, 255, 255, 0.25);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    }
+
+    .ai-management-btn i {
+      font-size: 18px;
+      width: 24px;
+    }
+
+    /* ===== مودالات إدارة الذكاء الاصطناعي ===== */
+    .ai-modal-content {
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: white;
       border-radius: 20px;
     }
 
-    .news-modal-content .modal-header {
+    .ai-modal-content .modal-header {
       border-bottom: 1px solid rgba(255,255,255,0.2);
     }
 
-    .news-modal-content .form-control {
+    .ai-modal-content .form-control {
       background: rgba(255,255,255,0.1);
       border: 1px solid rgba(255,255,255,0.3);
       color: white;
     }
 
-    .news-modal-content .form-control::placeholder {
+    .ai-modal-content .form-control::placeholder {
       color: rgba(255,255,255,0.7);
     }
 
-    /* فقاعة أخبار السادس */
-    #news-badge {
-      position: absolute;
-      top: -5px;
-      right: -5px;
-      background: #ff4757;
+    .ai-modal-content textarea.form-control {
+      min-height: 150px;
+      resize: vertical;
+    }
+
+    /* ===== تحسينات للوضع الليلي في المساعد الدراسي ===== */
+    [data-theme="dark"] .ai-assistant-page {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    }
+
+    [data-theme="dark"] .ai-message.user {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+
+    [data-theme="dark"] .ai-input {
+      background: rgba(255, 255, 255, 0.1);
       color: white;
-      border-radius: 50%;
-      width: 20px;
-      height: 20px;
-      font-size: 11px;
-      font-weight: bold;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      border: 2px solid #fff;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-      animation: pulse 2s infinite;
     }
 
-    /* مؤشر سحب التحديث لأخبار السادس */
-    #news-pull-bubble {
-      position: absolute;
-      top: -28px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #e9f0ff;
-      border: 1px solid #d0dcff;
-      border-radius: 999px;
-      padding: 4px 10px;
-      font-size: 12px;
-      color: #3a5bef;
-      display: none;
+    [data-theme="dark"] .ai-input::placeholder {
+      color: rgba(255, 255, 255, 0.7);
     }
 
-    /* 🔥 تصميم النقاط الثلاثة للمنشورات */
-    .post-menu {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-    }
-
-    .post-menu-btn {
-      background: rgba(255,255,255,0.9);
-      border: none;
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      font-size: 16px;
-      color: #666;
-      transition: all 0.3s ease;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-
-    .post-menu-btn:hover {
-      background: white;
-      color: #333;
-      transform: scale(1.1);
-    }
-
-    .post-menu-dropdown {
-      position: absolute;
-      top: 35px;
-      left: 0;
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.15);
-      padding: 8px;
-      z-index: 10;
-      min-width: 120px;
-      display: none;
-    }
-
-    .post-menu-dropdown.show {
-      display: block;
-      animation: fadeInUp 0.2s ease;
-    }
-
-    .post-menu-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 12px;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      font-size: 13px;
-      color: #333;
-    }
-
-    .post-menu-item:hover {
-      background: var(--sky);
-      color: var(--primary-color);
-    }
-
-    .post-menu-item i {
-      font-size: 12px;
-      width: 16px;
-    }
-
-    /* ===== 🔥 صفحة محتوى الخبر الجديدة ===== */
-    .news-content-page {
-      padding: 20px;
-    }
-
-    .news-content-card {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      border-radius: 20px;
-      padding: 25px;
+    [data-theme="dark"] .ai-send-btn {
+      background: rgba(255, 255, 255, 0.2);
       color: white;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-      margin-bottom: 20px;
-      position: relative;
-      overflow: hidden;
     }
 
-    .news-content-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 100%;
-      background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
-      transform: translateX(-100%);
-    }
-
-    .news-content-title {
-      font-size: 24px;
-      font-weight: 900;
-      margin-bottom: 15px;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-      line-height: 1.3;
-    }
-
-    .news-content-body {
-      font-size: 16px;
-      line-height: 1.8;
-      opacity: 0.95;
-      margin-bottom: 20px;
-      white-space: pre-wrap;
-      word-wrap: break-word;
-    }
-
-    .news-content-meta {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 14px;
-      opacity: 0.8;
-      border-top: 1px solid rgba(255,255,255,0.3);
-      padding-top: 15px;
-    }
-
-    .news-actions {
-      display: flex;
-      gap: 10px;
-      margin-top: 15px;
-    }
-
-    /* ===== 🔥 صفحة التواصل مع الدعم الجديدة ===== */
+    /* ===== صفحة التواصل مع الدعم الجديدة ===== */
     .support-page {
       padding: 20px;
     }
@@ -1804,7 +1842,7 @@
       width: 24px;
     }
 
-    /* ===== 🔥 صفحة الرد على مشاكل المستخدمين ===== */
+    /* ===== 🔥 صفحة الرد على مشاكل المستخدمين - تصميم جديد ومحسن ===== */
     .user-support-page {
       padding: 20px;
     }
@@ -1816,40 +1854,76 @@
       margin-bottom: 15px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.1);
       border: 1px solid var(--border-color);
+      transition: all 0.3s ease;
+    }
+
+    [data-theme="dark"] .user-support-item {
+      background: #1e1e1e;
+      color: #ffffff;
+      border-color: #333;
+    }
+
+    .user-support-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
     }
 
     .support-meta {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-color);
     }
 
     .support-user {
       font-weight: 700;
       color: var(--primary-color);
+      font-size: 16px;
     }
 
     .support-type {
       background: var(--accent-color);
       color: white;
-      padding: 4px 8px;
+      padding: 6px 12px;
       border-radius: 8px;
       font-size: 12px;
       font-weight: 700;
     }
 
     .support-message {
-      color: #333;
+      color: var(--text-color);
       line-height: 1.6;
-      margin-bottom: 12px;
+      margin-bottom: 15px;
       white-space: pre-wrap;
+      font-size: 14px;
     }
 
     .reply-section {
       border-top: 1px dashed var(--border-color);
       padding-top: 12px;
       margin-top: 12px;
+    }
+
+    .support-reply-btn {
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .support-reply-btn:hover {
+      background: #3a5bef;
+      transform: translateY(-1px);
     }
 
     /* 🔥 ازرار لوحة التحكم باللون الازرق */
@@ -1863,6 +1937,335 @@
       background: #3a5bef !important;
       transform: translateY(-2px);
     }
+
+    /* 🔥 تصميم جديد لصفحة إدارة الذكاء الاصطناعي */
+    .ai-management-page {
+      padding: 20px;
+    }
+
+    .ai-management-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .ai-management-item {
+      background: var(--gradient-primary);
+      border-radius: 15px;
+      padding: 20px;
+      color: white;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .ai-management-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    .ai-management-item h3 {
+      margin-bottom: 10px;
+      font-size: 18px;
+    }
+
+    .ai-management-item p {
+      margin-bottom: 15px;
+      opacity: 0.9;
+    }
+
+    .ai-management-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .ai-stat {
+      background: rgba(255,255,255,0.15);
+      padding: 10px;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    .ai-stat-number {
+      font-size: 20px;
+      font-weight: 900;
+      margin-bottom: 5px;
+    }
+
+    .ai-stat-label {
+      font-size: 12px;
+      opacity: 0.8;
+    }
+    
+    /* 🔥 إضافة تصميم قائمة النقاط الثلاثة في المنشورات */
+.post-menu {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 10;
+}
+
+.post-menu-btn {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--border-color);
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--text-color);
+  transition: all 0.3s ease;
+}
+
+.post-menu-btn:hover {
+  background: var(--primary-color);
+  color: white;
+  transform: scale(1.1);
+}
+
+.post-menu-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: white;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  min-width: 150px;
+  display: none;
+  z-index: 100;
+}
+
+[data-theme="dark"] .post-menu-dropdown {
+  background: #2a2a2a;
+  border-color: #444;
+}
+
+.post-menu-dropdown.show {
+  display: block;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.post-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--border-color);
+  transition: all 0.2s ease;
+  font-size: 13px;
+  color: var(--text-color);
+}
+
+.post-menu-item:last-child {
+  border-bottom: none;
+}
+
+.post-menu-item:hover {
+  background: var(--sky);
+  color: var(--primary-color);
+}
+
+.post-menu-item i {
+  width: 16px;
+  text-align: center;
+  font-size: 12px;
+}
+
+/* 🔥 تحسينات جديدة للذكاء الاصطناعي */
+.ai-warning {
+  position: absolute;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  color: rgba(255, 255, 255, 0.7);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 11px;
+  text-align: center;
+  z-index: 5;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  max-width: 90%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ai-clear-btn {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 14px;
+  color: white;
+  z-index: 10;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.ai-clear-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+/* 🔥 تحسينات للمحادثة - حجم أكبر */
+.ai-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.ai-message {
+  max-width: 85%;
+  padding: 16px 20px;
+  border-radius: 20px;
+  line-height: 1.6;
+  word-wrap: break-word;
+  animation: messageSlide 0.3s ease-out;
+  font-size: 16px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.ai-message.user {
+  align-self: flex-end;
+  background: rgba(255, 255, 255, 0.95);
+  color: #333;
+  border-bottom-right-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.ai-message.assistant {
+  align-self: flex-start;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(15px);
+  color: white;
+  border-bottom-left-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.ai-input-container {
+  display: flex;
+  gap: 12px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  position: relative;
+  z-index: 2;
+}
+
+.ai-input {
+  flex: 1;
+  padding: 16px 20px;
+  border: none;
+  border-radius: 25px;
+  background: rgba(255, 255, 255, 0.95);
+  color: #333;
+  font-size: 16px;
+  outline: none;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.ai-send-btn {
+  background: rgba(255, 255, 255, 0.95);
+  border: none;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #667eea;
+  font-size: 20px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.ai-send-btn:hover {
+  background: white;
+  transform: scale(1.05);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+/* 🔥 صفحة تعليم الذكاء الاصطناعي الجديدة */
+.ai-training-page {
+  padding: 20px;
+}
+
+.ai-training-card {
+  background: var(--gradient-primary);
+  border-radius: 20px;
+  padding: 25px;
+  color: white;
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+  margin-bottom: 20px;
+}
+
+.ai-training-title {
+  font-size: 20px;
+  font-weight: 900;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.ai-training-actions {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 15px;
+}
+
+.ai-training-btn {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 20px;
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 15px;
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: right;
+}
+
+.ai-training-btn:hover {
+  background: rgba(255,255,255,0.25);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+}
+
+.ai-training-btn i {
+  font-size: 22px;
+  width: 30px;
+}
 
   </style>
 
@@ -2046,13 +2449,14 @@
             <span>التواصل مع الدعم</span>
           </div>
           
-          <!-- 6. زر باقي الازرار (للمالك فقط) -->
+          
+          <!-- 7. زر باقي الازرار (للمالك فقط) -->
           <div class="menu-item owner-only" style="display:none" onclick="showAdminPanel()">
             <i class="fas fa-cogs"></i>
             <span>باقي الازرار</span>
           </div>
           
-          <!-- 7. زر تسجيل الخروج -->
+          <!-- 8. زر تسجيل الخروج -->
           <div class="menu-item" onclick="logout()">
             <i class="fas fa-sign-out-alt"></i>
             <span>تسجيل الخروج</span>
@@ -2105,29 +2509,34 @@
     </div>
   </div>
 
-  <!-- صفحة الإدارة (للمالك فقط) -->
   <div id="admin-panel-page" class="container page" style="display:none">
     <div class="header">
-      <button class="btn btn-secondary" onclick="backToProfile()"><i class="fas fa-arrow-right"></i></button>
-      <span style="font-weight:900">لوحة التحكم</span>
+        <button class="btn btn-secondary" onclick="backToProfile()"><i class="fas fa-arrow-right"></i></button>
+        <span style="font-weight:900">لوحة التحكم</span>
     </div>
     <div class="posts-container">
-      <div class="admin-menu">
-        <div class="menu-item admin-control-btn" onclick="showUserManagement()">
-          <i class="fas fa-users-cog"></i>
-          <span>إدارة المستخدمين</span>
+        <div class="admin-menu">
+            <div class="menu-item admin-control-btn" onclick="showUserManagement()">
+                <i class="fas fa-users-cog"></i>
+                <span>إدارة المستخدمين</span>
+            </div>
+            <div class="menu-item admin-control-btn" onclick="showBroadcastPanel()">
+                <i class="fas fa-bullhorn"></i>
+                <span>إشعار عام</span>
+            </div>
+            <!-- نهاية الزر المضاف -->
+            <div class="menu-item admin-control-btn" onclick="showUserSupportPage()">
+                <i class="fas fa-comments"></i>
+                <span>الرد على المستخدمين</span>
+            </div>
+            <!-- 🔥 الزر المضاف هنا -->
+            <div class="menu-item admin-control-btn" onclick="showAITrainingPage()">
+                <i class="fas fa-graduation-cap"></i>
+                <span>تعليم الذكاء الاصطناعي</span>
+            </div>
         </div>
-        <div class="menu-item admin-control-btn" onclick="showBroadcastPanel()">
-          <i class="fas fa-bullhorn"></i>
-          <span>إشعار عام</span>
-        </div>
-        <div class="menu-item admin-control-btn" onclick="showUserSupportPage()">
-          <i class="fas fa-comments"></i>
-          <span>الرد على المستخدمين</span>
-        </div>
-      </div>
     </div>
-  </div>
+</div>
 
   <!-- صفحة إدارة المستخدمين -->
   <div id="user-management-page" class="container page" style="display:none">
@@ -2180,38 +2589,65 @@
     </div>
   </div>
 
-  <!-- 🔥 صفحة أخبار السادس الجديدة -->
-  <div id="news-page" class="container page" style="display:none">
+  <!-- 🔥 صفحة تعليم الذكاء الاصطناعي الجديدة -->
+  <div id="ai-training-page" class="container page" style="display:none">
     <div class="header">
-      <button class="btn btn-secondary" onclick="backToMainFromNews()"><i class="fas fa-arrow-right"></i></button>
-      <span style="font-weight:900">أخبار السادس</span>
+      <button class="btn btn-secondary" onclick="backToProfile()"><i class="fas fa-arrow-right"></i></button>
+      <span style="font-weight:900">تعليم الذكاء الاصطناعي</span>
     </div>
-    
-    <!-- مؤشر سحب التحديث لأخبار السادس -->
-    <div class="pull-indicator">
-      <div id="news-pull-bubble" class="bubble" style="display: none">
-        <i class="fas fa-sync-alt fa-spin"></i> جاري التحديث...
+    <div class="ai-training-page">
+      <div class="ai-training-card">
+        <div class="ai-training-title">إعدادات المساعد الدراسي</div>
+        
+        <div class="ai-training-actions">
+          <button class="ai-training-btn" onclick="openAICommandsModal()">
+            <i class="fas fa-terminal"></i>
+            <span>إضافة أوامر للمساعد</span>
+          </button>
+          
+          <button class="ai-training-btn" onclick="openAIKnowledgeModal()">
+            <i class="fas fa-brain"></i>
+            <span>إضافة معلومات للمساعد</span>
+          </button>
+        </div>
       </div>
     </div>
-    
-    <div class="news-section" id="news-container">
-      <!-- سيتم عرض أخبار السادس هنا -->
-    </div>
-    
-    <!-- زر إضافة خبر جديد (للمالك فقط) -->
-    <button class="add-news-btn owner-only" style="display:none" onclick="openAddNewsModal()">
-      <i class="fas fa-plus"></i>
-    </button>
   </div>
 
-  <!-- 🔥 صفحة محتوى الخبر الجديدة -->
-  <div id="news-content-page" class="container page" style="display:none">
+  <!-- 🔥 صفحة المساعد الدراسي الجديدة - بدون شاشة ترحيب -->
+  <div id="ai-assistant-page" class="container page" style="display:none">
     <div class="header">
-      <button class="btn btn-secondary" onclick="backToNews()"><i class="fas fa-arrow-right"></i></button>
-      <span style="font-weight:900">محتوى الخبر</span>
+      <button class="btn btn-secondary" onclick="backToMainFromAI()"><i class="fas fa-arrow-right"></i></button>
+      <span style="font-weight:900">المساعد الدراسي</span>
     </div>
-    <div class="news-content-page" id="news-content-container">
-      <!-- سيتم عرض محتوى الخبر هنا -->
+    
+    <div class="ai-assistant-page">
+      <!-- 🔥 زر مسح المحادثة -->
+      <button class="ai-clear-btn" onclick="clearAIConversation()" title="مسح المحادثة">
+        <i class="fas fa-trash"></i>
+      </button>
+      
+      <!-- 🔥 تنبيه صغير -->
+      <div class="ai-warning" id="ai-warning">
+        ⚠️ الإجابات قد تكون غير دقيقة
+      </div>
+      
+      <!-- 🔥 إزالة شاشة الترحيب وإظهار المحادثة مباشرة -->
+      <div class="ai-chat-container" id="ai-chat-container">
+        <div class="ai-messages" id="ai-messages">
+          <!-- 🔥 رسالة ترحيب مباشرة -->
+          <div class="ai-message assistant">
+            مرحباً! أنا المساعد الدراسي. كيف يمكنني مساعدتك اليوم في دراستك؟
+          </div>
+        </div>
+        
+        <div class="ai-input-container">
+          <input type="text" class="ai-input" id="ai-input" placeholder="اكتب سؤالك هنا..." onkeypress="handleAIKeyPress(event)">
+          <button class="ai-send-btn" id="ai-send-btn" onclick="sendAIMessage()">
+            <i class="fas fa-paper-plane"></i>
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -2241,20 +2677,17 @@
     </div>
   </div>
 
-  <!-- 🔥 صفحة الرد على مشاكل المستخدمين -->
+  <!-- 🔥 صفحة الرد على مشاكل المستخدمين - تصميم جديد -->
   <div id="user-support-page" class="container page" style="display:none">
     <div class="header">
       <button class="btn btn-secondary" onclick="backToAdminPanel()"><i class="fas fa-arrow-right"></i></button>
       <span style="font-weight:900">الرد على المستخدمين</span>
     </div>
     <div class="user-support-page" id="user-support-container">
-      <div class="search-box" style="margin-bottom: 15px;">
-        <input type="text" id="support-search-input" class="form-control" placeholder="ابحث برقم ID المستخدم...">
-        <button class="btn" onclick="searchUserSupport()" style="margin-top: 10px; width: 100%;">بحث</button>
-      </div>
+      <!-- 🔥 إزالة مربع البحث -->
       <div id="user-support-results">
         <div class="post">
-          <p>استخدم مربع البحث للعثور على المستخدمين الذين أرسلوا اقتراحات أو مشاكل</p>
+          <p style="text-align: center; color: var(--text-color);">جاري تحميل طلبات المستخدمين...</p>
         </div>
       </div>
     </div>
@@ -2267,10 +2700,10 @@
       <span>المنشورات</span>
       <div id="posts-badge" class="nav-badge" style="display: none">0</div>
     </div>
-    <div class="nav-item" data-page="news" onclick="showNewsPage()">
-      <i class="fas fa-newspaper"></i>
-      <span>أخبار السادس</span>
-      <div id="news-badge" class="nav-badge" style="display: none">0</div>
+    <div class="nav-item" data-page="ai-assistant" onclick="showAIAssistantPage()">
+      <i class="fas fa-robot"></i>
+      <span>المساعد الدراسي</span>
+      <div id="ai-badge" class="nav-badge" style="display: none">0</div>
     </div>
     <div class="nav-item" data-page="profile" onclick="showProfilePage()">
       <i class="fas fa-user"></i>
@@ -2461,50 +2894,45 @@
     </div>
   </div>
 
-  <!-- 🔥 مودال إضافة خبر جديد -->
-  <div id="add-news-modal" class="modal">
-    <div class="modal-content news-modal-content">
+  <!-- 🔥 مودال إضافة أوامر للذكاء الاصطناعي -->
+  <div id="ai-commands-modal" class="modal">
+    <div class="modal-content ai-modal-content">
       <div class="modal-header">
-        <h2 style="color: white;">إضافة خبر جديد</h2>
-        <button class="close-modal" style="color: white;" onclick="closeAddNewsModal()">&times;</button>
+        <h2 style="color: white;">إضافة أوامر للمساعد</h2>
+        <button class="close-modal" style="color: white;" onclick="closeAICommandsModal()">&times;</button>
       </div>
       <div class="select-group">
-        <label style="color: white;">عنوان الخبر</label>
-        <input type="text" id="new-news-title" class="form-control" placeholder="أدخل عنوان الخبر...">
+        <label style="color: white;">الأوامر الممنوعة</label>
+        <textarea id="ai-commands-input" class="form-control" rows="6" placeholder="اكتب الأوامر التي تريد منع المساعد من تنفيذها (كل أمر في سطر)..."></textarea>
       </div>
       <div class="select-group">
-        <label style="color: white;">محتوى الخبر</label>
-        <textarea id="new-news-content" class="form-control" rows="6" placeholder="أدخل محتوى الخبر..."></textarea>
+        <label style="color: white;">التعليمات الخاصة</label>
+        <textarea id="ai-instructions-input" class="form-control" rows="4" placeholder="اكتب التعليمات الإضافية للمساعد..."></textarea>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-secondary" onclick="closeAddNewsModal()">إلغاء</button>
-        <button class="btn btn-success" onclick="addNewNews()">
-          <i class="fas fa-plus"></i> إضافة الخبر
+        <button class="btn btn-secondary" onclick="closeAICommandsModal()">إلغاء</button>
+        <button class="btn btn-success" onclick="saveAICommands()">
+          <i class="fas fa-save"></i> حفظ الأوامر
         </button>
       </div>
     </div>
   </div>
 
-  <!-- 🔥 مودال تعديل الخبر -->
-  <div id="edit-news-modal" class="modal">
-    <div class="modal-content news-modal-content">
+  <!-- 🔥 مودال إضافة معلومات للذكاء الاصطناعي -->
+  <div id="ai-knowledge-modal" class="modal">
+    <div class="modal-content ai-modal-content">
       <div class="modal-header">
-        <h2 style="color: white;">تعديل الخبر</h2>
-        <button class="close-modal" style="color: white;" onclick="closeEditNewsModal()">&times;</button>
-      </div>
-      <input type="hidden" id="edit-news-id">
-      <div class="select-group">
-        <label style="color: white;">عنوان الخبر</label>
-        <input type="text" id="edit-news-title" class="form-control" placeholder="أدخل عنوان الخبر...">
+        <h2 style="color: white;">إضافة معلومات للمساعد</h2>
+        <button class="close-modal" style="color: white;" onclick="closeAIKnowledgeModal()">&times;</button>
       </div>
       <div class="select-group">
-        <label style="color: white;">محتوى الخبر</label>
-        <textarea id="edit-news-content" class="form-control" rows="6" placeholder="أدخل محتوى الخبر..."></textarea>
+        <label style="color: white;">المعلومات الجديدة</label>
+        <textarea id="ai-knowledge-input" class="form-control" rows="8" placeholder="اكتب المعلومات التي تريد إضافتها إلى معرفة المساعد..."></textarea>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-secondary" onclick="closeEditNewsModal()">إلغاء</button>
-        <button class="btn btn-success" onclick="saveNewsEdits()">
-          <i class="fas fa-save"></i> حفظ التعديلات
+        <button class="btn btn-secondary" onclick="closeAIKnowledgeModal()">إلغاء</button>
+        <button class="btn btn-success" onclick="saveAIKnowledge()">
+          <i class="fas fa-save"></i> حفظ المعلومات
         </button>
       </div>
     </div>
@@ -2614,11 +3042,14 @@ try {
 
 const APP_OWNER_EMAIL = "mslmalmyaly223@gmail.com";
 
+/* ===== إعدادات الذكاء الاصطناعي ===== */
+const AI_ENDPOINT = "https://api.deepseek.com/v1/chat/completions";
+const AI_KEY = "sk-ff429bca45194b3c87dacda66d63bfb5";
+
 /* ===== State ===== */
 let currentUser = null;
 let posts = [];
 let companies = [];
-let news = [];
 let activeSection = "posts";
 let currentDetailsPostId = null;
 let currentCommentsPostId = null;
@@ -2628,21 +3059,38 @@ let lastBroadcast = null;
 let isFirstLoginSession = false;
 
 // نظام الإشعارات
-let unreadNotifications = { inbox: 0, newPosts: 0, newNews: 0 };
+let unreadNotifications = { inbox: 0, newPosts: 0 };
 let unreadPostsCount = 0;
-let unreadNewsCount = 0;
 let notificationsListener = null;
 let postsListener = null;
 let commentsListener = null;
-let newsListener = null;
 
 // عناصر DOM
 let pages = {};
-let postsContainer, companiesContainer, userPostsContainer, detailsContainer, commentsList, inboxContainer, newsContainer;
-let createBtn, createBtnLabel, filterBox, pillPosts, pillCompanies;
+let postsContainer, companiesContainer, userPostsContainer, detailsContainer, commentsList, inboxContainer;
 
 // ===== متغيرات جديدة للصورة في التسجيل =====
 let registerAvatarBase64 = null;
+
+// ===== متغيرات الذكاء الاصطناعي =====
+let aiConversations = {};
+let aiSystemPrompt = `أنت مساعد دراسي عراقي متخصص في مساعدة طلاب السادس العلمي والأدبي. يجب أن:
+
+1. تتحدث باللغة العربية الفصحى السليمة فقط
+2. تركز على المواضيع الدراسية فقط (رياضيات، فيزياء، كيمياء، عربي، انكليزي، إحياء، جغرافيا، تاريخ، إسلامية)
+3. لا تجيب على أسئلة غير دراسية أو شخصية
+4. تدعم جميع الرموز الرياضية والعلمية
+5. تكون مفيداً وودوداً مع الطلاب
+6. تشرح المفاهيم بطريقة سهلة ومبسطة
+7. تعطي أمثلة عملية عندما يكون ذلك مناسباً
+8. تستخدم لغة عربية سليمة بدون أخطاء إملائية أو نحوية
+9. تركز على منهج السادس العلمي والأدبي العراقي
+10. تساعد في حل المسائل الرياضية والعلمية خطوة بخطوة
+
+تذكر: أنت مساعد دراسي فقط، لا تتحدث عن مواضيع أخرى.`;
+
+let aiCommands = [];
+let aiKnowledge = [];
 
 /* =========================
    نظام الوضع الليلي
@@ -3143,8 +3591,13 @@ auth.onAuthStateChanged(async (user) => {
     console.log("📥 Loading posts and companies...");
     updateLoadingText('جاري تحميل المنشورات...');
     
-    // تحميل البيانات بالتوازي لتحسين السرعة
-    await Promise.all([loadPostsFromFirestore(), loadCompanies(), fetchLatestBroadcast(), loadNews()]);
+    // 🔥 تحميل البيانات بشكل أسرع - تحسين المشكلة الأولى
+    await Promise.all([
+      loadPostsFromFirestore(), 
+      loadCompanies(), 
+      fetchLatestBroadcast(), 
+      loadAIConfig()
+    ]);
     
     startAllListeners();
     
@@ -3158,6 +3611,320 @@ auth.onAuthStateChanged(async (user) => {
     hideSplashAfterLoad();
   }
 });
+
+/* =========================
+   🔥 نظام الذكاء الاصطناعي الجديد - محسن
+========================= */
+
+// 🔥 تحميل إعدادات الذكاء الاصطناعي
+async function loadAIConfig() {
+  if (!isOwner()) return;
+  
+  try {
+    const configDoc = await db.collection('ai_config').doc('settings').get();
+    if (configDoc.exists) {
+      const data = configDoc.data();
+      aiCommands = data.commands || [];
+      aiKnowledge = data.knowledge || [];
+      aiSystemPrompt = data.systemPrompt || aiSystemPrompt;
+    }
+  } catch (error) {
+    console.error('Error loading AI config:', error);
+  }
+}
+
+// 🔥 حفظ إعدادات الذكاء الاصطناعي
+async function saveAIConfig() {
+  if (!isOwner()) return;
+  
+  try {
+    await db.collection('ai_config').doc('settings').set({
+      commands: aiCommands,
+      knowledge: aiKnowledge,
+      systemPrompt: aiSystemPrompt,
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      updatedBy: currentUser.uid
+    });
+    showNotification('تم حفظ إعدادات الذكاء الاصطناعي', 'success');
+  } catch (error) {
+    console.error('Error saving AI config:', error);
+    showNotification('فشل حفظ الإعدادات', 'error');
+  }
+}
+
+// 🔥 إظهار صفحة المساعد الدراسي - بدون شاشة ترحيب
+function showAIAssistantPage() {
+  showPage("ai-assistant");
+  loadAIConversation();
+}
+
+// 🔥 العودة من المساعد الدراسي
+function backToMainFromAI() {
+  showPage("main");
+}
+
+// 🔥 تحميل محادثة المستخدم - بدون شاشة ترحيب
+function loadAIConversation() {
+  if (!currentUser) return;
+  
+  const userId = currentUser.uid;
+  const savedConversation = localStorage.getItem(`ai_conversation_${userId}`);
+  
+  if (savedConversation) {
+    aiConversations[userId] = JSON.parse(savedConversation);
+    renderAIConversation();
+  } else {
+    aiConversations[userId] = [];
+    // 🔥 إضافة رسالة ترحيب مباشرة بدون شاشة منفصلة
+    addAIMessage('assistant', 'مرحباً! أنا المساعد الدراسي. كيف يمكنني مساعدتك اليوم في دراستك؟');
+  }
+}
+
+// 🔥 حفظ محادثة المستخدم
+function saveAIConversation() {
+  if (!currentUser) return;
+  
+  const userId = currentUser.uid;
+  if (aiConversations[userId]) {
+    localStorage.setItem(`ai_conversation_${userId}`, JSON.stringify(aiConversations[userId]));
+  }
+}
+
+// 🔥 عرض المحادثة
+function renderAIConversation() {
+  const messagesContainer = document.getElementById('ai-messages');
+  if (!messagesContainer) return;
+  
+  const userId = currentUser.uid;
+  const conversation = aiConversations[userId] || [];
+  
+  messagesContainer.innerHTML = conversation.map(msg => `
+    <div class="ai-message ${msg.role}">
+      ${escapeHTML(msg.content).replace(/\n/g, '<br>')}
+    </div>
+  `).join('');
+  
+  // التمرير إلى الأسفل
+  messagesContainer.scrollTop = messagesContainer.scrollHeight;
+}
+
+// 🔥 إضافة رسالة إلى المحادثة
+function addAIMessage(role, content) {
+  if (!currentUser) return;
+  
+  const userId = currentUser.uid;
+  if (!aiConversations[userId]) {
+    aiConversations[userId] = [];
+  }
+  
+  aiConversations[userId].push({
+    role: role,
+    content: content,
+    timestamp: new Date().toISOString()
+  });
+  
+  // حفظ المحادثة
+  saveAIConversation();
+  
+  // عرض الرسالة
+  renderAIConversation();
+}
+
+// 🔥 إظهار مؤشر الكتابة
+function showAITyping() {
+  const messagesContainer = document.getElementById('ai-messages');
+  if (!messagesContainer) return;
+  
+  messagesContainer.innerHTML += `
+    <div class="ai-typing">
+      <span>المساعد يكتب...</span>
+      <div class="ai-typing-dots">
+        <div class="ai-typing-dot"></div>
+        <div class="ai-typing-dot"></div>
+        <div class="ai-typing-dot"></div>
+      </div>
+    </div>
+  `;
+  
+  messagesContainer.scrollTop = messagesContainer.scrollHeight;
+}
+
+// 🔥 إخفاء مؤشر الكتابة
+function hideAITyping() {
+  const messagesContainer = document.getElementById('ai-messages');
+  if (!messagesContainer) return;
+  
+  const typingIndicator = messagesContainer.querySelector('.ai-typing');
+  if (typingIndicator) {
+    typingIndicator.remove();
+  }
+}
+
+// 🔥 إرسال رسالة إلى الذكاء الاصطناعي - محسن للغة العربية
+async function sendAIMessage() {
+  if (!currentUser) return;
+  
+  const input = document.getElementById('ai-input');
+  const message = input.value.trim();
+  
+  if (!message) return;
+  
+  // إضافة رسالة المستخدم
+  addAIMessage('user', message);
+  
+  // مسح حقل الإدخال
+  input.value = '';
+  
+  // تعطيل زر الإرسال
+  const sendBtn = document.getElementById('ai-send-btn');
+  sendBtn.disabled = true;
+  
+  // إظهار مؤشر الكتابة
+  showAITyping();
+  
+  try {
+    // إعداد الرسائل للمحادثة
+    const userId = currentUser.uid;
+    const conversation = aiConversations[userId] || [];
+    
+    // إنشاء قائمة الرسائل مع النظام والأوامر
+    const messages = [
+      {
+        role: 'system',
+        content: aiSystemPrompt + '\n\n' + 
+                (aiKnowledge.length > 0 ? 'معلومات إضافية:\n' + aiKnowledge.join('\n') : '') +
+                (aiCommands.length > 0 ? '\n\nأوامر ممنوعة:\n' + aiCommands.join('\n') : '') +
+                '\n\nتأكد من:\n' +
+                '1. استخدام اللغة العربية الفصحى السليمة\n' +
+                '2. عدم وجود أخطاء إملائية أو نحوية\n' +
+                '3. الالتزام بالمواضيع الدراسية فقط\n' +
+                '4. تقديم إجابات دقيقة ومفيدة\n' +
+                '5. شرح المفاهيم بطريقة مبسطة'
+      },
+      ...conversation.slice(-10).map(msg => ({
+        role: msg.role,
+        content: msg.content
+      }))
+    ];
+    
+    // إرسال الطلب إلى الذكاء الاصطناعي
+    const response = await fetch(AI_ENDPOINT, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${AI_KEY}`
+      },
+      body: JSON.stringify({
+        model: 'deepseek-chat',
+        messages: messages,
+        max_tokens: 2000,
+        temperature: 0.7
+      })
+    });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    
+    // إخفاء مؤشر الكتابة
+    hideAITyping();
+    
+    // إضافة رد الذكاء الاصطناعي
+    if (data.choices && data.choices[0] && data.choices[0].message) {
+      const aiResponse = data.choices[0].message.content;
+      addAIMessage('assistant', aiResponse);
+    } else {
+      throw new Error('Invalid response format');
+    }
+    
+  } catch (error) {
+    console.error('Error calling AI:', error);
+    hideAITyping();
+    
+    // إضافة رسالة خطأ
+    addAIMessage('assistant', 'عذراً، لم أتمكن من الإجابة حالياً. يرجى المحاولة مرة أخرى لاحقاً.');
+    
+    showNotification('حدث خطأ في الاتصال بالمساعد', 'error');
+  } finally {
+    // تمكين زر الإرسال
+    sendBtn.disabled = false;
+  }
+}
+
+// 🔥 التعامل مع ضغط Enter في حقل الإدخال
+function handleAIKeyPress(event) {
+  if (event.key === 'Enter') {
+    sendAIMessage();
+  }
+}
+
+// 🔥 مسح محادثة الذكاء الاصطناعي
+function clearAIConversation() {
+  if (!currentUser) return;
+  
+  if (!confirm('هل أنت متأكد من مسح المحادثة؟ سيتم حذف جميع الرسائل.')) return;
+  
+  const userId = currentUser.uid;
+  aiConversations[userId] = [];
+  
+  // إضافة رسالة ترحيب جديدة
+  addAIMessage('assistant', 'مرحباً! أنا المساعد الدراسي. كيف يمكنني مساعدتك اليوم في دراستك؟');
+  
+  showNotification('تم مسح المحادثة', 'success');
+}
+
+// 🔥 فتح مودال إضافة الأوامر
+function openAICommandsModal() {
+  document.getElementById('ai-commands-modal').style.display = 'block';
+  document.getElementById('ai-commands-input').value = aiCommands.join('\n');
+  document.getElementById('ai-instructions-input').value = aiSystemPrompt;
+}
+
+// 🔥 إغلاق مودال إضافة الأوامر
+function closeAICommandsModal() {
+  document.getElementById('ai-commands-modal').style.display = 'none';
+}
+
+// 🔥 حفظ الأوامر
+function saveAICommands() {
+  const commandsInput = document.getElementById('ai-commands-input').value;
+  const instructionsInput = document.getElementById('ai-instructions-input').value;
+  
+  aiCommands = commandsInput.split('\n').filter(cmd => cmd.trim());
+  aiSystemPrompt = instructionsInput.trim() || aiSystemPrompt;
+  
+  saveAIConfig();
+  closeAICommandsModal();
+}
+
+// 🔥 فتح مودال إضافة المعلومات
+function openAIKnowledgeModal() {
+  document.getElementById('ai-knowledge-modal').style.display = 'block';
+  document.getElementById('ai-knowledge-input').value = aiKnowledge.join('\n');
+}
+
+// 🔥 إغلاق مودال إضافة المعلومات
+function closeAIKnowledgeModal() {
+  document.getElementById('ai-knowledge-modal').style.display = 'none';
+}
+
+// 🔥 حفظ المعلومات
+function saveAIKnowledge() {
+  const knowledgeInput = document.getElementById('ai-knowledge-input').value;
+  
+  aiKnowledge = knowledgeInput.split('\n').filter(info => info.trim());
+  
+  saveAIConfig();
+  closeAIKnowledgeModal();
+}
+
+// 🔥 إظهار صفحة تعليم الذكاء الاصطناعي
+function showAITrainingPage() {
+  if (!isOwner()) return;
+  showPage("ai-training");
+}
 
 /* =========================
    Pages & Navigation
@@ -3176,8 +3943,8 @@ function initializePages() {
     userManagement: document.getElementById("user-management-page"),
     broadcastPanel: document.getElementById("broadcast-panel-page"),
     privacyPolicy: document.getElementById("privacy-policy-page"),
-    news: document.getElementById("news-page"),
-    newsContent: document.getElementById("news-content-page"),
+    'ai-assistant': document.getElementById("ai-assistant-page"),
+    'ai-training': document.getElementById("ai-training-page"),
     support: document.getElementById("support-page"),
     userSupport: document.getElementById("user-support-page")
   };
@@ -3201,6 +3968,11 @@ function showPage(key) {
   const helpBtn = document.getElementById('help-floating-btn');
   if (helpBtn) {
     helpBtn.style.display = (key === "auth") ? 'flex' : 'none';
+  }
+  
+  // 🔥 تحميل طلبات الدعم عند عرض صفحة الرد على المستخدمين
+  if (key === "userSupport") {
+    loadUserSupportRequests();
   }
 }
 
@@ -3241,12 +4013,8 @@ function backToMainFromComments() {
   showPage("main");
 }
 
-function backToMainFromNews() {
-  showPage("main");
-}
-
-function backToNews() {
-  showPage("news");
+function backToAdminPanel() {
+  showPage("adminPanel");
 }
 
 function switchAuthTab(tab) {
@@ -3289,583 +4057,6 @@ function updateUIForLoggedOutUser() {
   currentUser = null;
   document.getElementById("broadcast-banner").classList.remove('show');
   document.getElementById("broadcast-overlay").classList.remove('show');
-}
-
-/* =========================
-   🔥 نظام أخبار السادس الجديد
-========================= */
-
-// 🔥 إظهار صفحة أخبار السادس
-function showNewsPage() {
-  showPage("news");
-  renderNews();
-  clearNewsBadge(); // مسح الفقاعة عند الدخول للصفحة
-}
-
-// 🔥 تحميل أخبار السادس
-async function loadNews() {
-  try {
-    const snap = await db.collection('news').orderBy('createdAt', 'desc').get();
-    news = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-    
-    // تحديث عدد الأخبار الجديدة
-    updateNewsBadgeCount();
-    
-  } catch (error) {
-    console.error('Error loading news:', error);
-  }
-}
-
-// 🔥 عرض أخبار السادس بتصميم جديد
-function renderNews() {
-  const container = document.getElementById('news-container');
-  if (!container) return;
-  
-  if (news.length === 0) {
-    container.innerHTML = `
-      <div class="news-card" style="text-align: center;">
-        <div class="news-card-title">لا توجد أخبار حالياً</div>
-        <div class="news-card-content">
-          سيتم إضافة الأخبار قريباً...
-        </div>
-      </div>
-    `;
-    return;
-  }
-  
-  container.innerHTML = news.map(item => {
-    const newsDate = item.createdAt?.toDate ? formatRelativeTime(item.createdAt.toDate()) : 'غير معروف';
-    
-    return `
-      <div class="news-card" onclick="showNewsContent('${item.id}')">
-        <div class="news-card-title">
-          ${escapeHTML(item.title)}
-          <i class="fas fa-external-link-alt news-expand-icon"></i>
-        </div>
-        <div class="news-card-content">
-          ${escapeHTML(item.content)}
-        </div>
-        <div class="news-card-date">
-          <i class="far fa-clock"></i>
-          ${newsDate}
-        </div>
-      </div>
-    `;
-  }).join('');
-}
-
-// 🔥 دالة تبديل فتح/إغلاق محتوى الخبر
-function toggleNewsCard(card) {
-  card.classList.toggle('expanded');
-}
-
-// 🔥 إظهار محتوى الخبر الكامل
-async function showNewsContent(newsId) {
-  const newsItem = news.find(item => item.id === newsId);
-  if (!newsItem) return;
-  
-  showPage("newsContent");
-  
-  const container = document.getElementById('news-content-container');
-  const newsDate = newsItem.createdAt?.toDate ? formatRelativeTime(newsItem.createdAt.toDate()) : 'غير معروف';
-  
-  let ownerActions = '';
-  if (isOwner()) {
-    ownerActions = `
-      <div class="news-actions">
-        <button class="btn btn-warning" onclick="openEditNewsModal('${newsItem.id}')">
-          <i class="fas fa-edit"></i> تعديل الخبر
-        </button>
-        <button class="btn btn-danger" onclick="deleteNews('${newsItem.id}')">
-          <i class="fas fa-trash"></i> حذف الخبر
-        </button>
-      </div>
-    `;
-  }
-  
-  container.innerHTML = `
-    <div class="news-content-card">
-      <div class="news-content-title">${escapeHTML(newsItem.title)}</div>
-      <div class="news-content-body">${escapeHTML(newsItem.content)}</div>
-      <div class="news-content-meta">
-        <span><i class="far fa-clock"></i> ${newsDate}</span>
-      </div>
-      ${ownerActions}
-    </div>
-  `;
-}
-
-// 🔥 فتح مودال تعديل الخبر
-function openEditNewsModal(newsId) {
-  const newsItem = news.find(item => item.id === newsId);
-  if (!newsItem) return;
-  
-  document.getElementById('edit-news-modal').style.display = 'block';
-  document.getElementById('edit-news-id').value = newsId;
-  document.getElementById('edit-news-title').value = newsItem.title;
-  document.getElementById('edit-news-content').value = newsItem.content;
-}
-
-// 🔥 إغلاق مودال تعديل الخبر
-function closeEditNewsModal() {
-  document.getElementById('edit-news-modal').style.display = 'none';
-}
-
-// 🔥 حفظ تعديلات الخبر
-async function saveNewsEdits() {
-  const newsId = document.getElementById('edit-news-id').value;
-  const title = document.getElementById('edit-news-title').value.trim();
-  const content = document.getElementById('edit-news-content').value.trim();
-  
-  if (!title || !content) {
-    return showNotification('يرجى ملء جميع الحقول', 'error');
-  }
-  
-  try {
-    await db.collection('news').doc(newsId).update({
-      title,
-      content,
-      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-    });
-    
-    showNotification('تم تعديل الخبر بنجاح', 'success');
-    closeEditNewsModal();
-    
-    // تحديث القائمة
-    await loadNews();
-    renderNews();
-    
-    // تحديث صفحة المحتوى إذا كانت مفتوحة
-    showNewsContent(newsId);
-    
-  } catch (error) {
-    console.error('Error editing news:', error);
-    showNotification('فشل تعديل الخبر', 'error');
-  }
-}
-
-// 🔥 حذف الخبر
-async function deleteNews(newsId) {
-  if (!isOwner()) return;
-  
-  if (!confirm('هل أنت متأكد من حذف هذا الخبر؟')) return;
-  
-  try {
-    await db.collection('news').doc(newsId).delete();
-    showNotification('تم حذف الخبر بنجاح', 'success');
-    
-    // العودة إلى صفحة الأخبار
-    showPage("news");
-    
-    // تحديث القائمة
-    await loadNews();
-    renderNews();
-    
-  } catch (error) {
-    console.error('Error deleting news:', error);
-    showNotification('فشل حذف الخبر', 'error');
-  }
-}
-
-// 🔥 فتح مودال إضافة خبر جديد
-function openAddNewsModal() {
-  if (!isOwner()) return;
-  document.getElementById('add-news-modal').style.display = 'block';
-  document.getElementById('new-news-title').value = '';
-  document.getElementById('new-news-content').value = '';
-}
-
-// 🔥 إغلاق مودال إضافة خبر جديد
-function closeAddNewsModal() {
-  document.getElementById('add-news-modal').style.display = 'none';
-}
-
-// 🔥 إضافة خبر جديد
-async function addNewNews() {
-  if (!isOwner()) return;
-  
-  const title = document.getElementById('new-news-title').value.trim();
-  const content = document.getElementById('new-news-content').value.trim();
-  
-  if (!title || !content) {
-    return showNotification('يرجى ملء جميع الحقول', 'error');
-  }
-  
-  try {
-    await db.collection('news').add({
-      title,
-      content,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-      createdBy: currentUser.uid
-    });
-    
-    showNotification('تم إضافة الخبر بنجاح', 'success');
-    closeAddNewsModal();
-    
-    // تحديث القائمة
-    await loadNews();
-    renderNews();
-    
-  } catch (error) {
-    console.error('Error adding news:', error);
-    showNotification('فشل إضافة الخبر', 'error');
-  }
-}
-
-// 🔥 تحديث عدد الأخبار الجديدة
-function updateNewsBadgeCount() {
-  const lastSeenNewsTime = getLastSeenNewsTime();
-  let newCount = 0;
-  
-  news.forEach(item => {
-    const itemTime = item.createdAt?.toDate?.();
-    if (itemTime && itemTime > lastSeenNewsTime) {
-      newCount++;
-    }
-  });
-  
-  unreadNewsCount = newCount;
-  updateNavBadges();
-}
-
-// 🔥 الحصول على وقت آخر مشاهدة للأخبار
-function getLastSeenNewsTime() {
-  const lastSeen = localStorage.getItem('lastSeenNewsTime');
-  return lastSeen ? new Date(parseInt(lastSeen)) : new Date(0);
-}
-
-// 🔥 تحديث وقت آخر مشاهدة للأخبار
-function updateLastSeenNewsTime() {
-  const now = Date.now();
-  localStorage.setItem('lastSeenNewsTime', now.toString());
-  unreadNewsCount = 0;
-  updateNavBadges();
-}
-
-// 🔥 مسح فقاعة أخبار السادس
-function clearNewsBadge() {
-  updateLastSeenNewsTime();
-}
-
-/* =========================
-   🔥 صفحة التواصل مع الدعم
-========================= */
-
-// 🔥 إظهار صفحة التواصل مع الدعم
-function showSupportPage() {
-  showPage("support");
-}
-
-// 🔥 التواصل عبر التيليجرام
-function contactTelegram() {
-  window.open("https://t.me/mslmh19", "_blank");
-}
-
-// 🔥 فتح مودال إرسال اقتراح
-function openSuggestionModal() {
-  document.getElementById('suggestion-modal').style.display = 'block';
-  document.getElementById('suggestion-type').value = 'problem';
-  document.getElementById('suggestion-message').value = '';
-}
-
-// 🔥 إغلاق مودال إرسال اقتراح
-function closeSuggestionModal() {
-  document.getElementById('suggestion-modal').style.display = 'none';
-}
-
-// 🔥 إرسال اقتراح أو مشكلة
-async function sendSuggestion() {
-  const type = document.getElementById('suggestion-type').value;
-  const message = document.getElementById('suggestion-message').value.trim();
-  
-  if (!message) {
-    return showNotification('يرجى كتابة وصف المشكلة أو الاقتراح', 'error');
-  }
-  
-  try {
-    await db.collection('support').add({
-      userId: currentUser.uid,
-      userName: currentUser.name,
-      userEmail: currentUser.email,
-      userShortUid: currentUser.shortUid,
-      type: type,
-      message: message,
-      status: 'pending',
-      createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    });
-
-    // 🔥 إرسال إشعار للمالك في البريد الوارد مع نوع الرسالة
-    const typeText = type === 'problem' ? 'مشكلة جديدة' : 'اقتراح جديد';
-    const typeIcon = type === 'problem' ? '🚨' : '💡';
-    
-    await db.collection('inbox').add({
-      userId: 'owner', // إشعار خاص للمالك
-      type: 'support_request',
-      title: `${typeIcon} ${typeText}`,
-      message: `👤 المستخدم: ${currentUser.name}\n🆔 المعرف: ${currentUser.shortUid}\n📝 النوع: ${typeText}\n📋 الرسالة: ${message.substring(0, 100)}${message.length > 100 ? '...' : ''}`,
-      status: 'unread',
-      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-      userShortUid: currentUser.shortUid,
-      supportType: type
-    });
-    
-    showNotification('تم إرسال رسالتك بنجاح وسيتم الرد عليها قريباً', 'success');
-    closeSuggestionModal();
-    
-  } catch (error) {
-    console.error('Error sending suggestion:', error);
-    showNotification('فشل إرسال الرسالة', 'error');
-  }
-}
-
-// 🔥 إظهار صفحة الرد على مشاكل المستخدمين
-async function showUserSupportPage() {
-  if (!isOwner()) return;
-  showPage("userSupport");
-  // لا نحمل أي بيانات هنا، ننتظر البحث
-}
-
-// 🔥 دالة عرض تلقائي لجميع المشاكل والاقتراحات
-async function showUserSupportPage() {
-  if (!isOwner()) return;
-  showPage("userSupport");
-  await loadAllSupportRequests();
-}
-
-// 🔥 تحميل جميع طلبات الدعم تلقائياً
-async function loadAllSupportRequests() {
-  const resultsContainer = document.getElementById("user-support-results");
-  resultsContainer.innerHTML = '<div class="post"><p><i class="fas fa-spinner fa-spin"></i> جاري تحميل طلبات الدعم...</p></div>';
-
-  try {
-    // جلب جميع طلبات الدعم مرتبة من الأحدث
-    const supportSnap = await db.collection('support')
-      .orderBy('createdAt', 'desc')
-      .get();
-
-    if (supportSnap.empty) {
-      resultsContainer.innerHTML = `
-        <div class="post">
-          <p>📭 لا توجد طلبات دعم أو اقتراحات حالياً</p>
-          <small style="color: #777;">سيظهر هنا أي مشكلة أو اقتراح يرسله المستخدمون</small>
-        </div>
-      `;
-      return;
-    }
-
-    const supportItems = supportSnap.docs.map(doc => ({ 
-      id: doc.id, 
-      ...doc.data() 
-    }));
-
-    resultsContainer.innerHTML = supportItems.map(item => {
-      const created = item.createdAt?.toDate ? formatRelativeTime(item.createdAt.toDate()) : 'غير معروف';
-      const typeText = item.type === 'problem' ? 'مشكلة في التطبيق' : 'اقتراح للتطبيق';
-      const typeIcon = item.type === 'problem' ? '🚨' : '💡';
-      const statusBadge = item.status === 'resolved' ? 
-        '<span style="background: var(--success-color); color: white; padding: 4px 12px; border-radius: 12px; font-size: 12px; margin-right: 10px;"><i class="fas fa-check"></i> تم الرد</span>' : 
-        '<span style="background: var(--warning-color); color: black; padding: 4px 12px; border-radius: 12px; font-size: 12px; margin-right: 10px;"><i class="fas fa-clock"></i> بانتظار الرد</span>';
-      
-      return `
-        <div class="user-support-item">
-          <div class="support-meta">
-            <div class="support-user">
-              <strong>👤 ${escapeHTML(item.userName || 'مستخدم')}</strong>
-              <small style="color: #666; margin-right: 10px;">(${item.userShortUid || 'غير معروف'})</small>
-              ${statusBadge}
-            </div>
-            <div class="support-type">
-              ${typeIcon} ${typeText}
-            </div>
-          </div>
-          
-          <div class="support-message">
-            <strong>📝 الرسالة:</strong><br>
-            <div style="background: #f8f9fa; padding: 12px; border-radius: 8px; margin-top: 8px; border-right: 3px solid var(--primary-color);">
-              ${escapeHTML(item.message).replace(/\n/g, '<br>')}
-            </div>
-          </div>
-          
-          <div class="support-meta" style="margin-top: 15px; padding-top: 15px; border-top: 1px dashed #ddd;">
-            <small style="color: #777;">
-              <i class="far fa-clock"></i> ${created}
-            </small>
-            <div class="support-actions">
-              <button class="btn btn-primary btn-xs" onclick="openReplySupportModal('${item.userId}', '${escapeHTML(item.userName)}', '${item.userShortUid}', '${item.id}')" ${item.status === 'resolved' ? 'disabled' : ''}>
-                <i class="fas fa-reply"></i> ${item.status === 'resolved' ? 'تم الرد' : 'رد على المستخدم'}
-              </button>
-              
-              ${item.status !== 'resolved' ? `
-              <button class="btn btn-success btn-xs" onclick="markSupportAsResolved('${item.id}')">
-                <i class="fas fa-check"></i> تم حل المشكلة
-              </button>
-              ` : ''}
-              
-              <button class="btn btn-warning btn-xs" onclick="viewUserDetails('${item.userId}')">
-                <i class="fas fa-eye"></i> عرض الملف
-              </button>
-            </div>
-          </div>
-        </div>
-      `;
-    }).join('');
-
-  } catch (error) {
-    console.error('❌ خطأ في تحميل طلبات الدعم:', error);
-    resultsContainer.innerHTML = `
-      <div class="post">
-        <p>❌ حدث خطأ في تحميل طلبات الدعم</p>
-        <small style="color: #777;">${error.message || 'يرجى المحاولة مرة أخرى'}</small>
-      </div>
-    `;
-  }
-}
-
-// 🔥 دالة محسنة للرد على المستخدم
-function openReplySupportModal(userId, userName, userShortUid, supportId = null) {
-  document.getElementById('reply-support-modal').style.display = 'block';
-  document.getElementById('reply-user-id').value = userId;
-  document.getElementById('reply-user-name').value = userName;
-  document.getElementById('reply-message').value = '';
-  document.getElementById('reply-support-modal').dataset.userShortUid = userShortUid;
-  document.getElementById('reply-support-modal').dataset.supportId = supportId; // حفظ معرف الطلب
-}
-
-// 🔥 دالة محسنة لإرسال الرد
-async function sendSupportReply() {
-  const userId = document.getElementById('reply-user-id').value;
-  const userName = document.getElementById('reply-user-name').value;
-  const message = document.getElementById('reply-message').value.trim();
-  const userShortUid = document.getElementById('reply-support-modal').dataset.userShortUid;
-  const supportId = document.getElementById('reply-support-modal').dataset.supportId;
-  
-  if (!message) {
-    return showNotification('يرجى كتابة الرد', 'error');
-  }
-  
-  const btn = document.querySelector('#reply-support-modal .btn-success');
-  const originalText = btn.innerHTML;
-  btn.disabled = true;
-  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإرسال...';
-  
-  try {
-    // 1. إرسال الرد إلى بريد المستخدم الوارد
-    await db.collection('inbox').add({
-      userId: userId,
-      type: 'support_reply',
-      title: '📩 رد من الدعم الفني - سوق الطلاب',
-      message: `مرحباً ${userName},\n\nشكراً لتواصلك معنا.\n\n${message}\n\nمع تحيات فريق الدعم الفني\nسوق الطلاب`,
-      status: 'unread',
-      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-      repliedBy: currentUser.uid,
-      repliedByName: currentUser.name
-    });
-
-    // 2. إذا كان هناك supportId، تحديث حالة الطلب إلى "تم الرد"
-    if (supportId) {
-      await db.collection('support').doc(supportId).update({
-        status: 'resolved',
-        resolvedAt: firebase.firestore.FieldValue.serverTimestamp(),
-        resolvedBy: currentUser.uid,
-        replyMessage: message // حفظ نص الرد
-      });
-    }
-
-    showNotification('✅ تم إرسال الرد بنجاح إلى المستخدم', 'success');
-    closeReplySupportModal();
-    
-    // 3. إعادة تحميل القائمة لتحديث الحالة
-    setTimeout(() => loadAllSupportRequests(), 1000);
-    
-  } catch (error) {
-    console.error('Error sending support reply:', error);
-    showNotification('❌ فشل إرسال الرد: ' + error.message, 'error');
-  } finally {
-    btn.disabled = false;
-    btn.innerHTML = '<i class="fas fa-paper-plane"></i> إرسال الرد';
-  }
-}
-
-// 🔥 دالة تحديد المشكلة كمحلولة
-async function markSupportAsResolved(supportId) {
-  if (!isOwner()) return;
-  
-  if (!confirm('هل تريد تحديد هذه المشكلة كمحلولة دون إرسال رد؟')) return;
-  
-  try {
-    await db.collection('support').doc(supportId).update({
-      status: 'resolved',
-      resolvedAt: firebase.firestore.FieldValue.serverTimestamp(),
-      resolvedBy: currentUser.uid,
-      resolvedWithoutReply: true
-    });
-    
-    showNotification('✅ تم تحديد المشكلة كمحلولة', 'success');
-    setTimeout(() => loadAllSupportRequests(), 500);
-  } catch (error) {
-    console.error('Error marking as resolved:', error);
-    showNotification('❌ فشل تحديث الحالة', 'error');
-  }
-}
-
-// 🔥 دالة عرض تفاصيل المستخدم
-async function viewUserDetails(userId) {
-  try {
-    const userDoc = await db.collection('users').doc(userId).get();
-    if (userDoc.exists) {
-      const userData = userDoc.data();
-      const userInfo = `
-الاسم: ${userData.name || 'غير محدد'}
-البريد: ${userData.email || 'غير محدد'}
-المعرف: ${userData.shortUid || 'غير محدد'}
-الحالة: ${userData.blockedFromPosting ? '🚫 محظور' : '✅ نشط'}
-التوثيق: ${userData.isVerified ? '✅ موثق' : '❌ غير موثق'}
-      `.trim();
-      
-      alert(`📋 معلومات المستخدم:\n\n${userInfo}`);
-    } else {
-      showNotification('❌ لم يتم العثور على بيانات المستخدم', 'error');
-    }
-  } catch (error) {
-    console.error('Error fetching user details:', error);
-    showNotification('❌ فشل تحميل بيانات المستخدم', 'error');
-  }
-}
-
-// 🔥 إغلاق المودال
-function closeReplySupportModal() {
-  document.getElementById('reply-support-modal').style.display = 'none';
-}
-
-// 🔥 تحديث دالة إرسال الاقتراح لتسجيل البيانات بشكل صحيح
-async function sendSuggestion() {
-  const type = document.getElementById('suggestion-type').value;
-  const message = document.getElementById('suggestion-message').value.trim();
-  
-  if (!message) {
-    return showNotification('يرجى كتابة وصف المشكلة أو الاقتراح', 'error');
-  }
-  
-  try {
-    // حفظ الطلب في collection support
-    await db.collection('support').add({
-      userId: currentUser.uid,
-      userName: currentUser.name,
-      userEmail: currentUser.email,
-      userShortUid: currentUser.shortUid,
-      type: type,
-      message: message,
-      status: 'pending', // حالة جديدة
-      createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    });
-
-    showNotification('✅ تم إرسال رسالتك بنجاح وسيتم الرد عليها قريباً', 'success');
-    closeSuggestionModal();
-    
-  } catch (error) {
-    console.error('Error sending suggestion:', error);
-    showNotification('❌ فشل إرسال الرسالة', 'error');
-  }
 }
 
 /* =========================
@@ -3985,19 +4176,81 @@ async function loadUserStatistics() {
   }
 }
 
-// التواصل مع الدعم (القديم - للحفاظ على التوافق)
-function contactSupport() {
-  showSupportPage();
+// 🔥 صفحة التواصل مع الدعم - إصلاح الدالة
+function showSupportPage() {
+  showPage("support");
+}
+
+// 🔥 دالة التواصل عبر التيليجرام
+function contactTelegram() {
+  window.open("https://t.me/mslmalmyaly223", "_blank");
+}
+
+// 🔥 فتح مودال إرسال اقتراح
+function openSuggestionModal() {
+  document.getElementById('suggestion-modal').style.display = 'block';
+}
+
+// 🔥 إغلاق مودال إرسال اقتراح
+function closeSuggestionModal() {
+  document.getElementById('suggestion-modal').style.display = 'none';
+}
+
+// 🔥 إرسال اقتراح
+async function sendSuggestion() {
+  if (!currentUser) return showNotification('يرجى تسجيل الدخول أولاً', 'error');
+  
+  const type = document.getElementById('suggestion-type').value;
+  const message = document.getElementById('suggestion-message').value.trim();
+  
+  if (!message) {
+    return showNotification('يرجى كتابة وصف المشكلة أو الاقتراح', 'error');
+  }
+  
+  const btn = document.querySelector('#suggestion-modal .btn-success');
+  const originalText = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإرسال...';
+  
+  try {
+    // إرسال إلى صاحب التطبيق
+    const ownerQuery = await db.collection('users')
+      .where('email', '==', APP_OWNER_EMAIL)
+      .limit(1)
+      .get();
+    
+    if (ownerQuery.empty) return;
+    
+    const ownerDoc = ownerQuery.docs[0];
+    const ownerUid = ownerDoc.id;
+    
+    await db.collection('inbox').add({
+      userId: ownerUid,
+      type: 'support_request',
+      supportType: type,
+      title: type === 'problem' ? '🚨 مشكلة جديدة' : '💡 اقتراح جديد',
+      message: `👤 المستخدم: ${currentUser.name || 'مستخدم'}\n📧 البريد: ${currentUser.email}\n🆔 المعرف: ${currentUser.shortUid || currentUser.uid.substring(0, 8)}\n📝 النوع: ${type === 'problem' ? 'مشكلة' : 'اقتراح'}\n💬 الرسالة: ${message}`,
+      status: 'unread',
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      userUid: currentUser.uid,
+      userName: currentUser.name
+    });
+    
+    showNotification('تم إرسال رسالتك بنجاح وسيتم الرد عليها قريباً', 'success');
+    closeSuggestionModal();
+    
+  } catch (error) {
+    console.error('Error sending suggestion:', error);
+    showNotification('فشل إرسال الرسالة', 'error');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = originalText;
+  }
 }
 
 // عرض لوحة التحكم (للمالك فقط)
 function showAdminPanel() {
   if (!isOwner()) return showNotification('للمالك فقط', 'error');
-  showPage("adminPanel");
-}
-
-// العودة من لوحة التحكم
-function backToAdminPanel() {
   showPage("adminPanel");
 }
 
@@ -4143,6 +4396,170 @@ async function sendBroadcast() {
 }
 
 /* =========================
+   🔥 صفحة الرد على المستخدمين - محسنة
+========================= */
+
+// 🔥 إظهار صفحة الرد على المستخدمين
+function showUserSupportPage() {
+  if (!isOwner()) return;
+  showPage("userSupport");
+}
+
+// 🔥 إصلاح دالة تحميل طلبات الدعم
+async function loadUserSupportRequests() {
+  const container = document.getElementById('user-support-results');
+  if (!container) return;
+  
+  container.innerHTML = '<div class="post"><p style="text-align: center; color: var(--text-color);">جاري تحميل طلبات الدعم...</p></div>';
+  
+  try {
+    // 🔥 إصلاح: استخدام get() بدلاً من where المعقد
+    const supportSnapshot = await db.collection('inbox').get();
+    
+    if (supportSnapshot.empty) {
+      container.innerHTML = '<div class="post"><p style="text-align: center; color: var(--text-color);">لا توجد طلبات دعم حالياً</p></div>';
+      return;
+    }
+    
+    // 🔥 تصفية النتائج يدوياً
+    const supportRequests = supportSnapshot.docs
+      .map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }))
+      .filter(request => 
+        request.type === 'support_request' || 
+        request.type === 'admin_report'
+      )
+      .sort((a, b) => (b.createdAt?.toDate?.() || 0) - (a.createdAt?.toDate?.() || 0));
+    
+    if (supportRequests.length === 0) {
+      container.innerHTML = '<div class="post"><p style="text-align: center; color: var(--text-color);">لا توجد طلبات دعم حالياً</p></div>';
+      return;
+    }
+    
+    container.innerHTML = supportRequests.map(request => {
+      const requestTime = request.createdAt?.toDate ? formatRelativeTime(request.createdAt.toDate()) : 'غير معروف';
+      const typeText = request.supportType === 'problem' ? 'مشكلة' : 'اقتراح';
+      const typeIcon = request.supportType === 'problem' ? '🚨' : '💡';
+      const statusColor = request.status === 'resolved' ? 'var(--success-color)' : 'var(--warning-color)';
+      
+      return `
+        <div class="user-support-item">
+          <div class="support-meta">
+            <div class="support-user">
+              ${typeIcon} ${escapeHTML(request.userName || 'مستخدم')}
+            </div>
+            <div class="support-type" style="background: ${statusColor}">
+              ${request.status === 'resolved' ? 'تم الرد' : typeText}
+            </div>
+          </div>
+          
+          <div class="support-message">
+            ${escapeHTML(request.message || '')}
+          </div>
+          
+          <div class="reply-section">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+              <small style="color: var(--light-text);">${requestTime}</small>
+              <small style="color: var(--light-text);">ID: ${request.userUid?.substring(0, 8) || 'غير معروف'}</small>
+            </div>
+            
+            ${request.status !== 'resolved' ? `
+            <button class="support-reply-btn" onclick="openReplySupportModal('${request.userUid}', '${escapeHTML(request.userName || 'مستخدم')}', '${request.id}')">
+              <i class="fas fa-reply"></i> الرد على المستخدم
+            </button>
+            ` : `
+            <div style="color: var(--success-color); font-weight: bold; text-align: center;">
+              <i class="fas fa-check-circle"></i> تم الرد على هذه الرسالة
+            </div>
+            `}
+          </div>
+        </div>
+      `;
+    }).join('');
+    
+  } catch (error) {
+    console.error('Error loading support requests:', error);
+    container.innerHTML = `
+      <div class="post">
+        <p style="text-align: center; color: var(--danger-color);">
+          خطأ في تحميل طلبات الدعم: ${error.message}
+        </p>
+        <button class="btn" onclick="loadUserSupportRequests()" style="margin-top: 10px;">
+          <i class="fas fa-redo"></i> إعادة المحاولة
+        </button>
+      </div>
+    `;
+  }
+}
+
+// 🔥 فتح مودال الرد على المستخدم
+function openReplySupportModal(userId, userName, requestId) {
+  document.getElementById('reply-user-id').value = userId;
+  document.getElementById('reply-user-name').value = userName;
+  document.getElementById('reply-support-modal').setAttribute('data-request-id', requestId);
+  document.getElementById('reply-support-modal').style.display = 'block';
+}
+
+// 🔥 إغلاق مودال الرد على المستخدم
+function closeReplySupportModal() {
+  document.getElementById('reply-support-modal').style.display = 'none';
+  document.getElementById('reply-message').value = '';
+}
+
+// 🔥 إرسال رد الدعم
+async function sendSupportReply() {
+  const userId = document.getElementById('reply-user-id').value;
+  const userName = document.getElementById('reply-user-name').value;
+  const replyMessage = document.getElementById('reply-message').value.trim();
+  const requestId = document.getElementById('reply-support-modal').getAttribute('data-request-id');
+  
+  if (!replyMessage) {
+    return showNotification('يرجى كتابة الرد', 'error');
+  }
+  
+  const btn = document.querySelector('#reply-support-modal .btn-success');
+  const originalText = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإرسال...';
+  
+  try {
+    // إرسال الرد إلى المستخدم
+    await db.collection('inbox').add({
+      userId: userId,
+      type: 'support_reply',
+      title: '📬 رد على طلب الدعم',
+      message: `مرحباً ${userName},\n\n${replyMessage}\n\nمع تحيات فريق الدعم - سوق الطلاب`,
+      status: 'unread',
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      repliedBy: currentUser.uid,
+      repliedByName: currentUser.name
+    });
+    
+    // تحديث حالة الطلب الأصلي
+    if (requestId) {
+      await db.collection('inbox').doc(requestId).update({
+        status: 'resolved',
+        resolvedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        resolvedBy: currentUser.uid
+      });
+    }
+    
+    showNotification('تم إرسال الرد بنجاح', 'success');
+    closeReplySupportModal();
+    loadUserSupportRequests(); // تحديث القائمة
+    
+  } catch (error) {
+    console.error('Error sending support reply:', error);
+    showNotification('فشل إرسال الرد', 'error');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = originalText;
+  }
+}
+
+/* =========================
    Sections switch
 ========================= */
 function switchSection(section) {
@@ -4171,8 +4588,28 @@ function onCreateButton() {
 /* =========================
    Posts CRUD
 ========================= */
+// 🔥 تحسين دالة تحميل المنشورات لجعلها أسرع
 async function loadPostsFromFirestore() {
   try {
+    // استخدام cache لتحسين الأداء
+    const cacheKey = 'posts_cache';
+    const cacheTime = 'posts_cache_time';
+    const now = Date.now();
+    const cacheExpiry = 30 * 1000; // 30 ثانية
+    
+    // التحقق من وجود cache حديث
+    const cachedPosts = localStorage.getItem(cacheKey);
+    const cacheTimestamp = localStorage.getItem(cacheTime);
+    
+    if (cachedPosts && cacheTimestamp && (now - parseInt(cacheTimestamp)) < cacheExpiry) {
+      console.log('📥 تحميل المنشورات من الذاكرة المؤقتة');
+      posts = JSON.parse(cachedPosts);
+      renderPosts();
+      updatePostCountInProfile();
+      return;
+    }
+    
+    console.log('📥 تحميل المنشورات من قاعدة البيانات');
     const snap = await db.collection("posts").orderBy("createdAt", "desc").get();
     posts = snap.docs.map(d => {
       const data = d.data();
@@ -4181,11 +4618,16 @@ async function loadPostsFromFirestore() {
         id: d.id, 
         isPinned: !!data.isPinned, 
         commentsCount: data.commentsCount || 0,
-        cheapestPrice: data.cheapestPrice || 0, // إضافة أرخص سعر
+        cheapestPrice: data.cheapestPrice || 0,
         ...data, 
         createdAt 
       };
     });
+    
+    // حفظ في cache
+    localStorage.setItem(cacheKey, JSON.stringify(posts));
+    localStorage.setItem(cacheTime, now.toString());
+    
     renderPosts();
     updatePostCountInProfile();
   } catch (e) {
@@ -4204,7 +4646,7 @@ async function getUserMeta(uid) {
       blockedFromPosting: !!data?.blockedFromPosting,
       avatar: data?.avatar || 'male',
       avatarBase64: data?.avatarBase64 || null,
-      createdAt: data?.createdAt // إضافة تاريخ الإنشاء
+      createdAt: data?.createdAt
     };
     userMetaCache[uid] = meta;
     return meta;
@@ -4593,7 +5035,7 @@ async function createPost() {
       userEmail: currentUser.email || "",
       stage, material, 
       price: Number(formattedPrice) || 0, 
-      cheapestPrice: Number(formattedCheapestPrice) || 0, // إضافة أرخص سعر
+      cheapestPrice: Number(formattedCheapestPrice) || 0,
       description, contactMethod,
       whatsapp: contactMethod === "whatsapp" ? whatsapp : "",
       telegram: contactMethod === "telegram" ? telegram : "",
@@ -4604,6 +5046,11 @@ async function createPost() {
     };
     
     await db.collection("posts").add(newPost);
+    
+    // تحديث cache
+    const cacheKey = 'posts_cache';
+    localStorage.removeItem(cacheKey);
+    
     closeCreatePostModal();
     await loadPostsFromFirestore();
     showNotification("تم نشر المنشور بنجاح", "success");
@@ -4668,6 +5115,11 @@ async function savePostEdits() {
   
   try {
     await db.collection('posts').doc(postId).update(updatedData);
+    
+    // تحديث cache
+    const cacheKey = 'posts_cache';
+    localStorage.removeItem(cacheKey);
+    
     showNotification('تم حفظ التعديلات', 'success');
     closeEditPostModal();
     await loadPostsFromFirestore();
@@ -4771,6 +5223,11 @@ async function repost(postId) {
     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
     status: 'active'
   });
+  
+  // تحديث cache
+  const cacheKey = 'posts_cache';
+  localStorage.removeItem(cacheKey);
+  
   showNotification("تم إعادة النشر وتحديث التاريخ", "success");
   await loadPostsFromFirestore();
   showUserPosts();
@@ -4782,6 +5239,11 @@ async function markSold(postId, isSold) {
   await db.collection("posts").doc(postId).update({
     status: isSold ? 'active' : 'sold'
   });
+  
+  // تحديث cache
+  const cacheKey = 'posts_cache';
+  localStorage.removeItem(cacheKey);
+  
   showNotification(isSold ? "تم إلغاء حالة البيع" : "تم تحديد: تم بيعه", "success");
   await loadPostsFromFirestore();
   showUserPosts();
@@ -4799,6 +5261,10 @@ async function deletePost(postId) {
     } catch (delErr) {
       await db.collection("posts").doc(postId).update({ status: 'deleted' });
     }
+    
+    // تحديث cache
+    const cacheKey = 'posts_cache';
+    localStorage.removeItem(cacheKey);
     
     showNotification("تم الحذف", "success");
     await loadPostsFromFirestore();
@@ -5229,6 +5695,11 @@ async function ownerTogglePin(postId, isPinned) {
   if (!isOwner()) return;
   try {
     await db.collection('posts').doc(postId).update({ isPinned: !isPinned });
+    
+    // تحديث cache
+    const cacheKey = 'posts_cache';
+    localStorage.removeItem(cacheKey);
+    
     showNotification(isPinned ? 'أُلغي التثبيت' : 'تم التثبيت', 'success');
     await loadPostsFromFirestore();
   } catch (e) {
@@ -5270,6 +5741,11 @@ async function ownerDeletePost(postId) {
   if (!confirm('حذف المنشور نهائيًا؟')) return;
   try {
     await db.collection('posts').doc(postId).delete();
+    
+    // تحديث cache
+    const cacheKey = 'posts_cache';
+    localStorage.removeItem(cacheKey);
+    
     showNotification('حُذف المنشور', 'success');
     await loadPostsFromFirestore();
   } catch (e) {
@@ -5624,7 +6100,6 @@ function startAllListeners() {
   startInboxListener();
   startPostsListener();
   startCommentsListener();
-  startNewsListener();
 }
 
 function startInboxListener() {
@@ -5712,35 +6187,6 @@ function startCommentsListener() {
     });
 }
 
-// 🔥 مستمع أخبار السادس
-function startNewsListener() {
-  if (newsListener) newsListener();
-  
-  const lastSeenNewsTime = getLastSeenNewsTime();
-  
-  newsListener = db.collection("news")
-    .where("createdAt", ">=", lastSeenNewsTime)
-    .onSnapshot((snapshot) => {
-      let newCount = 0;
-      
-      snapshot.docChanges().forEach(change => {
-        if (change.type === 'added') {
-          const newsTime = change.doc.data().createdAt?.toDate?.();
-          if (newsTime && newsTime > lastSeenNewsTime) {
-            newCount++;
-          }
-        }
-      });
-      
-      if (newCount > 0) {
-        unreadNewsCount = newCount;
-        updateNavBadges();
-      }
-    }, (error) => {
-      console.error("News listener error:", error);
-    });
-}
-
 function stopAllListeners() {
   if (notificationsListener) {
     notificationsListener();
@@ -5753,10 +6199,6 @@ function stopAllListeners() {
   if (commentsListener) {
     commentsListener();
     commentsListener = null;
-  }
-  if (newsListener) {
-    newsListener();
-    newsListener = null;
   }
 }
 
@@ -5784,17 +6226,6 @@ function updateNavBadges() {
       inboxBadge.textContent = unreadNotifications.inbox > 9 ? '9+' : unreadNotifications.inbox.toString();
     } else {
       inboxBadge.style.display = 'none';
-    }
-  }
-  
-  // 🔥 فقاعة أخبار السادس - تظهر فقط إذا كان هناك أخبار جديدة
-  const newsBadge = document.getElementById('news-badge');
-  if (newsBadge) {
-    if (unreadNewsCount > 0) {
-      newsBadge.style.display = 'flex';
-      newsBadge.textContent = unreadNewsCount > 9 ? '9+' : unreadNewsCount.toString();
-    } else {
-      newsBadge.style.display = 'none';
     }
   }
   
@@ -5937,9 +6368,8 @@ function initializePullToRefresh() {
   let startY;
   let isAtTop = false;
   const pullIndicator = document.getElementById("pull-bubble");
-  const newsPullIndicator = document.getElementById("news-pull-bubble");
   
-  if (!pullIndicator || !newsPullIndicator) return;
+  if (!pullIndicator) return;
   
   document.addEventListener('touchstart', e => {
     // التحقق إذا كنا في أعلى القائمة
@@ -5965,9 +6395,6 @@ function initializePullToRefresh() {
       if (currentPage === 'main-page') {
         pullIndicator.style.display = 'block';
         pullIndicator.style.opacity = Math.min(1, diff / 100);
-      } else if (currentPage === 'news-page') {
-        newsPullIndicator.style.display = 'block';
-        newsPullIndicator.style.opacity = Math.min(1, diff / 100);
       }
     }
   });
@@ -5994,24 +6421,9 @@ function initializePullToRefresh() {
             showNotification("فشل التحديث", "error");
           });
         }, 1000);
-      } else if (currentPage === 'news-page') {
-        newsPullIndicator.innerHTML = '<i class="fas fa-sync-alt fa-spin"></i> جاري التحديث...';
-        
-        setTimeout(() => {
-          loadNews().then(() => {
-            renderNews();
-            newsPullIndicator.style.display = 'none';
-            clearNewsBadge(); // 🔥 مسح الفقاعة بعد التحديث
-            showNotification("تم تحديث الأخبار", "success");
-          }).catch(error => {
-            newsPullIndicator.style.display = 'none';
-            showNotification("فشل التحديث", "error");
-          });
-        }, 1000);
       }
     } else {
       pullIndicator.style.display = 'none';
-      newsPullIndicator.style.display = 'none';
     }
     
     startY = null;
@@ -6022,7 +6434,6 @@ function initializePullToRefresh() {
   window.addEventListener('scroll', () => {
     if (window.scrollY > 10) {
       pullIndicator.style.display = 'none';
-      newsPullIndicator.style.display = 'none';
     }
   });
 }
@@ -6056,7 +6467,6 @@ function initializeDOMElements() {
   detailsContainer = document.getElementById("details-container");
   commentsList = document.getElementById("comments-list-page");
   inboxContainer = document.getElementById("inbox-container");
-  newsContainer = document.getElementById("news-container");
   createBtn = document.getElementById("create-btn");
   createBtnLabel = document.getElementById("create-btn-label");
   filterBox = document.getElementById("filter-container");
@@ -6070,7 +6480,6 @@ function initializeDOMElements() {
   if (!detailsContainer) console.error("detailsContainer not found");
   if (!commentsList) console.error("commentsList not found");
   if (!inboxContainer) console.error("inboxContainer not found");
-  if (!newsContainer) console.error("newsContainer not found");
 }
 
 // 🔥 تهيئة التطبيق مع التعامل مع الأخطاء
