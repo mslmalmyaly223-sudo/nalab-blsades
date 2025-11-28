@@ -1,17 +1,21 @@
-// service-worker.js
+// sw.js
 self.addEventListener('install', (event) => {
-    console.log('✅ Service Worker installed');
-    self.skipWaiting();
+  self.skipWaiting();
 });
 
 self.addEventListener('activate', (event) => {
-    console.log('✅ Service Worker activated');
-    event.waitUntil(self.clients.claim());
+  event.waitUntil(self.clients.claim());
 });
 
 self.addEventListener('message', (event) => {
-    if (event.data.type === 'PLAY_AUDIO') {
-        // التعامل مع تشغيل الصوت في الخلفية
-        event.ports[0].postMessage({status: 'PLAYING'});
-    }
+  if (event.data && event.data.type === 'PLAY_AUDIO') {
+    // نقل بيانات الصوت للخلفية
+    event.waitUntil(
+      self.registration.showNotification('سوق الطلاب', {
+        body: `جاري تشغيل: ${event.data.title}`,
+        icon: '/icon.png',
+        tag: 'audio-playback'
+      })
+    );
+  }
 });
