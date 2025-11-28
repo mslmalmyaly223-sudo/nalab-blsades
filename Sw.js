@@ -1,21 +1,18 @@
-// sw.js
+// sw.js - Service Worker لتشغيل الصوت في الخلفية
 self.addEventListener('install', (event) => {
+  console.log('Service Worker installed');
   self.skipWaiting();
 });
 
 self.addEventListener('activate', (event) => {
+  console.log('Service Worker activated');
   event.waitUntil(self.clients.claim());
 });
 
-self.addEventListener('message', (event) => {
-  if (event.data && event.data.type === 'PLAY_AUDIO') {
-    // نقل بيانات الصوت للخلفية
-    event.waitUntil(
-      self.registration.showNotification('سوق الطلاب', {
-        body: `جاري تشغيل: ${event.data.title}`,
-        icon: '/icon.png',
-        tag: 'audio-playback'
-      })
-    );
+// التعامل مع طلبات الصوت
+self.addEventListener('fetch', (event) => {
+  if (event.request.url.includes('youtube.com') || 
+      event.request.url.includes('youtu.be')) {
+    event.respondWith(fetch(event.request));
   }
 });
