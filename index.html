@@ -2931,6 +2931,29 @@
     </div>
 </div>
 
+<!-- أزرار التحكم في الخلفية -->
+<div id="background-audio-controls" style="display: none; position: fixed; bottom: 80px; left: 15px; right: 15px; background: var(--gradient-primary); color: white; padding: 12px; border-radius: 12px; z-index: 1000; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+    <div style="display: flex; align-items: center; justify-content: space-between;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <button class="btn btn-xs" onclick="playPreviousPoem()" style="background: rgba(255,255,255,0.2); color: white; border: none;">
+                <i class="fas fa-step-backward"></i>
+            </button>
+            <button id="bg-play-pause-btn" class="btn btn-xs" onclick="toggleBackgroundPlayback()" style="background: rgba(255,255,255,0.2); color: white; border: none;">
+                <i class="fas fa-pause"></i>
+            </button>
+            <button class="btn btn-xs" onclick="playNextPoem()" style="background: rgba(255,255,255,0.2); color: white; border: none;">
+                <i class="fas fa-step-forward"></i>
+            </button>
+        </div>
+        <div style="flex: 1; margin: 0 10px;">
+            <div id="bg-now-playing" style="font-weight: 700; font-size: 14px;">جاري التشغيل...</div>
+        </div>
+        <button class="btn btn-xs" onclick="stopBackgroundAudio()" style="background: rgba(255,255,255,0.2); color: white; border: none;">
+            <i class="fas fa-stop"></i>
+        </button>
+    </div>
+</div>
+
 <script>
 const firebaseConfig = {
   apiKey: "AIzaSyBkoSz3ZUy4qKBTeLx42Oo-TlTtvFtF2vY",
@@ -4879,7 +4902,7 @@ async function reportPost(postId) {
       reporterName: currentUser.name || 'مستخدم',
       reporterShortUid: currentUser.shortUid || 'غير معروف',
       title: '🚨 بلاغ جديد',
-      message: `👤 المبلغ: ${currentUser.name || 'مستخدم'}\n📝 السبب: ${reason}\n🆔 معرف المبلغ: ${currentUser.shortUid || currentUser.uid.substring(0, 8)}`,
+      message: `👤 المبلغ: ${currentUser.name || 'مستخدم'}\n?? السبب: ${reason}\n🆔 معرف المبلغ: ${currentUser.shortUid || currentUser.uid.substring(0, 8)}`,
       status: 'unread',
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
     });
@@ -6276,11 +6299,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 100);
 });
 
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/sw.js')
-            .then(() => console.log('Service Worker registered'))
-            .catch(err => console.log('Error:', err));
-    }
     
 let currentReportPostId = null;
 let selectedReportReason = '';
@@ -8431,6 +8449,291 @@ function showStudyTimerPage() {
     showPage("study-timer-page");
     updateSessionsDisplay();
 }
+
+// نظام تشغيل القصائد في الخلفية
+let backgroundAudio = {
+    currentAudio: null,
+    audioElement: null,
+    isPlaying: false
+};
+
+// تهيئة نظام الخلفية
+function initializeBackgroundAudio() {
+    // إنشاء عنصر صوت مخفي
+    backgroundAudio.audioElement = document.createElement('audio');
+    backgroundAudio.audioElement.style.display = 'none';
+    backgroundAudio.audioElement.setAttribute('playsinline', '');
+    backgroundAudio.audioElement.setAttribute('webkit-playsinline', '');
+    document.body.appendChild(backgroundAudio.audioElement);
+
+    // إعداد Media Session API
+    if ('mediaSession' in navigator) {
+        navigator.mediaSession.setActionHandler('play', function() {
+            playBackgroundAudio();
+        });
+        
+        navigator.mediaSession.setActionHandler('pause', function() {
+            pauseBackgroundAudio();
+        });
+        
+        navigator.mediaSession.setActionHandler('stop', function() {
+            stopBackgroundAudio();
+        });
+        
+        navigator.mediaSession.setActionHandler('previoustrack', function() {
+            playPreviousPoem();
+        });
+        
+        navigator.mediaSession.setActionHandler('nexttrack', function() {
+            playNextPoem();
+        });
+    }
+
+    // استمرار التشغيل عند إغلاق التبويب
+    document.addEventListener('visibilitychange', function() {
+        if (!document.hidden && backgroundAudio.isPlaying) {
+            updateMediaSessionMetadata();
+        }
+    });
+}
+
+// تشغيل القصيدة في الخلفية
+async function playBackgroundPoem(poemId) {
+    const poem = poems.find(p => p.id === poemId);
+    if (!poem) return;
+
+    try {
+        // إيقاف أي صوت شغال
+        stopBackgroundAudio();
+
+        // الحصول على رابط الصوت من YouTube
+        const audioUrl = await getYouTubeAudioUrl(poem.youtubeUrl);
+        if (!audioUrl) {
+            throw new Error('Cannot get audio URL');
+        }
+
+        // إعداد عنصر الصوت
+        backgroundAudio.audioElement.src = audioUrl;
+        backgroundAudio.audioElement.load();
+        
+        backgroundAudio.currentAudio = {
+            poemId: poemId,
+            title: poem.title,
+            audioUrl: audioUrl
+        };
+
+        // التشغيل
+        await backgroundAudio.audioElement.play();
+        backgroundAudio.isPlaying = true;
+
+        // تحديث واجهة التحكم
+        updateMediaSessionMetadata();
+        showNotification(`🔊 تشغيل في الخلفية: ${poem.title}`, 'success');
+
+        // تحديث الواجهة
+        updatePoemsDisplay();
+
+        // إعداد الأحداث
+        backgroundAudio.audioElement.onended = function() {
+            if (backgroundAudio.currentAudio) {
+                playNextPoemAutomatically();
+            }
+        };
+
+    } catch (error) {
+        console.error('Error playing background audio:', error);
+        // العودة للطريقة العادية إذا فشلت الخلفية
+        playPoemFinal(poemId);
+    }
+}
+
+// الحصول على رابط الصوت من YouTube
+async function getYouTubeAudioUrl(youtubeUrl) {
+    const videoId = extractYouTubeId(youtubeUrl);
+    if (!videoId) return null;
+
+    // استخدام خدمة خارجية لاستخراج الصوت
+    try {
+        const response = await fetch(`https://api.example.com/audio?url=${encodeURIComponent(youtubeUrl)}`);
+        const data = await response.json();
+        return data.audioUrl;
+    } catch (error) {
+        // استخدام رابط بديل
+        return `https://www.youtube.com/embed/${videoId}?autoplay=1&controls=0`;
+    }
+}
+
+// تحديث واجهة التحكم في الخلفية
+function updateMediaSessionMetadata() {
+    if (!('mediaSession' in navigator) || !backgroundAudio.currentAudio) return;
+
+    navigator.mediaSession.metadata = new MediaMetadata({
+        title: backgroundAudio.currentAudio.title,
+        artist: 'سوق الطلاب',
+        album: 'القصائد',
+        artwork: [
+            { src: 'https://via.placeholder.com/96', sizes: '96x96', type: 'image/png' },
+            { src: 'https://via.placeholder.com/128', sizes: '128x128', type: 'image/png' },
+            { src: 'https://via.placeholder.com/192', sizes: '192x192', type: 'image/png' },
+            { src: 'https://via.placeholder.com/256', sizes: '256x256', type: 'image/png' },
+            { src: 'https://via.placeholder.com/384', sizes: '384x384', type: 'image/png' },
+            { src: 'https://via.placeholder.com/512', sizes: '512x512', type: 'image/png' },
+        ]
+    });
+}
+
+// التحكم في التشغيل
+function playBackgroundAudio() {
+    if (backgroundAudio.audioElement && backgroundAudio.currentAudio) {
+        backgroundAudio.audioElement.play();
+        backgroundAudio.isPlaying = true;
+        updateMediaSessionMetadata();
+    }
+}
+
+function pauseBackgroundAudio() {
+    if (backgroundAudio.audioElement) {
+        backgroundAudio.audioElement.pause();
+        backgroundAudio.isPlaying = false;
+    }
+}
+
+function stopBackgroundAudio() {
+    if (backgroundAudio.audioElement) {
+        backgroundAudio.audioElement.pause();
+        backgroundAudio.audioElement.src = '';
+        backgroundAudio.isPlaying = false;
+        backgroundAudio.currentAudio = null;
+        
+        if ('mediaSession' in navigator) {
+            navigator.mediaSession.metadata = null;
+        }
+    }
+}
+
+// التشغيل التلقائي للقصيدة التالية
+function playNextPoemAutomatically() {
+    if (!backgroundAudio.currentAudio) return;
+
+    const currentIndex = poems.findIndex(p => p.id === backgroundAudio.currentAudio.poemId);
+    const nextIndex = (currentIndex + 1) % poems.length;
+    
+    if (nextIndex >= 0 && nextIndex < poems.length) {
+        playBackgroundPoem(poems[nextIndex].id);
+    }
+}
+
+function playNextPoem() {
+    if (!backgroundAudio.currentAudio) return;
+    
+    const currentIndex = poems.findIndex(p => p.id === backgroundAudio.currentAudio.poemId);
+    const nextIndex = (currentIndex + 1) % poems.length;
+    
+    if (nextIndex >= 0 && nextIndex < poems.length) {
+        playBackgroundPoem(poems[nextIndex].id);
+    }
+}
+
+function playPreviousPoem() {
+    if (!backgroundAudio.currentAudio) return;
+    
+    const currentIndex = poems.findIndex(p => p.id === backgroundAudio.currentAudio.poemId);
+    const prevIndex = (currentIndex - 1 + poems.length) % poems.length;
+    
+    if (prevIndex >= 0 && prevIndex < poems.length) {
+        playBackgroundPoem(poems[prevIndex].id);
+    }
+}
+
+// تعديل دالة التشغيل الرئيسية
+function playPoemFinal(poemId) {
+    // محاولة التشغيل في الخلفية أولاً
+    if (supportsBackgroundAudio()) {
+        playBackgroundPoem(poemId);
+    } else {
+        // العودة للطريقة القديمة إذا لم تدعم الخلفية
+        const poem = poems.find(p => p.id === poemId);
+        if (!poem) return;
+
+        const videoId = extractYouTubeId(poem.youtubeUrl);
+        if (!videoId) return;
+
+        stopCurrentAudioFinal();
+        createYouTubePlayer(videoId, poem.title, poemId);
+    }
+}
+
+// التحقق من دعم الخلفية
+function supportsBackgroundAudio() {
+    return ('mediaSession' in navigator) && 
+           (typeof document.createElement('audio').play === 'function');
+}
+
+// تحديث زر التشغيل في واجهة القصائد
+function updatePlayButton(poemId) {
+    // داخل دالة loadPoems - تحديث زر التشغيل
+const isPlayingInBackground = backgroundAudio.currentAudio && 
+                             backgroundAudio.currentAudio.poemId === poem.id && 
+                             backgroundAudio.isPlaying;
+
+// تحديث النص في عرض القصيدة
+`<div style="font-weight: 700; color: var(--primary-color); font-size: 16px; cursor: pointer;" 
+     onclick="playPoemFinal('${poem.id}')">
+    ${isPinned ? '📌 ' : '🎵 '} 
+    ${poem.title || 'بدون عنوان'}
+    ${isPlayingInBackground ? ' <span style="color: var(--success-color);">🔴 خلفية</span>' : 
+      (isPlaying ? ' <span style="color: var(--danger-color);">🔴 تشغيل</span>' : '')}
+</div>`
+}
+
+// تبديل التشغيل/الإيقاف
+function toggleBackgroundPlayback() {
+    if (backgroundAudio.isPlaying) {
+        pauseBackgroundAudio();
+        document.getElementById('bg-play-pause-btn').innerHTML = '<i class="fas fa-play"></i>';
+    } else {
+        playBackgroundAudio();
+        document.getElementById('bg-play-pause-btn').innerHTML = '<i class="fas fa-pause"></i>';
+    }
+}
+
+// تحديث واجهة التحكم
+function updateBackgroundControls() {
+    const controls = document.getElementById('background-audio-controls');
+    const nowPlaying = document.getElementById('bg-now-playing');
+    
+    if (backgroundAudio.currentAudio && backgroundAudio.isPlaying) {
+        controls.style.display = 'block';
+        nowPlaying.textContent = backgroundAudio.currentAudio.title;
+        document.getElementById('bg-play-pause-btn').innerHTML = '<i class="fas fa-pause"></i>';
+    } else {
+        controls.style.display = 'none';
+    }
+}
+
+// استدعاء التحديث عند التشغيل
+function playBackgroundAudio() {
+    if (backgroundAudio.audioElement && backgroundAudio.currentAudio) {
+        backgroundAudio.audioElement.play();
+        backgroundAudio.isPlaying = true;
+        updateMediaSessionMetadata();
+        updateBackgroundControls();
+    }
+}
+
+// تسجيل Service Worker
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js')
+        .then(registration => console.log('SW registered'))
+        .catch(error => console.log('SW registration failed'));
+}
+
+// تهيئة النظام عند تحميل الصفحة
+document.addEventListener('DOMContentLoaded', function() {
+    initializeBackgroundAudio();
+    initializeAudioSystem();
+});
+
 
 </script>
 </body>
