@@ -2715,7 +2715,7 @@
     </div>
 </div>
 
-<!-- صفحة المساعد الدراسي الرئيسية -->
+<!-- في صفحة study-assistant-page، أضف الزر الجديد بعد زر القصائد -->
 <div id="study-assistant-page" class="container page" style="display:none">
     <div class="header">
         <button class="btn btn-secondary" onclick="showMainPage()">
@@ -2740,6 +2740,18 @@
                 <div class="menu-item" onclick="showPoemsPage()">
                     <i class="fas fa-music"></i>
                     <span>القصائد</span>
+                </div>
+                
+                <!-- الزر الجديد: الواجبات اليومية -->
+                <div class="menu-item" onclick="showDailyTasksPage()">
+                    <i class="fas fa-tasks"></i>
+                    <span>الواجبات اليومية</span>
+                </div>
+                
+                <!-- الزر الجديد: الجداول الدراسية -->
+                <div class="menu-item" onclick="showStudySchedulesPage()">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>الجداول الدراسية</span>
                 </div>
             </div>
         </div>
@@ -2930,27 +2942,558 @@
         </div>
     </div>
 </div>
+</div>
+</div>
 
-<!-- أزرار التحكم في الخلفية -->
-<div id="background-audio-controls" style="display: none; position: fixed; bottom: 80px; left: 15px; right: 15px; background: var(--gradient-primary); color: white; padding: 12px; border-radius: 12px; z-index: 1000; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
-    <div style="display: flex; align-items: center; justify-content: space-between;">
-        <div style="display: flex; align-items: center; gap: 10px;">
-            <button class="btn btn-xs" onclick="playPreviousPoem()" style="background: rgba(255,255,255,0.2); color: white; border: none;">
-                <i class="fas fa-step-backward"></i>
-            </button>
-            <button id="bg-play-pause-btn" class="btn btn-xs" onclick="toggleBackgroundPlayback()" style="background: rgba(255,255,255,0.2); color: white; border: none;">
-                <i class="fas fa-pause"></i>
-            </button>
-            <button class="btn btn-xs" onclick="playNextPoem()" style="background: rgba(255,255,255,0.2); color: white; border: none;">
-                <i class="fas fa-step-forward"></i>
-            </button>
-        </div>
-        <div style="flex: 1; margin: 0 10px;">
-            <div id="bg-now-playing" style="font-weight: 700; font-size: 14px;">جاري التشغيل...</div>
-        </div>
-        <button class="btn btn-xs" onclick="stopBackgroundAudio()" style="background: rgba(255,255,255,0.2); color: white; border: none;">
-            <i class="fas fa-stop"></i>
+<!-- صفحة الواجبات اليومية -->
+<div id="daily-tasks-page" class="container page" style="display:none">
+    <div class="header">
+        <button class="btn btn-secondary" onclick="showStudyAssistantPage()">
+            <i class="fas fa-arrow-right"></i>
         </button>
+        <span style="font-weight:900">الواجبات اليومية</span>
+        <button class="btn" onclick="openAddTaskModal()">
+            <i class="fas fa-plus"></i> إضافة واجب
+        </button>
+    </div>
+    
+    <div class="posts-container">
+        <!-- إحصائيات الواجبات -->
+        <div id="tasks-stats" class="post" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; text-align: center;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
+                <div>
+                    <div style="font-size: 24px; font-weight: 900;" id="total-tasks">0</div>
+                    <div style="font-size: 13px;">إجمالي الواجبات</div>
+                </div>
+                <div>
+                    <div style="font-size: 24px; font-weight: 900;" id="completed-tasks">0</div>
+                    <div style="font-size: 13px;">مكتملة</div>
+                </div>
+                <div>
+                    <div style="font-size: 24px; font-weight: 900;" id="pending-tasks">0</div>
+                    <div style="font-size: 13px;">قيد التنفيذ</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- قائمة الواجبات -->
+        <div id="tasks-list">
+            <div class="post">
+                <p style="text-align: center; color: var(--light-text);">لا توجد واجبات. أضف واجبك الأول!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- نافذة إضافة واجب جديدة -->
+<div id="add-task-modal" class="modal">
+    <div class="modal-content" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+        <div class="modal-header">
+            <h2><i class="fas fa-plus-circle"></i> إضافة واجب جديد</h2>
+            <button class="close-modal" onclick="closeAddTaskModal()" style="color: white;">&times;</button>
+        </div>
+        
+        <div class="select-group">
+            <label>اسم الواجب</label>
+            <input type="text" id="task-name" class="form-control" placeholder="مثل: حل تمارين الرياضيات" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.3);">
+        </div>
+        
+        <div class="select-group">
+            <label>وقت التحدي (ساعات)</label>
+            <input type="number" id="task-hours" class="form-control" min="1" max="24" value="1" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.3);">
+        </div>
+        
+        <div class="select-group">
+            <label>وقت التحدي (دقائق)</label>
+            <input type="number" id="task-minutes" class="form-control" min="0" max="59" value="0" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.3);">
+        </div>
+        
+        <div class="select-group">
+            <label>وقت التحدي (ثواني)</label>
+            <input type="number" id="task-seconds" class="form-control" min="0" max="59" value="0" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.3);">
+        </div>
+        
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeAddTaskModal()" style="background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3);">إلغاء</button>
+            <button class="btn btn-success" onclick="addNewTask()" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: #000;">
+                <i class="fas fa-save"></i> إضافة الواجب
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- نافذة تهنئة عند إكمال الواجب -->
+<div id="congrats-modal" class="modal">
+    <div class="modal-content" style="background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%); color: #000; text-align: center; border-radius: 20px; padding: 30px;">
+        <div style="font-size: 80px; margin-bottom: 20px;">🎉</div>
+        <h2 style="color: #000; margin-bottom: 15px;">مبروك! لقد أكملت الواجب بنجاح</h2>
+        <div id="congrats-message" style="font-size: 18px; margin-bottom: 20px;"></div>
+        <div style="font-size: 24px; font-weight: 900; margin-bottom: 20px;" id="time-saved"></div>
+        <button class="btn" onclick="closeCongratsModal()" style="background: #000; color: #FFD700; padding: 12px 30px; font-weight: 900; border: none;">
+            <i class="fas fa-check-circle"></i> ممتاز!
+        </button>
+    </div>
+</div>
+
+<!-- صفحة الجداول الدراسية الرئيسية -->
+<div id="study-schedules-page" class="container page" style="display:none">
+    <div class="header">
+        <button class="btn btn-secondary" onclick="showStudyAssistantPage()">
+            <i class="fas fa-arrow-right"></i>
+        </button>
+        <span style="font-weight:900">الجداول الدراسية</span>
+    </div>
+    
+    <div class="posts-container">
+        <div class="profile-actions-card">
+            <div class="profile-menu">
+                <div class="menu-item" onclick="showDailySchedulePage()">
+                    <i class="fas fa-calendar-day"></i>
+                    <span>جدول يومي</span>
+                </div>
+                
+                <div class="menu-item" onclick="showWeeklySchedulePage()">
+                    <i class="fas fa-calendar-week"></i>
+                    <span>جدول أسبوعي</span>
+                </div>
+                
+                <div class="menu-item" onclick="showAccumulationSchedulePage()">
+                    <i class="fas fa-layer-group"></i>
+                    <span>جدول تراكمات</span>
+                </div>
+                
+                <div class="menu-item" onclick="showReviewSchedulePage()">
+                    <i class="fas fa-book-reader"></i>
+                    <span>جدول مراجعة</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- نافذة إنشاء جدول يومي -->
+<div id="daily-schedule-modal" class="modal">
+    <div class="modal-content" style="max-width: 600px;">
+        <div class="modal-header">
+            <h2><i class="fas fa-calendar-day"></i> إنشاء جدول يومي</h2>
+            <button class="close-modal" onclick="closeDailyScheduleModal()">&times;</button>
+        </div>
+        
+        <div class="select-group">
+            <label>عدد المواد (1-9)</label>
+            <input type="number" id="daily-subjects-count" class="form-control" min="1" max="9" value="3" onchange="generateSubjectFields('daily')">
+        </div>
+        
+        <div id="daily-subjects-container">
+            <!-- سيتم توليد حقول المواد هنا -->
+        </div>
+        
+        <div class="select-group">
+            <label>عدد ساعات الدراسة اليومية</label>
+            <input type="number" id="daily-study-hours" class="form-control" min="1" max="12" value="4">
+        </div>
+        
+        <div class="select-group">
+            <label>عدد فصول كل مادة يومياً</label>
+            <input type="number" id="daily-chapters-per-subject" class="form-control" min="1" max="10" value="2">
+        </div>
+        
+        <div class="select-group">
+            <label>وقت الدراسة المفضل</label>
+            <select id="daily-study-time" class="form-control">
+                <option value="morning">صباحاً</option>
+                <option value="evening">مساءً</option>
+                <option value="night">ليلاً</option>
+            </select>
+        </div>
+        
+        <div class="select-group">
+            <label>وقت الاستراحة بين الجلسات (دقائق)</label>
+            <input type="number" id="daily-break-time" class="form-control" min="5" max="60" value="15">
+        </div>
+        
+        <div class="select-group">
+            <label>الوقت الممنوع للدراسة</label>
+            <input type="text" id="daily-forbidden-time" class="form-control" placeholder="مثل: 12:00 - 14:00">
+        </div>
+        
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeDailyScheduleModal()">إلغاء</button>
+            <button class="btn btn-success" onclick="generateDailySchedule()">
+                <i class="fas fa-magic"></i> إنشاء الجدول
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- صفحة عرض الجدول اليومي -->
+<div id="daily-schedule-page" class="container page" style="display:none">
+    <div class="header">
+        <button class="btn btn-secondary" onclick="showStudySchedulesPage()">
+            <i class="fas fa-arrow-right"></i>
+        </button>
+        <span style="font-weight:900">جدولك اليومي</span>
+        <button class="btn" onclick="openDailyScheduleModal()" style="margin-left: auto;">
+            <i class="fas fa-redo"></i> جدول جديد
+        </button>
+    </div>
+    
+    <div class="posts-container">
+        <!-- إحصائيات الجدول -->
+        <div id="daily-schedule-stats" class="post" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+            <!-- سيتم تعبئة الإحصائيات هنا -->
+        </div>
+        
+        <!-- جدول الدراسة -->
+        <div id="daily-schedule-table" class="post">
+            <!-- سيتم توليد الجدول هنا -->
+        </div>
+        
+        <!-- نظام التقييم -->
+        <div id="schedule-rating" class="post" style="text-align: center;">
+            <h3 style="margin-bottom: 15px;">قيم هذا الجدول</h3>
+            <div style="font-size: 24px; margin-bottom: 10px;" id="stars-container">
+                <span onclick="rateSchedule(1)" style="cursor: pointer; margin: 0 2px;">☆</span>
+                <span onclick="rateSchedule(2)" style="cursor: pointer; margin: 0 2px;">☆</span>
+                <span onclick="rateSchedule(3)" style="cursor: pointer; margin: 0 2px;">☆</span>
+                <span onclick="rateSchedule(4)" style="cursor: pointer; margin: 0 2px;">☆</span>
+                <span onclick="rateSchedule(5)" style="cursor: pointer; margin: 0 2px;">☆</span>
+            </div>
+            <small style="color: var(--light-text);">اضغط على النجوم لتقييم الجدول</small>
+        </div>
+    </div>
+</div>
+
+<!-- نافذة إرسال التقييم -->
+<div id="rating-modal" class="modal">
+    <div class="modal-content" style="background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%); color: #000;">
+        <div class="modal-header">
+            <h2><i class="fas fa-star"></i> تقييم الجدول</h2>
+            <button class="close-modal" onclick="closeRatingModal()" style="color: #000;">&times;</button>
+        </div>
+        
+        <div class="select-group">
+            <label>تقييمك: <span id="selected-rating-text" style="font-weight: 900;"></span></label>
+            <div style="font-size: 24px; text-align: center; margin: 10px 0;" id="rating-stars-display">
+                ★★★★★
+            </div>
+        </div>
+        
+        <div class="select-group">
+            <label>رأيك حول الجدول (اختياري)</label>
+            <textarea id="rating-comment" class="form-control" rows="4" placeholder="اكتب رأيك هنا..." style="background: rgba(255,255,255,0.9); color: #000;"></textarea>
+        </div>
+        
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeRatingModal()" style="background: rgba(0,0,0,0.2); color: #000;">إلغاء</button>
+            <button class="btn" onclick="submitRating()" style="background: #000; color: #FFD700;">
+                <i class="fas fa-paper-plane"></i> إرسال التقييم
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- صفحة الجدول الأسبوعي -->
+<div id="weekly-schedule-page" class="container page" style="display:none">
+    <div class="header">
+        <button class="btn btn-secondary" onclick="showStudySchedulesPage()">
+            <i class="fas fa-arrow-right"></i>
+        </button>
+        <span style="font-weight:900">جدولك الأسبوعي</span>
+        <button class="btn" onclick="openWeeklyScheduleModal()" style="margin-left: auto;">
+            <i class="fas fa-redo"></i> جدول جديد
+        </button>
+    </div>
+    
+    <div class="posts-container">
+        <!-- إحصائيات الجدول -->
+        <div id="weekly-schedule-stats" class="post" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+            <!-- سيتم تعبئة الإحصائيات هنا -->
+        </div>
+        
+        <!-- جدول الدراسة الأسبوعي -->
+        <div id="weekly-schedule-table" class="post">
+            <!-- سيتم توليد الجدول هنا -->
+        </div>
+        
+        <!-- نظام التقييم -->
+        <div id="weekly-schedule-rating" class="post" style="text-align: center;">
+            <h3 style="margin-bottom: 15px;">قيم هذا الجدول</h3>
+            <div style="font-size: 24px; margin-bottom: 10px;" id="weekly-stars-container">
+                <span onclick="rateWeeklySchedule(1)" style="cursor: pointer; margin: 0 2px;">☆</span>
+                <span onclick="rateWeeklySchedule(2)" style="cursor: pointer; margin: 0 2px;">☆</span>
+                <span onclick="rateWeeklySchedule(3)" style="cursor: pointer; margin: 0 2px;">☆</span>
+                <span onclick="rateWeeklySchedule(4)" style="cursor: pointer; margin: 0 2px;">☆</span>
+                <span onclick="rateWeeklySchedule(5)" style="cursor: pointer; margin: 0 2px;">☆</span>
+            </div>
+            <small style="color: var(--light-text);">اضغط على النجوم لتقييم الجدول</small>
+        </div>
+    </div>
+</div>
+
+<!-- صفحة جدول التراكمات -->
+<div id="accumulation-schedule-page" class="container page" style="display:none">
+    <div class="header">
+        <button class="btn btn-secondary" onclick="showStudySchedulesPage()">
+            <i class="fas fa-arrow-right"></i>
+        </button>
+        <span style="font-weight:900">جدول التراكمات</span>
+        <button class="btn" onclick="openAccumulationScheduleModal()" style="margin-left: auto;">
+            <i class="fas fa-redo"></i> جدول جديد
+        </button>
+    </div>
+    
+    <div class="posts-container">
+        <!-- إحصائيات الجدول -->
+        <div id="accumulation-schedule-stats" class="post" style="background: linear-gradient(135deg, #FF6B6B 0%, #FF8E6B 100%); color: white;">
+            <!-- سيتم تعبئة الإحصائيات هنا -->
+        </div>
+        
+        <!-- جدول التراكمات -->
+        <div id="accumulation-schedule-table" class="post">
+            <!-- سيتم توليد الجدول هنا -->
+        </div>
+        
+        <!-- نظام التقييم -->
+        <div id="accumulation-schedule-rating" class="post" style="text-align: center;">
+            <h3 style="margin-bottom: 15px;">قيم هذا الجدول</h3>
+            <div style="font-size: 24px; margin-bottom: 10px;" id="accumulation-stars-container">
+                <span onclick="rateAccumulationSchedule(1)" style="cursor: pointer; margin: 0 2px;">☆</span>
+                <span onclick="rateAccumulationSchedule(2)" style="cursor: pointer; margin: 0 2px;">☆</span>
+                <span onclick="rateAccumulationSchedule(3)" style="cursor: pointer; margin: 0 2px;">☆</span>
+                <span onclick="rateAccumulationSchedule(4)" style="cursor: pointer; margin: 0 2px;">☆</span>
+                <span onclick="rateAccumulationSchedule(5)" style="cursor: pointer; margin: 0 2px;">☆</span>
+            </div>
+            <small style="color: var(--light-text);">اضغط على النجوم لتقييم الجدول</small>
+        </div>
+    </div>
+</div>
+
+<!-- صفحة جدول المراجعة -->
+<div id="review-schedule-page" class="container page" style="display:none">
+    <div class="header">
+        <button class="btn btn-secondary" onclick="showStudySchedulesPage()">
+            <i class="fas fa-arrow-right"></i>
+        </button>
+        <span style="font-weight:900">جدول المراجعة</span>
+        <button class="btn" onclick="openReviewScheduleModal()" style="margin-left: auto;">
+            <i class="fas fa-redo"></i> جدول جديد
+        </button>
+    </div>
+    
+    <div class="posts-container">
+        <!-- إحصائيات الجدول -->
+        <div id="review-schedule-stats" class="post" style="background: linear-gradient(135deg, #06D6A0 0%, #04A777 100%); color: white;">
+            <!-- سيتم تعبئة الإحصائيات هنا -->
+        </div>
+        
+        <!-- جدول المراجعة -->
+        <div id="review-schedule-table" class="post">
+            <!-- سيتم توليد الجدول هنا -->
+        </div>
+        
+        <!-- نظام التقييم -->
+        <div id="review-schedule-rating" class="post" style="text-align: center;">
+            <h3 style="margin-bottom: 15px;">قيم هذا الجدول</h3>
+            <div style="font-size: 24px; margin-bottom: 10px;" id="review-stars-container">
+                <span onclick="rateReviewSchedule(1)" style="cursor: pointer; margin: 0 2px;">☆</span>
+                <span onclick="rateReviewSchedule(2)" style="cursor: pointer; margin: 0 2px;">☆</span>
+                <span onclick="rateReviewSchedule(3)" style="cursor: pointer; margin: 0 2px;">☆</span>
+                <span onclick="rateReviewSchedule(4)" style="cursor: pointer; margin: 0 2px;">☆</span>
+                <span onclick="rateReviewSchedule(5)" style="cursor: pointer; margin: 0 2px;">☆</span>
+            </div>
+            <small style="color: var(--light-text);">اضغط على النجوم لتقييم الجدول</small>
+        </div>
+    </div>
+</div>
+
+<!-- نافذة إنشاء جدول أسبوعي -->
+<div id="weekly-schedule-modal" class="modal">
+    <div class="modal-content" style="max-width: 600px;">
+        <div class="modal-header">
+            <h2><i class="fas fa-calendar-week"></i> إنشاء جدول أسبوعي</h2>
+            <button class="close-modal" onclick="closeWeeklyScheduleModal()">&times;</button>
+        </div>
+        
+        <div class="select-group">
+            <label>عدد المواد (1-9)</label>
+            <input type="number" id="weekly-subjects-count" class="form-control" min="1" max="9" value="4" onchange="generateWeeklySubjectFields()">
+        </div>
+        
+        <div id="weekly-subjects-container">
+            <!-- سيتم توليد حقول المواد هنا -->
+        </div>
+        
+        <div class="select-group">
+            <label>عدد ساعات الدراسة يومياً</label>
+            <input type="number" id="weekly-study-hours" class="form-control" min="1" max="8" value="3">
+        </div>
+        
+        <div class="select-group">
+            <label>عدد أيام الدراسة أسبوعياً</label>
+            <select id="weekly-study-days" class="form-control">
+                <option value="5">5 أيام (من الأحد إلى الخميس)</option>
+                <option value="6">6 أيام (من الأحد إلى الجمعة)</option>
+                <option value="7">7 أيام (كل الأسبوع)</option>
+            </select>
+        </div>
+        
+        <div class="select-group">
+            <label>عدد فصول كل مادة أسبوعياً</label>
+            <input type="number" id="weekly-chapters-per-subject" class="form-control" min="1" max="20" value="4">
+        </div>
+        
+        <div class="select-group">
+            <label>وقت الدراسة المفضل</label>
+            <select id="weekly-study-time" class="form-control">
+                <option value="morning">صباحاً</option>
+                <option value="evening">مساءً</option>
+                <option value="night">ليلاً</option>
+                <option value="mixed">مختلط</option>
+            </select>
+        </div>
+        
+        <div class="select-group">
+            <label>وقت الاستراحة بين الجلسات (دقائق)</label>
+            <input type="number" id="weekly-break-time" class="form-control" min="5" max="60" value="15">
+        </div>
+        
+        <div class="select-group">
+            <label>الأيام الممنوعة للدراسة</label>
+            <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 5px;">
+                <label><input type="checkbox" name="weekly-forbidden-days" value="friday"> الجمعة</label>
+                <label><input type="checkbox" name="weekly-forbidden-days" value="saturday"> السبت</label>
+                <label><input type="checkbox" name="weekly-forbidden-days" value="sunday"> الأحد</label>
+            </div>
+        </div>
+        
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeWeeklyScheduleModal()">إلغاء</button>
+            <button class="btn btn-success" onclick="generateWeeklySchedule()">
+                <i class="fas fa-magic"></i> إنشاء الجدول الأسبوعي
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- نافذة إنشاء جدول تراكمات -->
+<div id="accumulation-schedule-modal" class="modal">
+    <div class="modal-content" style="max-width: 600px;">
+        <div class="modal-header">
+            <h2><i class="fas fa-layer-group"></i> إنشاء جدول تراكمات</h2>
+            <button class="close-modal" onclick="closeAccumulationScheduleModal()">&times;</button>
+        </div>
+        
+        <div class="select-group">
+            <label>عدد المواد المتراكمة (1-9)</label>
+            <input type="number" id="accumulation-subjects-count" class="form-control" min="1" max="9" value="3" onchange="generateAccumulationSubjectFields()">
+        </div>
+        
+        <div id="accumulation-subjects-container">
+            <!-- سيتم توليد حقول المواد هنا -->
+        </div>
+        
+        <div class="select-group">
+            <label>إجمالي الفصول المتراكمة لكل مادة</label>
+            <input type="number" id="accumulation-total-chapters" class="form-control" min="5" max="100" value="10">
+            <small style="color: var(--light-text);">عدد الفصول التي تحتاج لإنهائها</small>
+        </div>
+        
+        <div class="select-group">
+            <label>عدد ساعات الدراسة يومياً</label>
+            <input type="number" id="accumulation-study-hours" class="form-control" min="1" max="8" value="4">
+        </div>
+        
+        <div class="select-group">
+            <label>عدد فصول كل مادة يومياً</label>
+            <input type="number" id="accumulation-chapters-per-day" class="form-control" min="1" max="10" value="2">
+        </div>
+        
+        <div class="select-group">
+            <label>الأولوية للمواد</label>
+            <select id="accumulation-priority" class="form-control">
+                <option value="equal">توزيع متساوي</option>
+                <option value="difficult">المواد الصعبة أولاً</option>
+                <option value="easy">المواد السهلة أولاً</option>
+            </select>
+        </div>
+        
+        <div class="select-group">
+            <label>هدفك من الجدول</label>
+            <select id="accumulation-goal" class="form-control">
+                <option value="fast">إنهاء سريع</option>
+                <option value="balanced">إنهاء متوازن</option>
+                <option value="thorough">إنهاء متقن</option>
+            </select>
+        </div>
+        
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeAccumulationScheduleModal()">إلغاء</button>
+            <button class="btn btn-success" onclick="generateAccumulationSchedule()">
+                <i class="fas fa-magic"></i> إنشاء جدول التراكمات
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- نافذة إنشاء جدول مراجعة -->
+<div id="review-schedule-modal" class="modal">
+    <div class="modal-content" style="max-width: 600px;">
+        <div class="modal-header">
+            <h2><i class="fas fa-book-reader"></i> إنشاء جدول مراجعة</h2>
+            <button class="close-modal" onclick="closeReviewScheduleModal()">&times;</button>
+        </div>
+        
+        <div class="select-group">
+            <label>عدد الأيام المتبقية للامتحانات</label>
+            <input type="number" id="review-days-left" class="form-control" min="1" max="100" value="30">
+        </div>
+        
+        <div class="select-group">
+            <label>عدد المواد للمراجعة (1-9)</label>
+            <input type="number" id="review-subjects-count" class="form-control" min="1" max="9" value="5" onchange="generateReviewSubjectFields()">
+        </div>
+        
+        <div id="review-subjects-container">
+            <!-- سيتم توليد حقول المواد هنا -->
+        </div>
+        
+        <div class="select-group">
+            <label>صعوبة كل مادة (1-10)</label>
+            <div id="review-difficulty-container">
+                <!-- سيتم توليد حقول الصعوبة هنا -->
+            </div>
+        </div>
+        
+        <div class="select-group">
+            <label>عدد ساعات الدراسة يومياً</label>
+            <input type="number" id="review-study-hours" class="form-control" min="1" max="12" value="6">
+        </div>
+        
+        <div class="select-group">
+            <label>نظام المراجعة</label>
+            <select id="review-system" class="form-control">
+                <option value="spaced">التكرار المتباعد</option>
+                <option value="intensive">مراجعة مكثفة</option>
+                <option value="mixed">نظام مختلط</option>
+            </select>
+        </div>
+        
+        <div class="select-group">
+            <label>هدف المراجعة</label>
+            <select id="review-goal" class="form-control">
+                <option value="pass">النجاح فقط</option>
+                <option value="good">درجة جيدة</option>
+                <option value="excellent">تميز</option>
+            </select>
+        </div>
+        
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeReviewScheduleModal()">إلغاء</button>
+            <button class="btn btn-success" onclick="generateReviewSchedule()">
+                <i class="fas fa-magic"></i> إنشاء جدول المراجعة
+            </button>
+        </div>
     </div>
 </div>
 
@@ -6299,6 +6842,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 100);
 });
 
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js')
+            .then(() => console.log('Service Worker registered'))
+            .catch(err => console.log('Error:', err));
+    }
     
 let currentReportPostId = null;
 let selectedReportReason = '';
@@ -8450,290 +8998,1828 @@ function showStudyTimerPage() {
     updateSessionsDisplay();
 }
 
-// نظام تشغيل القصائد في الخلفية
-let backgroundAudio = {
-    currentAudio: null,
-    audioElement: null,
-    isPlaying: false
-};
+// ==============================================
+// متغيرات الواجبات اليومية
+// ==============================================
+let dailyTasks = JSON.parse(localStorage.getItem('dailyTasks')) || [];
+let tasksTimers = {};
 
-// تهيئة نظام الخلفية
-function initializeBackgroundAudio() {
-    // إنشاء عنصر صوت مخفي
-    backgroundAudio.audioElement = document.createElement('audio');
-    backgroundAudio.audioElement.style.display = 'none';
-    backgroundAudio.audioElement.setAttribute('playsinline', '');
-    backgroundAudio.audioElement.setAttribute('webkit-playsinline', '');
-    document.body.appendChild(backgroundAudio.audioElement);
+// ==============================================
+// دوال التنقل
+// ==============================================
+function showDailyTasksPage() {
+    showPage("daily-tasks");
+    loadDailyTasks();
+    updateTasksStats();
+}
 
-    // إعداد Media Session API
-    if ('mediaSession' in navigator) {
-        navigator.mediaSession.setActionHandler('play', function() {
-            playBackgroundAudio();
-        });
-        
-        navigator.mediaSession.setActionHandler('pause', function() {
-            pauseBackgroundAudio();
-        });
-        
-        navigator.mediaSession.setActionHandler('stop', function() {
-            stopBackgroundAudio();
-        });
-        
-        navigator.mediaSession.setActionHandler('previoustrack', function() {
-            playPreviousPoem();
-        });
-        
-        navigator.mediaSession.setActionHandler('nexttrack', function() {
-            playNextPoem();
-        });
+// ==============================================
+// إدارة النوافذ
+// ==============================================
+function openAddTaskModal() {
+    document.getElementById('add-task-modal').style.display = 'block';
+    document.getElementById('task-name').value = '';
+    document.getElementById('task-hours').value = '1';
+    document.getElementById('task-minutes').value = '0';
+    document.getElementById('task-seconds').value = '0';
+}
+
+function closeAddTaskModal() {
+    document.getElementById('add-task-modal').style.display = 'none';
+}
+
+function openCongratsModal(taskName, timeSaved) {
+    document.getElementById('congrats-message').textContent = `لقد أكملت "${taskName}" بنجاح!`;
+    document.getElementById('time-saved').textContent = `وفرت ${timeSaved}`;
+    document.getElementById('congrats-modal').style.display = 'block';
+}
+
+function closeCongratsModal() {
+    document.getElementById('congrats-modal').style.display = 'none';
+}
+
+// ==============================================
+// إضافة واجب جديد
+// ==============================================
+function addNewTask() {
+    const name = document.getElementById('task-name').value.trim();
+    const hours = parseInt(document.getElementById('task-hours').value) || 0;
+    const minutes = parseInt(document.getElementById('task-minutes').value) || 0;
+    const seconds = parseInt(document.getElementById('task-seconds').value) || 0;
+
+    if (!name) {
+        showNotification('يرجى إدخال اسم الواجب', 'error');
+        return;
     }
 
-    // استمرار التشغيل عند إغلاق التبويب
-    document.addEventListener('visibilitychange', function() {
-        if (!document.hidden && backgroundAudio.isPlaying) {
-            updateMediaSessionMetadata();
+    const totalSeconds = (hours * 3600) + (minutes * 60) + seconds;
+    if (totalSeconds <= 0) {
+        showNotification('يرجى تحديد وقت صحيح للواجب', 'error');
+        return;
+    }
+
+    // ألوان عشوائية للواجبات
+    const colors = [
+        'linear-gradient(135deg, #FF6B6B 0%, #FF8E6B 100%)',
+        'linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%)',
+        'linear-gradient(135deg, #FFD166 0%, #FFB347 100%)',
+        'linear-gradient(135deg, #06D6A0 0%, #04A777 100%)',
+        'linear-gradient(135deg, #118AB2 0%, #0A6E8F 100%)',
+        'linear-gradient(135deg, #EF476F 0%, #D43A5E 100%)',
+        'linear-gradient(135deg, #9D4EDD 0%, #7B3CB8 100%)',
+        'linear-gradient(135deg, #FF9A9E 0%, #FAD0C4 100%)',
+        'linear-gradient(135deg, #A1C4FD 0%, #C2E9FB 100%)',
+        'linear-gradient(135deg, #FFECD2 0%, #FCB69F 100%)'
+    ];
+
+    const newTask = {
+        id: Date.now(),
+        name: name,
+        totalTime: totalSeconds,
+        remainingTime: totalSeconds,
+        isCompleted: false,
+        createdAt: new Date().toLocaleString('ar-IQ'),
+        color: colors[Math.floor(Math.random() * colors.length)]
+    };
+
+    dailyTasks.push(newTask);
+    saveTasksToLocalStorage();
+    
+    showNotification('تم إضافة الواجب بنجاح!', 'success');
+    closeAddTaskModal();
+    loadDailyTasks();
+    updateTasksStats();
+    startTaskTimer(newTask.id);
+}
+
+// ==============================================
+// حفظ وتحميل الواجبات
+// ==============================================
+function saveTasksToLocalStorage() {
+    localStorage.setItem('dailyTasks', JSON.stringify(dailyTasks));
+}
+
+function loadDailyTasks() {
+    const tasksList = document.getElementById('tasks-list');
+    if (!tasksList) return;
+
+    if (dailyTasks.length === 0) {
+        tasksList.innerHTML = `
+            <div class="post">
+                <p style="text-align: center; color: var(--light-text);">
+                    لا توجد واجبات. أضف واجبك الأول!
+                </p>
+            </div>
+        `;
+        return;
+    }
+
+    // فرز الواجبات: غير المكتملة أولاً
+    const sortedTasks = [...dailyTasks].sort((a, b) => {
+        if (a.isCompleted && !b.isCompleted) return 1;
+        if (!a.isCompleted && b.isCompleted) return -1;
+        return b.id - a.id;
+    });
+
+    tasksList.innerHTML = sortedTasks.map(task => `
+        <div class="post" id="task-${task.id}" style="background: ${task.color}; color: white; border: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <div style="flex: 1;">
+                    <div style="font-weight: 900; font-size: 18px; margin-bottom: 5px;">
+                        ${task.name}
+                        ${task.isCompleted ? ' <span style="font-size: 14px;">✅</span>' : ''}
+                    </div>
+                    <div style="font-size: 13px; opacity: 0.9;">
+                        أضيف: ${task.createdAt}
+                    </div>
+                </div>
+                <div style="display: flex; gap: 8px;">
+                    ${!task.isCompleted ? `
+                    <button class="btn btn-xs" onclick="completeTask(${task.id})" 
+                            style="background: rgba(255,255,255,0.3); color: white; border: 1px solid rgba(255,255,255,0.5);">
+                        <i class="fas fa-check-circle"></i> انتهيت
+                    </button>
+                    ` : ''}
+                    <button class="btn btn-xs" onclick="deleteTask(${task.id})" 
+                            style="background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3);">
+                        <i class="fas fa-trash"></i> حذف
+                    </button>
+                </div>
+            </div>
+            
+            ${!task.isCompleted ? `
+            <div style="text-align: center; margin: 15px 0;">
+                <div style="font-size: 28px; font-weight: 900; font-family: monospace; letter-spacing: 2px;" id="timer-${task.id}">
+                    ${formatTime(task.remainingTime)}
+                </div>
+                <div style="font-size: 13px; margin-top: 5px; opacity: 0.9;">
+                    الوقت المتبقي
+                </div>
+            </div>
+            
+            <div style="background: rgba(255,255,255,0.2); height: 6px; border-radius: 3px; overflow: hidden; margin: 10px 0;">
+                <div id="progress-${task.id}" 
+                     style="height: 100%; background: white; width: ${((task.totalTime - task.remainingTime) / task.totalTime) * 100}%; 
+                            border-radius: 3px; transition: width 1s;">
+                </div>
+            </div>
+            ` : `
+            <div style="text-align: center; padding: 15px; background: rgba(255,255,255,0.2); border-radius: 10px; margin: 10px 0;">
+                <div style="font-size: 48px; margin-bottom: 10px;">🎉</div>
+                <div style="font-weight: 900; font-size: 16px;">تم إكمال هذا الواجب بنجاح!</div>
+            </div>
+            `}
+        </div>
+    `).join('');
+}
+
+// ==============================================
+// إدارة المؤقتات
+// ==============================================
+function startTaskTimer(taskId) {
+    // إيقاف المؤقت السابق إذا كان موجوداً
+    if (tasksTimers[taskId]) {
+        clearInterval(tasksTimers[taskId]);
+    }
+
+    tasksTimers[taskId] = setInterval(() => {
+        const taskIndex = dailyTasks.findIndex(t => t.id === taskId);
+        if (taskIndex === -1) {
+            clearInterval(tasksTimers[taskId]);
+            return;
+        }
+
+        const task = dailyTasks[taskIndex];
+        
+        if (task.isCompleted || task.remainingTime <= 0) {
+            clearInterval(tasksTimers[taskId]);
+            return;
+        }
+
+        task.remainingTime--;
+        
+        // تحديث العرض
+        const timerElement = document.getElementById(`timer-${taskId}`);
+        const progressElement = document.getElementById(`progress-${taskId}`);
+        
+        if (timerElement) {
+            timerElement.textContent = formatTime(task.remainingTime);
+        }
+        
+        if (progressElement) {
+            const progressPercent = ((task.totalTime - task.remainingTime) / task.totalTime) * 100;
+            progressElement.style.width = `${progressPercent}%`;
+        }
+
+        // حفظ التغييرات
+        saveTasksToLocalStorage();
+
+        // إذا انتهى الوقت
+        if (task.remainingTime <= 0) {
+            clearInterval(tasksTimers[taskId]);
+            showNotification(`انتهى وقت الواجب: ${task.name}`, 'warning');
+        }
+    }, 1000);
+}
+
+// ==============================================
+// دوال إدارة الواجبات
+// ==============================================
+function completeTask(taskId) {
+    const taskIndex = dailyTasks.findIndex(t => t.id === taskId);
+    if (taskIndex === -1) return;
+
+    const task = dailyTasks[taskIndex];
+    
+    // إيقاف المؤقت
+    if (tasksTimers[taskId]) {
+        clearInterval(tasksTimers[taskId]);
+    }
+
+    // حساب الوقت المتبقي
+    const timeSaved = formatTime(task.remainingTime);
+    task.isCompleted = true;
+    task.completedAt = new Date().toLocaleString('ar-IQ');
+    
+    saveTasksToLocalStorage();
+    loadDailyTasks();
+    updateTasksStats();
+    
+    // عرض نافذة التهنئة
+    setTimeout(() => {
+        openCongratsModal(task.name, timeSaved);
+    }, 500);
+}
+
+function deleteTask(taskId) {
+    if (!confirm('هل أنت متأكد من حذف هذا الواجب؟')) return;
+
+    // إيقاف المؤقت
+    if (tasksTimers[taskId]) {
+        clearInterval(tasksTimers[taskId]);
+        delete tasksTimers[taskId];
+    }
+
+    dailyTasks = dailyTasks.filter(t => t.id !== taskId);
+    saveTasksToLocalStorage();
+    
+    showNotification('تم حذف الواجب', 'success');
+    loadDailyTasks();
+    updateTasksStats();
+}
+
+function updateTasksStats() {
+    const total = dailyTasks.length;
+    const completed = dailyTasks.filter(t => t.isCompleted).length;
+    const pending = total - completed;
+
+    document.getElementById('total-tasks').textContent = total;
+    document.getElementById('completed-tasks').textContent = completed;
+    document.getElementById('pending-tasks').textContent = pending;
+}
+
+// ==============================================
+// دوال مساعدة
+// ==============================================
+function formatTime(seconds) {
+    const hrs = Math.floor(seconds / 3600);
+    const mins = Math.floor((seconds % 3600) / 60);
+    const secs = seconds % 60;
+    
+    return `${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+}
+
+// ==============================================
+// تهيئة المؤقتات عند تحميل الصفحة
+// ==============================================
+function initializeTasksTimers() {
+    dailyTasks.forEach(task => {
+        if (!task.isCompleted && task.remainingTime > 0) {
+            startTaskTimer(task.id);
         }
     });
 }
 
-// تشغيل القصيدة في الخلفية
-async function playBackgroundPoem(poemId) {
-    const poem = poems.find(p => p.id === poemId);
-    if (!poem) return;
-
-    try {
-        // إيقاف أي صوت شغال
-        stopBackgroundAudio();
-
-        // الحصول على رابط الصوت من YouTube
-        const audioUrl = await getYouTubeAudioUrl(poem.youtubeUrl);
-        if (!audioUrl) {
-            throw new Error('Cannot get audio URL');
-        }
-
-        // إعداد عنصر الصوت
-        backgroundAudio.audioElement.src = audioUrl;
-        backgroundAudio.audioElement.load();
-        
-        backgroundAudio.currentAudio = {
-            poemId: poemId,
-            title: poem.title,
-            audioUrl: audioUrl
-        };
-
-        // التشغيل
-        await backgroundAudio.audioElement.play();
-        backgroundAudio.isPlaying = true;
-
-        // تحديث واجهة التحكم
-        updateMediaSessionMetadata();
-        showNotification(`🔊 تشغيل في الخلفية: ${poem.title}`, 'success');
-
-        // تحديث الواجهة
-        updatePoemsDisplay();
-
-        // إعداد الأحداث
-        backgroundAudio.audioElement.onended = function() {
-            if (backgroundAudio.currentAudio) {
-                playNextPoemAutomatically();
-            }
-        };
-
-    } catch (error) {
-        console.error('Error playing background audio:', error);
-        // العودة للطريقة العادية إذا فشلت الخلفية
-        playPoemFinal(poemId);
-    }
-}
-
-// الحصول على رابط الصوت من YouTube
-async function getYouTubeAudioUrl(youtubeUrl) {
-    const videoId = extractYouTubeId(youtubeUrl);
-    if (!videoId) return null;
-
-    // استخدام خدمة خارجية لاستخراج الصوت
-    try {
-        const response = await fetch(`https://api.example.com/audio?url=${encodeURIComponent(youtubeUrl)}`);
-        const data = await response.json();
-        return data.audioUrl;
-    } catch (error) {
-        // استخدام رابط بديل
-        return `https://www.youtube.com/embed/${videoId}?autoplay=1&controls=0`;
-    }
-}
-
-// تحديث واجهة التحكم في الخلفية
-function updateMediaSessionMetadata() {
-    if (!('mediaSession' in navigator) || !backgroundAudio.currentAudio) return;
-
-    navigator.mediaSession.metadata = new MediaMetadata({
-        title: backgroundAudio.currentAudio.title,
-        artist: 'سوق الطلاب',
-        album: 'القصائد',
-        artwork: [
-            { src: 'https://via.placeholder.com/96', sizes: '96x96', type: 'image/png' },
-            { src: 'https://via.placeholder.com/128', sizes: '128x128', type: 'image/png' },
-            { src: 'https://via.placeholder.com/192', sizes: '192x192', type: 'image/png' },
-            { src: 'https://via.placeholder.com/256', sizes: '256x256', type: 'image/png' },
-            { src: 'https://via.placeholder.com/384', sizes: '384x384', type: 'image/png' },
-            { src: 'https://via.placeholder.com/512', sizes: '512x512', type: 'image/png' },
-        ]
-    });
-}
-
-// التحكم في التشغيل
-function playBackgroundAudio() {
-    if (backgroundAudio.audioElement && backgroundAudio.currentAudio) {
-        backgroundAudio.audioElement.play();
-        backgroundAudio.isPlaying = true;
-        updateMediaSessionMetadata();
-    }
-}
-
-function pauseBackgroundAudio() {
-    if (backgroundAudio.audioElement) {
-        backgroundAudio.audioElement.pause();
-        backgroundAudio.isPlaying = false;
-    }
-}
-
-function stopBackgroundAudio() {
-    if (backgroundAudio.audioElement) {
-        backgroundAudio.audioElement.pause();
-        backgroundAudio.audioElement.src = '';
-        backgroundAudio.isPlaying = false;
-        backgroundAudio.currentAudio = null;
-        
-        if ('mediaSession' in navigator) {
-            navigator.mediaSession.metadata = null;
-        }
-    }
-}
-
-// التشغيل التلقائي للقصيدة التالية
-function playNextPoemAutomatically() {
-    if (!backgroundAudio.currentAudio) return;
-
-    const currentIndex = poems.findIndex(p => p.id === backgroundAudio.currentAudio.poemId);
-    const nextIndex = (currentIndex + 1) % poems.length;
-    
-    if (nextIndex >= 0 && nextIndex < poems.length) {
-        playBackgroundPoem(poems[nextIndex].id);
-    }
-}
-
-function playNextPoem() {
-    if (!backgroundAudio.currentAudio) return;
-    
-    const currentIndex = poems.findIndex(p => p.id === backgroundAudio.currentAudio.poemId);
-    const nextIndex = (currentIndex + 1) % poems.length;
-    
-    if (nextIndex >= 0 && nextIndex < poems.length) {
-        playBackgroundPoem(poems[nextIndex].id);
-    }
-}
-
-function playPreviousPoem() {
-    if (!backgroundAudio.currentAudio) return;
-    
-    const currentIndex = poems.findIndex(p => p.id === backgroundAudio.currentAudio.poemId);
-    const prevIndex = (currentIndex - 1 + poems.length) % poems.length;
-    
-    if (prevIndex >= 0 && prevIndex < poems.length) {
-        playBackgroundPoem(poems[prevIndex].id);
-    }
-}
-
-// تعديل دالة التشغيل الرئيسية
-function playPoemFinal(poemId) {
-    // محاولة التشغيل في الخلفية أولاً
-    if (supportsBackgroundAudio()) {
-        playBackgroundPoem(poemId);
-    } else {
-        // العودة للطريقة القديمة إذا لم تدعم الخلفية
-        const poem = poems.find(p => p.id === poemId);
-        if (!poem) return;
-
-        const videoId = extractYouTubeId(poem.youtubeUrl);
-        if (!videoId) return;
-
-        stopCurrentAudioFinal();
-        createYouTubePlayer(videoId, poem.title, poemId);
-    }
-}
-
-// التحقق من دعم الخلفية
-function supportsBackgroundAudio() {
-    return ('mediaSession' in navigator) && 
-           (typeof document.createElement('audio').play === 'function');
-}
-
-// تحديث زر التشغيل في واجهة القصائد
-function updatePlayButton(poemId) {
-    // داخل دالة loadPoems - تحديث زر التشغيل
-const isPlayingInBackground = backgroundAudio.currentAudio && 
-                             backgroundAudio.currentAudio.poemId === poem.id && 
-                             backgroundAudio.isPlaying;
-
-// تحديث النص في عرض القصيدة
-`<div style="font-weight: 700; color: var(--primary-color); font-size: 16px; cursor: pointer;" 
-     onclick="playPoemFinal('${poem.id}')">
-    ${isPinned ? '📌 ' : '🎵 '} 
-    ${poem.title || 'بدون عنوان'}
-    ${isPlayingInBackground ? ' <span style="color: var(--success-color);">🔴 خلفية</span>' : 
-      (isPlaying ? ' <span style="color: var(--danger-color);">🔴 تشغيل</span>' : '')}
-</div>`
-}
-
-// تبديل التشغيل/الإيقاف
-function toggleBackgroundPlayback() {
-    if (backgroundAudio.isPlaying) {
-        pauseBackgroundAudio();
-        document.getElementById('bg-play-pause-btn').innerHTML = '<i class="fas fa-play"></i>';
-    } else {
-        playBackgroundAudio();
-        document.getElementById('bg-play-pause-btn').innerHTML = '<i class="fas fa-pause"></i>';
-    }
-}
-
-// تحديث واجهة التحكم
-function updateBackgroundControls() {
-    const controls = document.getElementById('background-audio-controls');
-    const nowPlaying = document.getElementById('bg-now-playing');
-    
-    if (backgroundAudio.currentAudio && backgroundAudio.isPlaying) {
-        controls.style.display = 'block';
-        nowPlaying.textContent = backgroundAudio.currentAudio.title;
-        document.getElementById('bg-play-pause-btn').innerHTML = '<i class="fas fa-pause"></i>';
-    } else {
-        controls.style.display = 'none';
-    }
-}
-
-// استدعاء التحديث عند التشغيل
-function playBackgroundAudio() {
-    if (backgroundAudio.audioElement && backgroundAudio.currentAudio) {
-        backgroundAudio.audioElement.play();
-        backgroundAudio.isPlaying = true;
-        updateMediaSessionMetadata();
-        updateBackgroundControls();
-    }
-}
-
-// تسجيل Service Worker
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/sw.js')
-        .then(registration => console.log('SW registered'))
-        .catch(error => console.log('SW registration failed'));
-}
-
-// تهيئة النظام عند تحميل الصفحة
+// استدعاء التهيئة عند تحميل الصفحة
 document.addEventListener('DOMContentLoaded', function() {
-    initializeBackgroundAudio();
-    initializeAudioSystem();
+    setTimeout(initializeTasksTimers, 1000);
 });
 
+// ==============================================
+// متغيرات الجداول الدراسية
+// ==============================================
+let currentSchedule = null;
+let currentRating = 0;
+let scheduleRatings = JSON.parse(localStorage.getItem('scheduleRatings')) || [];
+
+// ==============================================
+// دوال التنقل
+// ==============================================
+function showStudySchedulesPage() {
+    showPage("study-schedules");
+}
+
+function showDailySchedulePage() {
+    showPage("daily-schedule");
+    openDailyScheduleModal();
+}
+
+function showWeeklySchedulePage() {
+    showPage("weekly-schedule");
+    openWeeklyScheduleModal();
+}
+
+function showAccumulationSchedulePage() {
+    showPage("accumulation-schedule");
+    openAccumulationScheduleModal();
+}
+
+function showReviewSchedulePage() {
+    showPage("review-schedule");
+    openReviewScheduleModal();
+}
+
+// ==============================================
+// دوال الجداول اليومية
+// ==============================================
+function openDailyScheduleModal() {
+    document.getElementById('daily-schedule-modal').style.display = 'block';
+    generateSubjectFields('daily');
+}
+
+function closeDailyScheduleModal() {
+    document.getElementById('daily-schedule-modal').style.display = 'none';
+}
+
+function generateSubjectFields(type) {
+    const count = parseInt(document.getElementById(`${type}-subjects-count`).value) || 3;
+    const container = document.getElementById(`${type}-subjects-container`);
+    
+    let html = '<div style="margin-bottom: 15px;"><label>أسماء المواد</label></div>';
+    
+    for (let i = 1; i <= count; i++) {
+        html += `
+            <div class="row" style="margin-bottom: 8px;">
+                <input type="text" 
+                       class="form-control grow" 
+                       placeholder="اسم المادة ${i}"
+                       id="${type}-subject-${i}">
+            </div>
+        `;
+    }
+    
+    container.innerHTML = html;
+}
+
+function generateDailySchedule() {
+    // جمع بيانات الجدول
+    const subjectsCount = parseInt(document.getElementById('daily-subjects-count').value) || 3;
+    const studyHours = parseInt(document.getElementById('daily-study-hours').value) || 4;
+    const chaptersPerSubject = parseInt(document.getElementById('daily-chapters-per-subject').value) || 2;
+    const studyTime = document.getElementById('daily-study-time').value;
+    const breakTime = parseInt(document.getElementById('daily-break-time').value) || 15;
+    const forbiddenTime = document.getElementById('daily-forbidden-time').value.trim();
+    
+    // جمع أسماء المواد
+    const subjects = [];
+    for (let i = 1; i <= subjectsCount; i++) {
+        const subject = document.getElementById(`daily-subject-${i}`).value.trim();
+        if (subject) {
+            subjects.push(subject);
+        }
+    }
+    
+    if (subjects.length === 0) {
+        showNotification('يرجى إدخال أسماء المواد', 'error');
+        return;
+    }
+    
+    // إنشاء الجدول الذكي
+    const schedule = createSmartSchedule({
+        type: 'daily',
+        subjects: subjects,
+        totalHours: studyHours,
+        chaptersPerSubject: chaptersPerSubject,
+        preferredTime: studyTime,
+        breakMinutes: breakTime,
+        forbiddenTime: forbiddenTime,
+        days: 1
+    });
+    
+    // حفظ الجدول الحالي
+    currentSchedule = schedule;
+    localStorage.setItem('currentSchedule', JSON.stringify(schedule));
+    
+    // عرض الجدول
+    displayDailySchedule(schedule);
+    closeDailyScheduleModal();
+    showPage("daily-schedule");
+    
+    showNotification('تم إنشاء جدولك اليومي بنجاح!', 'success');
+}
+
+// ==============================================
+// خوارزمية إنشاء الجدول الذكي
+// ==============================================
+function createSmartSchedule(config) {
+    const {
+        type,
+        subjects,
+        totalHours,
+        chaptersPerSubject,
+        preferredTime,
+        breakMinutes,
+        forbiddenTime,
+        days
+    } = config;
+    
+    // أوقات الدراسة المفضلة
+    const timeSlots = {
+        morning: ['06:00', '12:00'],
+        evening: ['14:00', '18:00'],
+        night: ['19:00', '23:00']
+    };
+    
+    // الحصول على الفترة الزمنية المفضلة
+    const [startHour, endHour] = timeSlots[preferredTime] || timeSlots.morning;
+    
+    // حساب إجمالي الدقائق المتاحة
+    const totalMinutes = totalHours * 60;
+    const totalStudyMinutes = totalMinutes - (breakMinutes * (subjects.length - 1));
+    
+    // توزيع الوقت على المواد
+    const minutesPerSubject = Math.floor(totalStudyMinutes / subjects.length);
+    const minutesPerChapter = Math.floor(minutesPerSubject / chaptersPerSubject);
+    
+    // إنشاء الجدول
+    const schedule = {
+        type: type,
+        subjects: [],
+        totalTime: totalHours,
+        chaptersPerSubject: chaptersPerSubject,
+        preferredTime: preferredTime,
+        breakMinutes: breakMinutes,
+        createdAt: new Date().toLocaleString('ar-IQ'),
+        timetable: []
+    };
+    
+    // إضافة المواد
+    subjects.forEach((subject, index) => {
+        schedule.subjects.push({
+            name: subject,
+            totalMinutes: minutesPerSubject,
+            minutesPerChapter: minutesPerChapter,
+            color: getSubjectColor(index)
+        });
+    });
+    
+    // إنشاء الجدول الزمني
+    let currentTime = startHour;
+    
+    subjects.forEach((subject, index) => {
+        // إضافة المادة
+        for (let chapter = 1; chapter <= chaptersPerSubject; chapter++) {
+            const endTime = addMinutes(currentTime, minutesPerChapter);
+            
+            schedule.timetable.push({
+                subject: subject,
+                chapter: chapter,
+                startTime: currentTime,
+                endTime: endTime,
+                duration: minutesPerChapter,
+                type: 'study'
+            });
+            
+            currentTime = endTime;
+        }
+        
+        // إضافة استراحة (باستثناء المادة الأخيرة)
+        if (index < subjects.length - 1) {
+            const breakEndTime = addMinutes(currentTime, breakMinutes);
+            
+            schedule.timetable.push({
+                subject: 'استراحة',
+                chapter: '',
+                startTime: currentTime,
+                endTime: breakEndTime,
+                duration: breakMinutes,
+                type: 'break'
+            });
+            
+            currentTime = breakEndTime;
+        }
+    });
+    
+    // إضافة الأوقات المحظورة إذا وجدت
+    if (forbiddenTime) {
+        schedule.forbiddenTime = forbiddenTime;
+        
+        // تحليل الوقت المحظور
+        const [forbiddenStart, forbiddenEnd] = forbiddenTime.split('-').map(t => t.trim());
+        
+        // إعادة ترتيب الجدول لتجنب الوقت المحظور
+        schedule.timetable = schedule.timetable.filter(slot => {
+            const slotStart = slot.startTime;
+            const slotEnd = slot.endTime;
+            
+            // التحقق من التداخل
+            return !isTimeOverlap(slotStart, slotEnd, forbiddenStart, forbiddenEnd);
+        });
+    }
+    
+    return schedule;
+}
+
+// ==============================================
+// دوال مساعدة للوقت
+// ==============================================
+function addMinutes(time, minutes) {
+    const [hours, mins] = time.split(':').map(Number);
+    let totalMinutes = hours * 60 + mins + minutes;
+    
+    let newHours = Math.floor(totalMinutes / 60);
+    let newMinutes = totalMinutes % 60;
+    
+    // التحويل إلى تنسيق 24 ساعة
+    newHours = newHours % 24;
+    
+    return `${newHours.toString().padStart(2, '0')}:${newMinutes.toString().padStart(2, '0')}`;
+}
+
+function isTimeOverlap(start1, end1, start2, end2) {
+    const timeToMinutes = (time) => {
+        const [h, m] = time.split(':').map(Number);
+        return h * 60 + m;
+    };
+    
+    const s1 = timeToMinutes(start1);
+    const e1 = timeToMinutes(end1);
+    const s2 = timeToMinutes(start2);
+    const e2 = timeToMinutes(end2);
+    
+    return (s1 < e2 && e1 > s2);
+}
+
+function getSubjectColor(index) {
+    const colors = [
+        '#FF6B6B', '#4ECDC4', '#FFD166', '#06D6A0', '#118AB2',
+        '#EF476F', '#9D4EDD', '#FF9A9E', '#A1C4FD', '#FFECD2'
+    ];
+    return colors[index % colors.length];
+}
+
+// ==============================================
+// عرض الجدول اليومي
+// ==============================================
+function displayDailySchedule(schedule) {
+    // تحديث الإحصائيات
+    const statsContainer = document.getElementById('daily-schedule-stats');
+    statsContainer.innerHTML = `
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; text-align: center;">
+            <div>
+                <div style="font-size: 20px; font-weight: 900;">${schedule.subjects.length}</div>
+                <div style="font-size: 12px;">عدد المواد</div>
+            </div>
+            <div>
+                <div style="font-size: 20px; font-weight: 900;">${schedule.totalTime} س</div>
+                <div style="font-size: 12px;">إجمالي الوقت</div>
+            </div>
+            <div>
+                <div style="font-size: 20px; font-weight: 900;">${schedule.chaptersPerSubject}</div>
+                <div style="font-size: 12px;">فصول/مادة</div>
+            </div>
+        </div>
+        <div style="margin-top: 10px; font-size: 13px; text-align: center;">
+            <i class="fas fa-clock"></i> ${schedule.createdAt}
+        </div>
+    `;
+    
+    // عرض الجدول
+    const tableContainer = document.getElementById('daily-schedule-table');
+    let tableHTML = `
+        <h3 style="text-align: center; margin-bottom: 20px; color: var(--primary-color);">
+            <i class="fas fa-calendar-alt"></i> جدولك اليومي
+        </h3>
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="background: var(--primary-color); color: white;">
+                        <th style="padding: 12px; text-align: right;">الوقت</th>
+                        <th style="padding: 12px; text-align: right;">المادة</th>
+                        <th style="padding: 12px; text-align: right;">الفصل</th>
+                        <th style="padding: 12px; text-align: right;">المدة</th>
+                        <th style="padding: 12px; text-align: right;">النوع</th>
+                    </tr>
+                </thead>
+                <tbody>
+    `;
+    
+    schedule.timetable.forEach((slot, index) => {
+        const isBreak = slot.type === 'break';
+        const bgColor = isBreak ? '#f8f9fa' : schedule.subjects.find(s => s.name === slot.subject)?.color || '#e9f0ff';
+        const textColor = isBreak ? '#6c757d' : '#000';
+        
+        tableHTML += `
+            <tr style="border-bottom: 1px solid var(--border-color);">
+                <td style="padding: 10px; text-align: center; font-weight: 700; background: ${isBreak ? '#fff' : bgColor}; color: ${textColor};">
+                    ${slot.startTime} - ${slot.endTime}
+                </td>
+                <td style="padding: 10px; text-align: right; background: ${isBreak ? '#fff' : bgColor}; color: ${textColor};">
+                    ${slot.subject}
+                </td>
+                <td style="padding: 10px; text-align: center; background: ${isBreak ? '#fff' : bgColor}; color: ${textColor};">
+                    ${slot.chapter || '-'}
+                </td>
+                <td style="padding: 10px; text-align: center; background: ${isBreak ? '#fff' : bgColor}; color: ${textColor};">
+                    ${slot.duration} دقيقة
+                </td>
+                <td style="padding: 10px; text-align: center; background: ${isBreak ? '#fff' : bgColor}; color: ${textColor};">
+                    ${isBreak ? '<i class="fas fa-coffee"></i> استراحة' : '<i class="fas fa-book"></i> دراسة'}
+                </td>
+            </tr>
+        `;
+    });
+    
+    tableHTML += `
+                </tbody>
+            </table>
+        </div>
+        
+        <div style="margin-top: 20px; padding: 15px; background: var(--sky); border-radius: 10px;">
+            <h4 style="color: var(--primary-color); margin-bottom: 10px;">نصائح للدراسة:</h4>
+            <ul style="margin-right: 20px; color: #555;">
+                <li>التزم بالجدول الزمني بدقة</li>
+                <li>استغل أوقات الاستراحة للراحة الحقيقية</li>
+                <li>راجع ما درسته بعد كل جلسة</li>
+                <li>استخدم تقنية البومودورو (25 دقيقة دراسة، 5 دقائق راحة)</li>
+            </ul>
+        </div>
+    `;
+    
+    tableContainer.innerHTML = tableHTML;
+}
+
+// ==============================================
+// نظام التقييم
+// ==============================================
+function rateSchedule(rating) {
+    currentRating = rating;
+    
+    // تحديث عرض النجوم
+    const starsContainer = document.getElementById('stars-container');
+    let starsHTML = '';
+    
+    for (let i = 1; i <= 5; i++) {
+        starsHTML += `<span onclick="rateSchedule(${i})" style="cursor: pointer; margin: 0 2px; color: ${i <= rating ? '#FFD700' : '#ccc'}; font-size: 28px;">${i <= rating ? '★' : '☆'}</span>`;
+    }
+    
+    starsContainer.innerHTML = starsHTML;
+    
+    // فتح نافذة التقييم بعد ثانيتين
+    setTimeout(() => {
+        openRatingModal();
+    }, 1000);
+}
+
+function openRatingModal() {
+    document.getElementById('selected-rating-text').textContent = `${currentRating} نجوم`;
+    
+    // عرض النجوم المختارة
+    let starsDisplay = '';
+    for (let i = 1; i <= 5; i++) {
+        starsDisplay += i <= currentRating ? '★' : '☆';
+    }
+    document.getElementById('rating-stars-display').innerHTML = `<span style="color: #FFD700;">${starsDisplay}</span>`;
+    
+    document.getElementById('rating-modal').style.display = 'block';
+    document.getElementById('rating-comment').value = '';
+}
+
+function closeRatingModal() {
+    document.getElementById('rating-modal').style.display = 'none';
+    currentRating = 0;
+    
+    // إعادة تعيين النجوم
+    const starsContainer = document.getElementById('stars-container');
+    starsContainer.innerHTML = `
+        <span onclick="rateSchedule(1)" style="cursor: pointer; margin: 0 2px;">☆</span>
+        <span onclick="rateSchedule(2)" style="cursor: pointer; margin: 0 2px;">☆</span>
+        <span onclick="rateSchedule(3)" style="cursor: pointer; margin: 0 2px;">☆</span>
+        <span onclick="rateSchedule(4)" style="cursor: pointer; margin: 0 2px;">☆</span>
+        <span onclick="rateSchedule(5)" style="cursor: pointer; margin: 0 2px;">☆</span>
+    `;
+}
+
+function submitRating() {
+    const comment = document.getElementById('rating-comment').value.trim();
+    
+    const ratingData = {
+        id: Date.now(),
+        rating: currentRating,
+        comment: comment,
+        scheduleType: currentSchedule?.type || 'daily',
+        createdAt: new Date().toLocaleString('ar-IQ'),
+        userId: currentUser?.uid || 'anonymous',
+        userName: currentUser?.name || 'مستخدم'
+    };
+    
+    // حفظ التقييم محلياً
+    scheduleRatings.push(ratingData);
+    localStorage.setItem('scheduleRatings', JSON.stringify(scheduleRatings));
+    
+    // إرسال التقييم للمالك (إذا كان المستخدم مسجل دخول)
+    if (currentUser) {
+        sendRatingToOwner(ratingData);
+    }
+    
+    showNotification('شكراً لتقييمك! تم إرسال رأيك للمالك.', 'success');
+    closeRatingModal();
+}
+
+async function sendRatingToOwner(ratingData) {
+    try {
+        const ownerQuery = await db.collection('users')
+            .where('email', '==', APP_OWNER_EMAIL)
+            .limit(1)
+            .get();
+        
+        if (ownerQuery.empty) return;
+        
+        const ownerDoc = ownerQuery.docs[0];
+        const ownerUid = ownerDoc.id;
+        
+        await db.collection('inbox').add({
+            userId: ownerUid,
+            type: 'schedule_rating',
+            title: '⭐ تقييم جديد للجدول',
+            message: `👤 المستخدم: ${ratingData.userName}\n📊 التقييم: ${'★'.repeat(ratingData.rating)}${'☆'.repeat(5 - ratingData.rating)}\n💬 التعليق: ${ratingData.comment || 'بدون تعليق'}\n📅 التاريخ: ${ratingData.createdAt}\n📋 نوع الجدول: ${ratingData.scheduleType}`,
+            status: 'unread',
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        
+    } catch (error) {
+        console.error('Error sending rating:', error);
+    }
+}
+
+// ==============================================
+// تهيئة الصفحات الأخرى
+// ==============================================
+// تهيئة صفحة الجدول الأسبوعي
+function showWeeklySchedulePage() {
+    showPage("weekly-schedule");
+    // سيتم تطبيق نفس منطق الجدول اليومي مع تعديلات للأسبوع
+    showNotification('قريباً: الجدول الأسبوعي', 'info');
+}
+
+// تهيئة صفحة جدول التراكمات
+function showAccumulationSchedulePage() {
+    showPage("accumulation-schedule");
+    // سيتم تطبيق منطق خاص للتراكمات
+    showNotification('قريباً: جدول التراكمات', 'info');
+}
+
+// تهيئة صفحة جدول المراجعة
+function showReviewSchedulePage() {
+    showPage("review-schedule");
+    // سيتم تطبيق منطق خاص للمراجعة
+    showNotification('قريباً: جدول المراجعة', 'info');
+}
+
+// ==============================================
+// تحميل الجدول المحفوظ عند فتح الصفحة
+// ==============================================
+document.addEventListener('DOMContentLoaded', function() {
+    // تحميل الجدول المحفوظ
+    const savedSchedule = localStorage.getItem('currentSchedule');
+    if (savedSchedule) {
+        currentSchedule = JSON.parse(savedSchedule);
+    }
+    
+    // تحميل التقييمات
+    scheduleRatings = JSON.parse(localStorage.getItem('scheduleRatings')) || [];
+});
+
+// تحديث دالة initializePages لإضافة الصفحات الجديدة
+function initializePages() {
+    pages = {
+        auth: document.getElementById("auth-page"),
+        main: document.getElementById("main-page"),
+        profile: document.getElementById("profile-page"),
+        userPosts: document.getElementById("user-posts-page"),
+        inbox: document.getElementById("inbox-page"),
+        details: document.getElementById("details-page"),
+        comments: document.getElementById("comments-page"),
+        userStatistics: document.getElementById("user-statistics-page"),
+        adminPanel: document.getElementById("admin-panel-page"),
+        userManagement: document.getElementById("user-management-page"),
+        broadcastPanel: document.getElementById("broadcast-panel-page"),
+        privacyPolicy: document.getElementById("privacy-policy-page"),
+        support: document.getElementById("support-page"),
+        userSupport: document.getElementById("user-support-page"),
+        "study-assistant": document.getElementById("study-assistant-page"),
+        "ai-chat-page": document.getElementById("ai-chat-page"),
+        "study-timer-page": document.getElementById("study-timer-page"),
+        "poems-page": document.getElementById("poems-page"),
+        "ai-training-page": document.getElementById("ai-training-page"),
+        // الصفحات الجديدة
+        "daily-tasks": document.getElementById("daily-tasks-page"),
+        "study-schedules": document.getElementById("study-schedules-page"),
+        "daily-schedule": document.getElementById("daily-schedule-page"),
+        "weekly-schedule": document.getElementById("weekly-schedule-page") || createPlaceholderPage("weekly-schedule", "الجدول الأسبوعي"),
+        "accumulation-schedule": document.getElementById("accumulation-schedule-page") || createPlaceholderPage("accumulation-schedule", "جدول التراكمات"),
+        "review-schedule": document.getElementById("review-schedule-page") || createPlaceholderPage("review-schedule", "جدول المراجعة")
+    };
+}
+
+// دالة لإنشاء صفحات مؤقتة إذا لم تكن موجودة
+function createPlaceholderPage(id, title) {
+    const pageHTML = `
+        <div id="${id}" class="container page" style="display:none">
+            <div class="header">
+                <button class="btn btn-secondary" onclick="showStudySchedulesPage()">
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+                <span style="font-weight:900">${title}</span>
+            </div>
+            <div class="posts-container">
+                <div class="post" style="text-align: center; padding: 40px 20px;">
+                    <div style="font-size: 48px; margin-bottom: 20px;">🚧</div>
+                    <h3 style="color: var(--primary-color); margin-bottom: 15px;">قيد التطوير</h3>
+                    <p style="color: var(--light-text); margin-bottom: 20px;">
+                        ${title} قيد التطوير وسيكون جاهزاً قريباً
+                    </p>
+                    <button class="btn" onclick="showStudySchedulesPage()">
+                        <i class="fas fa-arrow-right"></i> العودة للجداول
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.insertAdjacentHTML('beforeend', pageHTML);
+    return document.getElementById(id);
+}
+
+// ==============================================
+// 1. الجدول الأسبوعي
+// ==============================================
+
+// دوال النوافذ
+function openWeeklyScheduleModal() {
+    document.getElementById('weekly-schedule-modal').style.display = 'block';
+    generateWeeklySubjectFields();
+}
+
+function closeWeeklyScheduleModal() {
+    document.getElementById('weekly-schedule-modal').style.display = 'none';
+}
+
+function generateWeeklySubjectFields() {
+    const count = parseInt(document.getElementById('weekly-subjects-count').value) || 4;
+    const container = document.getElementById('weekly-subjects-container');
+    
+    let html = '<div style="margin-bottom: 15px;"><label>أسماء المواد</label></div>';
+    
+    for (let i = 1; i <= count; i++) {
+        html += `
+            <div class="row" style="margin-bottom: 8px;">
+                <input type="text" 
+                       class="form-control grow" 
+                       placeholder="اسم المادة ${i}"
+                       id="weekly-subject-${i}">
+            </div>
+        `;
+    }
+    
+    container.innerHTML = html;
+}
+
+function generateWeeklySchedule() {
+    // جمع البيانات
+    const subjectsCount = parseInt(document.getElementById('weekly-subjects-count').value) || 4;
+    const studyHours = parseInt(document.getElementById('weekly-study-hours').value) || 3;
+    const studyDays = parseInt(document.getElementById('weekly-study-days').value) || 5;
+    const chaptersPerSubject = parseInt(document.getElementById('weekly-chapters-per-subject').value) || 4;
+    const studyTime = document.getElementById('weekly-study-time').value;
+    const breakTime = parseInt(document.getElementById('weekly-break-time').value) || 15;
+    
+    // جمع المواد
+    const subjects = [];
+    for (let i = 1; i <= subjectsCount; i++) {
+        const subject = document.getElementById(`weekly-subject-${i}`).value.trim();
+        if (subject) {
+            subjects.push(subject);
+        }
+    }
+    
+    if (subjects.length === 0) {
+        showNotification('يرجى إدخال أسماء المواد', 'error');
+        return;
+    }
+    
+    // جمع الأيام الممنوعة
+    const forbiddenDays = [];
+    document.querySelectorAll('input[name="weekly-forbidden-days"]:checked').forEach(checkbox => {
+        forbiddenDays.push(checkbox.value);
+    });
+    
+    // إنشاء الجدول الأسبوعي الذكي
+    const schedule = createWeeklySchedule({
+        subjects: subjects,
+        dailyHours: studyHours,
+        studyDays: studyDays,
+        chaptersPerSubject: chaptersPerSubject,
+        preferredTime: studyTime,
+        breakMinutes: breakTime,
+        forbiddenDays: forbiddenDays
+    });
+    
+    // حفظ وعرض الجدول
+    currentSchedule = schedule;
+    localStorage.setItem('weeklySchedule', JSON.stringify(schedule));
+    displayWeeklySchedule(schedule);
+    closeWeeklyScheduleModal();
+    
+    showNotification('تم إنشاء جدولك الأسبوعي بنجاح!', 'success');
+}
+
+// خوارزمية الجدول الأسبوعي
+function createWeeklySchedule(config) {
+    const { subjects, dailyHours, studyDays, chaptersPerSubject, preferredTime, breakMinutes, forbiddenDays } = config;
+    
+    // أيام الأسبوع
+    const weekDays = ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+    const availableDays = weekDays.filter(day => !forbiddenDays.some(forbidden => {
+        if (forbidden === 'friday') return day === 'الجمعة';
+        if (forbidden === 'saturday') return day === 'السبت';
+        if (forbidden === 'sunday') return day === 'الأحد';
+        return false;
+    })).slice(0, studyDays);
+    
+    // حساب الوقت الكلي
+    const totalStudyHours = dailyHours * availableDays.length;
+    const totalStudyMinutes = totalStudyHours * 60;
+    const totalBreaksMinutes = breakMinutes * (subjects.length - 1) * availableDays.length;
+    const effectiveStudyMinutes = totalStudyMinutes - totalBreaksMinutes;
+    
+    // توزيع الفصول على الأيام
+    const chaptersPerDay = Math.ceil(chaptersPerSubject / availableDays.length);
+    
+    // إنشاء الجدول
+    const schedule = {
+        type: 'weekly',
+        subjects: subjects.map((subject, index) => ({
+            name: subject,
+            totalChapters: chaptersPerSubject,
+            chaptersPerDay: chaptersPerDay,
+            color: getSubjectColor(index)
+        })),
+        days: availableDays,
+        dailyHours: dailyHours,
+        totalWeeks: Math.ceil(chaptersPerSubject / chaptersPerDay),
+        createdAt: new Date().toLocaleString('ar-IQ'),
+        timetable: {}
+    };
+    
+    // إنشاء جدول لكل يوم
+    availableDays.forEach(day => {
+        schedule.timetable[day] = createDailyTimetable({
+            subjects: subjects,
+            dailyHours: dailyHours,
+            chaptersPerDay: chaptersPerDay,
+            preferredTime: preferredTime,
+            breakMinutes: breakMinutes
+        });
+    });
+    
+    return schedule;
+}
+
+// ==============================================
+// 2. جدول التراكمات
+// ==============================================
+
+function openAccumulationScheduleModal() {
+    document.getElementById('accumulation-schedule-modal').style.display = 'block';
+    generateAccumulationSubjectFields();
+}
+
+function closeAccumulationScheduleModal() {
+    document.getElementById('accumulation-schedule-modal').style.display = 'none';
+}
+
+function generateAccumulationSubjectFields() {
+    const count = parseInt(document.getElementById('accumulation-subjects-count').value) || 3;
+    const container = document.getElementById('accumulation-subjects-container');
+    
+    let html = '<div style="margin-bottom: 15px;"><label>أسماء المواد المتراكمة</label></div>';
+    
+    for (let i = 1; i <= count; i++) {
+        html += `
+            <div class="row" style="margin-bottom: 8px;">
+                <input type="text" 
+                       class="form-control grow" 
+                       placeholder="اسم المادة ${i}"
+                       id="accumulation-subject-${i}">
+            </div>
+        `;
+    }
+    
+    container.innerHTML = html;
+}
+
+function generateAccumulationSchedule() {
+    // جمع البيانات
+    const subjectsCount = parseInt(document.getElementById('accumulation-subjects-count').value) || 3;
+    const totalChapters = parseInt(document.getElementById('accumulation-total-chapters').value) || 10;
+    const studyHours = parseInt(document.getElementById('accumulation-study-hours').value) || 4;
+    const chaptersPerDay = parseInt(document.getElementById('accumulation-chapters-per-day').value) || 2;
+    const priority = document.getElementById('accumulation-priority').value;
+    const goal = document.getElementById('accumulation-goal').value;
+    
+    // جمع المواد
+    const subjects = [];
+    for (let i = 1; i <= subjectsCount; i++) {
+        const subject = document.getElementById(`accumulation-subject-${i}`).value.trim();
+        if (subject) {
+            subjects.push({
+                name: subject,
+                difficulty: Math.floor(Math.random() * 10) + 1 // صعوبة عشوائية للتوضيح
+            });
+        }
+    }
+    
+    if (subjects.length === 0) {
+        showNotification('يرجى إدخال أسماء المواد', 'error');
+        return;
+    }
+    
+    // إنشاء جدول التراكمات الذكي
+    const schedule = createAccumulationSchedule({
+        subjects: subjects,
+        totalChapters: totalChapters,
+        dailyHours: studyHours,
+        chaptersPerDay: chaptersPerDay,
+        priority: priority,
+        goal: goal
+    });
+    
+    // حفظ وعرض الجدول
+    currentSchedule = schedule;
+    localStorage.setItem('accumulationSchedule', JSON.stringify(schedule));
+    displayAccumulationSchedule(schedule);
+    closeAccumulationScheduleModal();
+    
+    showNotification('تم إنشاء جدول التراكمات بنجاح!', 'success');
+}
+
+// خوارزمية جدول التراكمات
+function createAccumulationSchedule(config) {
+    const { subjects, totalChapters, dailyHours, chaptersPerDay, priority, goal } = config;
+    
+    // حساب إجمالي الفصول
+    const totalSubjectsChapters = subjects.length * totalChapters;
+    
+    // حساب الوقت اللازم بناءً على الهدف
+    let daysNeeded;
+    switch(goal) {
+        case 'fast':
+            daysNeeded = Math.ceil(totalSubjectsChapters / (chaptersPerDay * 1.5));
+            break;
+        case 'thorough':
+            daysNeeded = Math.ceil(totalSubjectsChapters / (chaptersPerDay * 0.7));
+            break;
+        default: // balanced
+            daysNeeded = Math.ceil(totalSubjectsChapters / chaptersPerDay);
+    }
+    
+    // توزيع المواد حسب الأولوية
+    let prioritizedSubjects;
+    switch(priority) {
+        case 'difficult':
+            prioritizedSubjects = [...subjects].sort((a, b) => b.difficulty - a.difficulty);
+            break;
+        case 'easy':
+            prioritizedSubjects = [...subjects].sort((a, b) => a.difficulty - b.difficulty);
+            break;
+        default: // equal
+            prioritizedSubjects = [...subjects];
+    }
+    
+    // توزيع الفصول على الأيام
+    const schedule = [];
+    let currentDay = 1;
+    let remainingChapters = subjects.map(s => ({...s, remaining: totalChapters}));
+    
+    while (remainingChapters.some(s => s.remaining > 0) && currentDay <= daysNeeded) {
+        const daySchedule = {
+            day: currentDay,
+            date: getFutureDate(currentDay - 1),
+            subjects: []
+        };
+        
+        let dayCapacity = chaptersPerDay;
+        
+        // توزيع الفصول حسب الأولوية
+        for (const subject of prioritizedSubjects) {
+            if (dayCapacity <= 0) break;
+            
+            const subjectData = remainingChapters.find(s => s.name === subject.name);
+            if (subjectData && subjectData.remaining > 0) {
+                const chaptersToStudy = Math.min(2, subjectData.remaining, dayCapacity);
+                
+                daySchedule.subjects.push({
+                    name: subject.name,
+                    chapters: chaptersToStudy,
+                    difficulty: subject.difficulty,
+                    color: getSubjectColor(prioritizedSubjects.indexOf(subject))
+                });
+                
+                subjectData.remaining -= chaptersToStudy;
+                dayCapacity -= chaptersToStudy;
+            }
+        }
+        
+        schedule.push(daySchedule);
+        currentDay++;
+    }
+    
+    return {
+        type: 'accumulation',
+        subjects: subjects,
+        totalChapters: totalChapters,
+        dailyChapters: chaptersPerDay,
+        estimatedDays: schedule.length,
+        createdAt: new Date().toLocaleString('ar-IQ'),
+        schedule: schedule,
+        goal: goal,
+        priority: priority
+    };
+}
+
+// ==============================================
+// 3. جدول المراجعة
+// ==============================================
+
+function openReviewScheduleModal() {
+    document.getElementById('review-schedule-modal').style.display = 'block';
+    generateReviewSubjectFields();
+    generateReviewDifficultyFields();
+}
+
+function closeReviewScheduleModal() {
+    document.getElementById('review-schedule-modal').style.display = 'none';
+}
+
+function generateReviewSubjectFields() {
+    const count = parseInt(document.getElementById('review-subjects-count').value) || 5;
+    const container = document.getElementById('review-subjects-container');
+    
+    let html = '<div style="margin-bottom: 15px;"><label>أسماء المواد للمراجعة</label></div>';
+    
+    for (let i = 1; i <= count; i++) {
+        html += `
+            <div class="row" style="margin-bottom: 8px;">
+                <input type="text" 
+                       class="form-control grow" 
+                       placeholder="اسم المادة ${i}"
+                       id="review-subject-${i}"
+                       onchange="updateReviewDifficultyFields()">
+            </div>
+        `;
+    }
+    
+    container.innerHTML = html;
+    generateReviewDifficultyFields();
+}
+
+function generateReviewDifficultyFields() {
+    const count = parseInt(document.getElementById('review-subjects-count').value) || 5;
+    const container = document.getElementById('review-difficulty-container');
+    
+    let html = '<div style="margin-top: 10px;">';
+    
+    for (let i = 1; i <= count; i++) {
+        const subjectName = document.getElementById(`review-subject-${i}`)?.value || `المادة ${i}`;
+        html += `
+            <div style="margin-bottom: 8px;">
+                <label style="font-size: 13px;">${subjectName}</label>
+                <input type="range" 
+                       id="review-difficulty-${i}"
+                       min="1" max="10" value="5"
+                       style="width: 100%; margin-top: 5px;">
+                <div style="display: flex; justify-content: space-between; font-size: 11px;">
+                    <span>سهلة</span>
+                    <span id="difficulty-value-${i}">5</span>
+                    <span>صعبة</span>
+                </div>
+            </div>
+        `;
+    }
+    
+    html += '</div>';
+    container.innerHTML = html;
+    
+    // إضافة event listeners
+    for (let i = 1; i <= count; i++) {
+        const slider = document.getElementById(`review-difficulty-${i}`);
+        const valueSpan = document.getElementById(`difficulty-value-${i}`);
+        
+        slider.addEventListener('input', function() {
+            valueSpan.textContent = this.value;
+        });
+    }
+}
+
+function updateReviewDifficultyFields() {
+    generateReviewDifficultyFields();
+}
+
+function generateReviewSchedule() {
+    // جمع البيانات
+    const daysLeft = parseInt(document.getElementById('review-days-left').value) || 30;
+    const subjectsCount = parseInt(document.getElementById('review-subjects-count').value) || 5;
+    const studyHours = parseInt(document.getElementById('review-study-hours').value) || 6;
+    const system = document.getElementById('review-system').value;
+    const goal = document.getElementById('review-goal').value;
+    
+    // جمع المواد وصعوبتها
+    const subjects = [];
+    for (let i = 1; i <= subjectsCount; i++) {
+        const subject = document.getElementById(`review-subject-${i}`).value.trim();
+        const difficulty = parseInt(document.getElementById(`review-difficulty-${i}`).value) || 5;
+        
+        if (subject) {
+            subjects.push({
+                name: subject,
+                difficulty: difficulty,
+                reviewDays: Math.ceil(difficulty / 2) // أيام المراجعة حسب الصعوبة
+            });
+        }
+    }
+    
+    if (subjects.length === 0) {
+        showNotification('يرجى إدخال أسماء المواد', 'error');
+        return;
+    }
+    
+    // إنشاء جدول المراجعة الذكي
+    const schedule = createReviewSchedule({
+        subjects: subjects,
+        daysLeft: daysLeft,
+        dailyHours: studyHours,
+        system: system,
+        goal: goal
+    });
+    
+    // حفظ وعرض الجدول
+    currentSchedule = schedule;
+    localStorage.setItem('reviewSchedule', JSON.stringify(schedule));
+    displayReviewSchedule(schedule);
+    closeReviewScheduleModal();
+    
+    showNotification('تم إنشاء جدول المراجعة بنجاح!', 'success');
+}
+
+// خوارزمية جدول المراجعة
+function createReviewSchedule(config) {
+    const { subjects, daysLeft, dailyHours, system, goal } = config;
+    
+    // حساب إجمالي أيام المراجعة المطلوبة
+    const totalReviewDaysNeeded = subjects.reduce((sum, subject) => sum + subject.reviewDays, 0);
+    
+    // تعديل بناءً على نظام المراجعة
+    let effectiveDays;
+    switch(system) {
+        case 'spaced':
+            effectiveDays = Math.ceil(totalReviewDaysNeeded * 1.5);
+            break;
+        case 'intensive':
+            effectiveDays = Math.ceil(totalReviewDaysNeeded * 0.7);
+            break;
+        default: // mixed
+            effectiveDays = totalReviewDaysNeeded;
+    }
+    
+    // تعديل بناءً على الهدف
+    switch(goal) {
+        case 'excellent':
+            effectiveDays = Math.ceil(effectiveDays * 1.3);
+            break;
+        case 'pass':
+            effectiveDays = Math.ceil(effectiveDays * 0.8);
+            break;
+    }
+    
+    // التحقق من وجود وقت كافٍ
+    if (effectiveDays > daysLeft) {
+        // ضغط الجدول إذا لم يكن هناك وقت كافٍ
+        const compressionRatio = daysLeft / effectiveDays;
+        subjects.forEach(subject => {
+            subject.reviewDays = Math.max(1, Math.floor(subject.reviewDays * compressionRatio));
+        });
+        effectiveDays = daysLeft;
+    }
+    
+    // توزيع المراجعة على الأيام
+    const schedule = [];
+    let currentDay = 0;
+    
+    // نظام التكرار المتباعد
+    const reviewCycles = Math.ceil(effectiveDays / 7); // دورات أسبوعية
+    
+    for (let cycle = 0; cycle < reviewCycles; cycle++) {
+        const cycleStartDay = cycle * 7;
+        
+        subjects.forEach((subject, index) => {
+            const subjectReviewDays = Math.min(subject.reviewDays, 3); // 3 مراجعات كحد أقصى لكل دورة
+            
+            for (let review = 0; review < subjectReviewDays; review++) {
+                const dayOffset = (cycle * 3 + review) % 7; // توزيع على أيام الأسبوع
+                const scheduleDay = cycleStartDay + dayOffset + 1;
+                
+                if (scheduleDay <= effectiveDays) {
+                    if (!schedule[scheduleDay - 1]) {
+                        schedule[scheduleDay - 1] = {
+                            day: scheduleDay,
+                            date: getFutureDate(scheduleDay - 1),
+                            subjects: [],
+                            totalHours: dailyHours
+                        };
+                    }
+                    
+                    schedule[scheduleDay - 1].subjects.push({
+                        name: subject.name,
+                        difficulty: subject.difficulty,
+                        reviewType: getReviewType(review + 1),
+                        hours: calculateReviewHours(subject.difficulty, dailyHours, schedule[scheduleDay - 1].subjects.length),
+                        color: getSubjectColor(index)
+                    });
+                }
+            }
+        });
+    }
+    
+    // ترتيب المواد حسب الصعوبة في كل يوم
+    schedule.forEach(day => {
+        day.subjects.sort((a, b) => b.difficulty - a.difficulty);
+    });
+    
+    return {
+        type: 'review',
+        subjects: subjects,
+        totalDays: effectiveDays,
+        dailyHours: dailyHours,
+        system: system,
+        goal: goal,
+        createdAt: new Date().toLocaleString('ar-IQ'),
+        examDate: getFutureDate(daysLeft),
+        schedule: schedule.filter(day => day) // إزالة الأيام الفارغة
+    };
+}
+
+// ==============================================
+// دوال مساعدة
+// ==============================================
+
+function getFutureDate(daysToAdd) {
+    const date = new Date();
+    date.setDate(date.getDate() + daysToAdd);
+    return date.toLocaleDateString('ar-IQ');
+}
+
+function getReviewType(reviewNumber) {
+    const types = ['مراجعة أولية', 'مراجعة متوسطة', 'مراجعة نهائية'];
+    return types[reviewNumber - 1] || 'مراجعة';
+}
+
+function calculateReviewHours(difficulty, dailyHours, subjectCount) {
+    const baseHours = dailyHours / 4; // افتراض 4 مواد يومياً
+    const difficultyMultiplier = 0.5 + (difficulty / 10); // 0.5 إلى 1.5
+    return Math.max(0.5, Math.min(3, baseHours * difficultyMultiplier));
+}
+
+function createDailyTimetable(config) {
+    const { subjects, dailyHours, chaptersPerDay, preferredTime, breakMinutes } = config;
+    
+    // أوقات الدراسة
+    const timeSlots = {
+        morning: ['06:00', '12:00'],
+        evening: ['14:00', '18:00'],
+        night: ['19:00', '23:00'],
+        mixed: ['09:00', '21:00']
+    };
+    
+    const [startHour, endHour] = timeSlots[preferredTime] || timeSlots.morning;
+    
+    // حساب الوقت لكل مادة
+    const totalMinutes = dailyHours * 60;
+    const breakMinutesTotal = breakMinutes * (subjects.length - 1);
+    const studyMinutesTotal = totalMinutes - breakMinutesTotal;
+    const minutesPerSubject = Math.floor(studyMinutesTotal / subjects.length);
+    
+    // إنشاء الجدول
+    const timetable = [];
+    let currentTime = startHour;
+    
+    subjects.forEach((subject, index) => {
+        // دراسة المادة
+        const endStudyTime = addMinutes(currentTime, minutesPerSubject);
+        
+        timetable.push({
+            subject: subject.name || subject,
+            time: `${currentTime} - ${endStudyTime}`,
+            duration: minutesPerSubject,
+            type: 'study',
+            color: getSubjectColor(index)
+        });
+        
+        currentTime = endStudyTime;
+        
+        // استراحة (باستثناء المادة الأخيرة)
+        if (index < subjects.length - 1) {
+            const endBreakTime = addMinutes(currentTime, breakMinutes);
+            
+            timetable.push({
+                subject: 'استراحة',
+                time: `${currentTime} - ${endBreakTime}`,
+                duration: breakMinutes,
+                type: 'break'
+            });
+            
+            currentTime = endBreakTime;
+        }
+    });
+    
+    return timetable;
+}
+
+// ==============================================
+// دوال العرض
+// ==============================================
+
+function displayWeeklySchedule(schedule) {
+    const statsContainer = document.getElementById('weekly-schedule-stats');
+    const tableContainer = document.getElementById('weekly-schedule-table');
+    
+    // الإحصائيات
+    statsContainer.innerHTML = `
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; text-align: center;">
+            <div>
+                <div style="font-size: 20px; font-weight: 900;">${schedule.subjects.length}</div>
+                <div style="font-size: 12px;">عدد المواد</div>
+            </div>
+            <div>
+                <div style="font-size: 20px; font-weight: 900;">${schedule.dailyHours} س</div>
+                <div style="font-size: 12px;">ساعات/يوم</div>
+            </div>
+            <div>
+                <div style="font-size: 20px; font-weight: 900;">${schedule.totalWeeks}</div>
+                <div style="font-size: 12px;">أسابيع</div>
+            </div>
+        </div>
+        <div style="margin-top: 10px; font-size: 13px; text-align: center;">
+            <i class="fas fa-calendar"></i> ${schedule.days.join('، ')}
+        </div>
+    `;
+    
+    // الجدول
+    let tableHTML = `
+        <h3 style="text-align: center; margin-bottom: 20px; color: var(--primary-color);">
+            <i class="fas fa-calendar-week"></i> جدولك الأسبوعي
+        </h3>
+    `;
+    
+    schedule.days.forEach(day => {
+        tableHTML += `
+            <div style="margin-bottom: 25px; padding: 15px; background: #f8f9fa; border-radius: 10px;">
+                <h4 style="color: var(--primary-color); margin-bottom: 15px; border-bottom: 2px solid var(--primary-color); padding-bottom: 8px;">
+                    <i class="fas fa-sun"></i> ${day}
+                </h4>
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="background: var(--primary-color); color: white;">
+                                <th style="padding: 10px; text-align: right;">الوقت</th>
+                                <th style="padding: 10px; text-align: right;">المادة</th>
+                                <th style="padding: 10px; text-align: right;">المدة</th>
+                                <th style="padding: 10px; text-align: right;">النوع</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+        `;
+        
+        schedule.timetable[day].forEach((slot, index) => {
+            const isBreak = slot.type === 'break';
+            const bgColor = isBreak ? '#fff' : slot.color;
+            
+            tableHTML += `
+                <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 10px; text-align: center; font-weight: 700; background: ${bgColor};">
+                        ${slot.time}
+                    </td>
+                    <td style="padding: 10px; text-align: right; background: ${bgColor};">
+                        ${slot.subject}
+                    </td>
+                    <td style="padding: 10px; text-align: center; background: ${bgColor};">
+                        ${slot.duration} دقيقة
+                    </td>
+                    <td style="padding: 10px; text-align: center; background: ${bgColor};">
+                        ${isBreak ? '<i class="fas fa-coffee"></i>' : '<i class="fas fa-book"></i>'}
+                    </td>
+                </tr>
+            `;
+        });
+        
+        tableHTML += `
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        `;
+    });
+    
+    tableContainer.innerHTML = tableHTML;
+}
+
+function displayAccumulationSchedule(schedule) {
+    const statsContainer = document.getElementById('accumulation-schedule-stats');
+    const tableContainer = document.getElementById('accumulation-schedule-table');
+    
+    // الإحصائيات
+    statsContainer.innerHTML = `
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; text-align: center;">
+            <div>
+                <div style="font-size: 20px; font-weight: 900;">${schedule.subjects.length}</div>
+                <div style="font-size: 12px;">عدد المواد</div>
+            </div>
+            <div>
+                <div style="font-size: 20px; font-weight: 900;">${schedule.estimatedDays}</div>
+                <div style="font-size: 12px;">يوم متوقع</div>
+            </div>
+            <div>
+                <div style="font-size: 20px; font-weight: 900;">${schedule.totalChapters}</div>
+                <div style="font-size: 12px;">فصل/مادة</div>
+            </div>
+        </div>
+        <div style="margin-top: 10px; font-size: 13px; text-align: center;">
+            <i class="fas fa-bullseye"></i> هدف: ${schedule.goal === 'fast' ? 'إنهاء سريع' : schedule.goal === 'thorough' ? 'إنهاء متقن' : 'إنهاء متوازن'}
+        </div>
+    `;
+    
+    // الجدول
+    let tableHTML = `
+        <h3 style="text-align: center; margin-bottom: 20px; color: #FF6B6B;">
+            <i class="fas fa-layer-group"></i> جدول التراكمات
+        </h3>
+        <div style="margin-bottom: 20px; padding: 15px; background: #fff3cd; border-radius: 10px; border-right: 4px solid #ffc107;">
+            <h4 style="color: #856404; margin-bottom: 10px;">
+                <i class="fas fa-lightbulb"></i> خطة التراكمات
+            </h4>
+            <p style="color: #856404; margin-bottom: 0;">
+                ستتمكن من إنهاء جميع التراكمات خلال <strong>${schedule.estimatedDays} يوم</strong> 
+                بمعدل <strong>${schedule.dailyChapters} فصل يومياً</strong>.
+            </p>
+        </div>
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="background: #FF6B6B; color: white;">
+                        <th style="padding: 12px; text-align: right;">اليوم</th>
+                        <th style="padding: 12px; text-align: right;">التاريخ</th>
+                        <th style="padding: 12px; text-align: right;">المواد</th>
+                        <th style="padding: 12px; text-align: right;">الفصول</th>
+                        <th style="padding: 12px; text-align: right;">التقدم</th>
+                    </tr>
+                </thead>
+                <tbody>
+    `;
+    
+    let totalStudiedChapters = 0;
+    const totalChapters = schedule.subjects.length * schedule.totalChapters;
+    
+    schedule.schedule.forEach((day, index) => {
+        const progressPercent = Math.min(100, Math.round((totalStudiedChapters / totalChapters) * 100));
+        
+        tableHTML += `
+            <tr style="border-bottom: 1px solid var(--border-color);">
+                <td style="padding: 10px; text-align: center; font-weight: 700; background: #f8f9fa;">
+                    ${day.day}
+                </td>
+                <td style="padding: 10px; text-align: right; background: #f8f9fa;">
+                    ${day.date}
+                </td>
+                <td style="padding: 10px; text-align: right; background: #f8f9fa;">
+                    ${day.subjects.map(s => `
+                        <div style="display: inline-block; padding: 4px 8px; margin: 2px; background: ${s.color}; color: white; border-radius: 4px; font-size: 12px;">
+                            ${s.name}
+                        </div>
+                    `).join('')}
+                </td>
+                <td style="padding: 10px; text-align: center; background: #f8f9fa;">
+                    ${day.subjects.map(s => s.chapters).reduce((a, b) => a + b, 0)} فصل
+                </td>
+                <td style="padding: 10px; background: #f8f9fa;">
+                    <div style="background: #e9ecef; height: 10px; border-radius: 5px; overflow: hidden;">
+                        <div style="height: 100%; background: #28a745; width: ${progressPercent}%;"></div>
+                    </div>
+                    <div style="text-align: center; font-size: 12px; margin-top: 5px;">${progressPercent}%</div>
+                </td>
+            </tr>
+        `;
+        
+        totalStudiedChapters += day.subjects.map(s => s.chapters).reduce((a, b) => a + b, 0);
+    });
+    
+    tableHTML += `
+                </tbody>
+            </table>
+        </div>
+        
+        <div style="margin-top: 20px; padding: 15px; background: linear-gradient(135deg, #FF6B6B 0%, #FF8E6B 100%); color: white; border-radius: 10px;">
+            <h4 style="margin-bottom: 10px;"><i class="fas fa-chart-line"></i> ملخص التقدم</h4>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div>
+                    <div style="font-size: 24px; font-weight: 900;">${totalStudiedChapters}</div>
+                    <div style="font-size: 12px;">إجمالي الفصول</div>
+                </div>
+                <div>
+                    <div style="font-size: 24px; font-weight: 900;">${schedule.estimatedDays}</div>
+                    <div style="font-size: 12px;">يوم للانتهاء</div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    tableContainer.innerHTML = tableHTML;
+}
+
+function displayReviewSchedule(schedule) {
+    const statsContainer = document.getElementById('review-schedule-stats');
+    const tableContainer = document.getElementById('review-schedule-table');
+    
+    // الإحصائيات
+    statsContainer.innerHTML = `
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; text-align: center;">
+            <div>
+                <div style="font-size: 20px; font-weight: 900;">${schedule.subjects.length}</div>
+                <div style="font-size: 12px;">عدد المواد</div>
+            </div>
+            <div>
+                <div style="font-size: 20px; font-weight: 900;">${schedule.totalDays}</div>
+                <div style="font-size: 12px;">يوم للمراجعة</div>
+            </div>
+            <div>
+                <div style="font-size: 20px; font-weight: 900;">${schedule.dailyHours} س</div>
+                <div style="font-size: 12px;">ساعات/يوم</div>
+            </div>
+        </div>
+        <div style="margin-top: 10px; font-size: 13px; text-align: center;">
+            <i class="fas fa-calendar-check"></i> تاريخ الامتحان: ${schedule.examDate}
+        </div>
+    `;
+    
+    // الجدول
+    let tableHTML = `
+        <h3 style="text-align: center; margin-bottom: 20px; color: #06D6A0;">
+            <i class="fas fa-book-reader"></i> جدول المراجعة للامتحانات
+        </h3>
+        
+        <div style="margin-bottom: 20px; padding: 15px; background: #d1ecf1; border-radius: 10px; border-right: 4px solid #0c5460;">
+            <h4 style="color: #0c5460; margin-bottom: 10px;">
+                <i class="fas fa-info-circle"></i> نظام المراجعة: ${schedule.system === 'spaced' ? 'التكرار المتباعد' : schedule.system === 'intensive' ? 'مراجعة مكثفة' : 'نظام مختلط'}
+            </h4>
+            <p style="color: #0c5460; margin-bottom: 0;">
+                هذا الجدول مصمم خصيصاً لتحقيق هدف: <strong>${schedule.goal === 'pass' ? 'النجاح' : schedule.goal === 'good' ? 'درجة جيدة' : 'تميز'}</strong>
+            </p>
+        </div>
+    `;
+    
+    // عرض الجدول الأسبوعي
+    const weeks = [];
+    for (let i = 0; i < schedule.schedule.length; i += 7) {
+        weeks.push(schedule.schedule.slice(i, i + 7));
+    }
+    
+    weeks.forEach((week, weekIndex) => {
+        tableHTML += `
+            <div style="margin-bottom: 30px; padding: 20px; background: #f8f9fa; border-radius: 10px; border: 2px solid #06D6A0;">
+                <h4 style="color: #06D6A0; margin-bottom: 15px; text-align: center;">
+                    <i class="fas fa-calendar-week"></i> أسبوع المراجعة ${weekIndex + 1}
+                </h4>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px;">
+        `;
+        
+        week.forEach(day => {
+            tableHTML += `
+                <div style="background: white; border-radius: 8px; padding: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                    <div style="font-weight: 900; color: #06D6A0; margin-bottom: 10px; border-bottom: 2px solid #06D6A0; padding-bottom: 5px;">
+                        <i class="fas fa-calendar-day"></i> اليوم ${day.day}: ${day.date}
+                    </div>
+                    <div style="font-size: 13px; color: #666; margin-bottom: 10px;">
+                        <i class="fas fa-clock"></i> ${day.totalHours} ساعة دراسة
+                    </div>
+                    <div style="margin-top: 10px;">
+                        ${day.subjects.map(subject => `
+                            <div style="margin-bottom: 8px; padding: 8px; background: ${subject.color}; color: white; border-radius: 6px;">
+                                <div style="font-weight: 700; font-size: 14px;">${subject.name}</div>
+                                <div style="font-size: 12px; opacity: 0.9;">
+                                    ${subject.reviewType} • ${subject.hours} ساعة
+                                    <span style="float: left;">${'★'.repeat(subject.difficulty)}${'☆'.repeat(10 - subject.difficulty)}</span>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        });
+        
+        tableHTML += `
+                </div>
+            </div>
+        `;
+    });
+    
+    tableHTML += `
+        <div style="margin-top: 20px; padding: 15px; background: linear-gradient(135deg, #06D6A0 0%, #04A777 100%); color: white; border-radius: 10px;">
+            <h4 style="margin-bottom: 10px;"><i class="fas fa-graduation-cap"></i> نصائح للمراجعة النهائية</h4>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div>
+                    <div style="font-weight: 700; margin-bottom: 5px;">📝 حل نماذج الامتحانات</div>
+                    <div style="font-size: 13px;">حل نماذج من السنوات السابقة</div>
+                </div>
+                <div>
+                    <div style="font-weight: 700; margin-bottom: 5px;">🧠 المراجعة النشطة</div>
+                    <div style="font-size: 13px;">اشرح المعلومة لنفسك</div>
+                </div>
+                <div>
+                    <div style="font-weight: 700; margin-bottom: 5px;">⏰ إدارة الوقت</div>
+                    <div style="font-size: 13px;">تدرّب على حل الامتحان في الوقت المحدد</div>
+                </div>
+                <div>
+                    <div style="font-weight: 700; margin-bottom: 5px;">💤 الراحة الكافية</div>
+                    <div style="font-size: 13px;">نوم 8 ساعات قبل الامتحان</div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    tableContainer.innerHTML = tableHTML;
+}
+
+// ==============================================
+// دوال التقييم للجداول الجديدة
+// ==============================================
+
+function rateWeeklySchedule(rating) {
+    currentRating = rating;
+    showNotification('شكراً لتقييمك! سيفتح نموذج التقييم قريباً.', 'info');
+    setTimeout(openRatingModal, 1000);
+}
+
+function rateAccumulationSchedule(rating) {
+    currentRating = rating;
+    showNotification('شكراً لتقييمك! سيفتح نموذج التقييم قريباً.', 'info');
+    setTimeout(openRatingModal, 1000);
+}
+
+function rateReviewSchedule(rating) {
+    currentRating = rating;
+    showNotification('شكراً لتقييمك! سيفتح نموذج التقييم قريباً.', 'info');
+    setTimeout(openRatingModal, 1000);
+}
+
+// ==============================================
+// تحميل الجداول المحفوظة
+// ==============================================
+document.addEventListener('DOMContentLoaded', function() {
+    // تحميل الجداول المحفوظة
+    const savedWeekly = localStorage.getItem('weeklySchedule');
+    const savedAccumulation = localStorage.getItem('accumulationSchedule');
+    const savedReview = localStorage.getItem('reviewSchedule');
+    
+    if (savedWeekly) {
+        const schedule = JSON.parse(savedWeekly);
+        if (document.getElementById('weekly-schedule-page')?.style.display === 'block') {
+            displayWeeklySchedule(schedule);
+        }
+    }
+    
+    if (savedAccumulation) {
+        const schedule = JSON.parse(savedAccumulation);
+        if (document.getElementById('accumulation-schedule-page')?.style.display === 'block') {
+            displayAccumulationSchedule(schedule);
+        }
+    }
+    
+    if (savedReview) {
+        const schedule = JSON.parse(savedReview);
+        if (document.getElementById('review-schedule-page')?.style.display === 'block') {
+            displayReviewSchedule(schedule);
+        }
+    }
+});
 
 </script>
 </body>
