@@ -11474,22 +11474,6 @@ function testNewSchedules() {
         { func: typeof generateReviewSchedule, name: 'generateReviewSchedule' }
     ];
     
-    functionTests.forEach(test => {
-        if (test.func === 'function') {
-            console.log(`✅ دالة ${test.name} - جاهزة`);
-        } else {
-            console.error(`❌ دالة ${test.name} - غير موجودة`);
-            allPassed = false;
-        }
-    });
-    
-    if (allPassed) {
-        console.log('🎉 جميع اختبارات النظام الجديد نجحت!');
-        showNotification('✅ نظام الجداول الجديد جاهز للعمل', 'success');
-    } else {
-        console.error('⚠️ هناك مشاكل في النظام الجديد');
-        showNotification('⚠️ بعض مكونات النظام الجديد تحتاج للتصحيح', 'warning');
-    }
     
     return allPassed;
 }
