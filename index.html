@@ -2088,6 +2088,85 @@
     min-width: 100px !important;
 }
 
+/* أنماط إضافية للثلاث نقاط المتحركة */
+.typing-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px;
+    background: #f8f9fa;
+    border-radius: 12px;
+    margin: 10px 0;
+    border: 1px solid #e9ecef;
+}
+
+.typing-dots {
+    display: flex;
+    gap: 4px;
+}
+
+.typing-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--primary-color);
+    border-radius: 50%;
+    animation: typingDot 1.4s infinite ease-in-out both;
+}
+
+.typing-dot:nth-child(1) {
+    animation-delay: -0.32s;
+}
+
+.typing-dot:nth-child(2) {
+    animation-delay: -0.16s;
+}
+
+@keyframes typingDot {
+    0%, 80%, 100% { 
+        transform: scale(0);
+        opacity: 0.5;
+    }
+    40% { 
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* تأثيرات التحريك للحقل */
+.ai-chat-field {
+    transition: all 0.3s ease;
+}
+
+.ai-chat-field.active {
+    transform: translateY(-20px);
+}
+
+/* تحسين مظهر المشاركة */
+.share-btn-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.share-btn-grid button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 15px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.share-btn-grid button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
 
 </style>
 
@@ -7152,18 +7231,19 @@ async function sendAIMessage() {
     addMessageToChat('user', message);
     messageInput.value = '';
     
-    // إخفاء الكيبورد إذا كان على جهاز محمول
-    messageInput.blur();
+    // NO LONGER HIDE KEYBOARD - Keep it visible
+    // messageInput.blur(); // تم إزالة هذا السطر
+    
+    // إضافة تأثير رفع الحقل
+    const chatField = document.querySelector('.ai-chat-field');
+    if (chatField) {
+        chatField.classList.add('active');
+    }
     
     const sendBtn = document.getElementById('ai-send-btn');
     const originalText = sendBtn.innerHTML;
     sendBtn.disabled = true;
     sendBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-    
-    // تحريك الحقل للأعلى عند الكتابة
-    const chatContainer = document.getElementById('ai-chat-container');
-    chatContainer.style.transition = 'transform 0.3s ease';
-    chatContainer.style.transform = 'translateY(-20px)';
     
     try {
         // تحميل بيانات التدريب
@@ -7172,8 +7252,9 @@ async function sendAIMessage() {
         // إعداد المحادثة
         const conversation = prepareConversation(message);
         
-        // إظهار مؤشر الكتابة مع 3 نقاط متحركة
+        // إظهار مؤشر الكتابة
         const typingIndicator = createTypingIndicator();
+        const chatContainer = document.getElementById('ai-chat-container');
         chatContainer.appendChild(typingIndicator);
         
         console.log('Sending to DeepSeek:', conversation);
@@ -7192,13 +7273,17 @@ async function sendAIMessage() {
         // حفظ المحادثة تلقائياً
         localStorage.setItem('aiConversationHistory', JSON.stringify(aiConversationHistory));
         
-        // تحميل المحادثة مرة أخرى للتأكد من العرض الصحيح
-        initializeAIChat();
+        // إرجاع حقل الكتابة للأسفل بعد الرد
+        setTimeout(() => {
+            const chatField = document.querySelector('.ai-chat-field');
+            if (chatField) {
+                chatField.classList.remove('active');
+            }
+        }, 300);
         
     } catch (error) {
         console.error('AI Error Details:', error);
         
-        // رسالة خطأ صديقة للمستخدم
         let userErrorMessage = 'عذراً، حدث خطأ في المعالجة. يرجى المحاولة مرة أخرى.';
         
         if (error.message.includes('مفتاح API غير صالح')) {
@@ -7214,12 +7299,6 @@ async function sendAIMessage() {
     } finally {
         sendBtn.disabled = false;
         sendBtn.innerHTML = originalText;
-        
-        // إرجاع الحقل للأسفل بعد الانتهاء
-        setTimeout(() => {
-            chatContainer.style.transform = 'translateY(0)';
-            messageInput.focus();
-        }, 300);
     }
 }
 
@@ -7626,6 +7705,43 @@ function initializeAIChat() {
             chatContainer.scrollTop = chatContainer.scrollHeight;
         }, 100);
     }
+    
+    // إضافة CSS جديد لتأثير رفع حقل الكتابة
+    const style = document.createElement('style');
+    style.textContent = `
+        .ai-chat-field {
+            position: fixed;
+            bottom: 70px;
+            left: 15px;
+            right: 15px;
+            background: white;
+            padding: 10px;
+            border-radius: 12px;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+        
+        .ai-chat-field.active {
+            transform: translateY(-250px);
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.15);
+        }
+        
+        /* لأجهزة الكمبيوتر */
+        @media (min-width: 768px) {
+            .ai-chat-field.active {
+                transform: translateY(-300px);
+            }
+        }
+        
+        /* للأجهزة اللوحية */
+        @media (min-width: 1024px) {
+            .ai-chat-field.active {
+                transform: translateY(-350px);
+            }
+        }
+    `;
+    document.head.appendChild(style);
 }
 
 let studyTimer = {
@@ -11491,6 +11607,17 @@ function getModalFunction(scheduleType) {
         case 'accumulative': return 'openAccumulativeScheduleModal';
         case 'review': return 'openReviewScheduleModal';
         default: return 'openDailyScheduleModal';
+    }
+}
+
+function clearAIChat() {
+    if (confirm('هل أنت متأكد من حذف كل محادثات الذكاء الاصطناعي؟')) {
+        aiConversationHistory = [];
+        localStorage.removeItem('aiConversationHistory');
+        showNotification('تم حذف جميع المحادثات', 'info');
+        
+        // إعادة تحميل الدردشة
+        initializeAIChat();
     }
 }
 
